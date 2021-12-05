@@ -1,0 +1,142 @@
+.container {
+
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  margin: 50px auto;
+  width: 80%;
+  height: 700px;
+}
+
+.main .regBlock {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 25px;
+}
+
+.registration {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 60%;
+  height: 60%;
+}
+
+.blockInput {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.input, .button {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid rgba(152, 118, 84, 0.8);
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.input:hover {
+  border: 2px solid black;
+}
+
+.inputPartOne, .inputPartTwo {
+  width: 48%;
+}
+
+.button {
+  background-color: rgba(152, 118, 84, 0.8);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: rgba(152, 118, 84, 0.6);
+  border: 2px solid black;
+}
+
+.main .descBlock {
+  width: 50%;
+  background-color: rgb(152, 118, 84);
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  position: relative;
+}
+
+.descPhrase {
+  margin: 300px auto;
+  width: 70%;
+  text-align: center;
+  color: white;
+}
+
+.image {
+  position: absolute;
+  transform: skewY(20deg);
+  box-shadow: 15px -15px saddlebrown;
+}
+
+.imageTop {
+  right: 5%;
+  top: 7%;
+}
+
+.imageBottom {
+  left: -60px;
+  bottom: 40px;
+}
+
+.shadow {
+  position: absolute;
+  transform: skewY(20deg);
+  background-color: sandybrown;
+
+}
+
+.shadowBig {
+  width: 150px;
+  height: 150px;
+  left: -60px;
+  top: 60px;
+}
+
+.shadowNormal {
+  width: 100px;
+  height: 100px;
+  right: 80px;
+  bottom: 80px;
+}
+
+.shadowSmallBottom {
+  width: 50px;
+  height: 50px;
+  left: 150px;
+  bottom: 210px;
+}
+
+.shadowSmallTop {
+  width: 50px;
+  height: 50px;
+  left: 200px;
+  top: 200px;
+}
+
+.errorLogin {
+  margin: 5px;
+  color: red;
+}
