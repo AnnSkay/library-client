@@ -18,6 +18,16 @@ const SignUp: NextPage = () => {
     setResponse(data)
   }
 
+  function showRecovery() {
+    let form = document.getElementById('recForm');
+    form.style.display = 'block';
+  }
+
+  function hideRecovery() {
+    let form = document.getElementById('recForm');
+    form.style.display = 'none';
+  }
+
   return (
     <div className={styles.container}>
 
@@ -47,11 +57,25 @@ const SignUp: NextPage = () => {
               <div className={styles.errorLogin}>Неверный логин/пароль</div>
             )}
 
+            <div className={styles.forgotPass} onClick={showRecovery}>
+              <a href="">Забыли пароль?</a>
+            </div>
+
             <button type="submit" onClick={handleLogin} className={styles.button}>Войти</button>
 
             <div>
-              Первый раз у нас? <a href="/sign_up" className={styles.loginLink}>Зарегистрироваться</a>
+              Первый раз у нас? <a href="/sign_up">Зарегистрироваться</a>
             </div>
+          </div>
+
+          <div id="recForm" className={styles.recoveryForm}>
+            <div className={styles.recoveryClose} onClick={hideRecovery}></div>
+            <h2>Восстановление пароля</h2>
+            <div className={styles.recoveryDesc}>
+              Для получения инструкций по восстановлению пароля введите email, указанный при регистрации
+            </div>
+            <input type="text" className={styles.input} placeholder="E-mail" />
+            <button type="submit" className={styles.button}>Выслать</button>
           </div>
         </div>
 

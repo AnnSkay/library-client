@@ -1,13 +1,20 @@
+/*@font-face {*/
+/*  font-family: AT;*/
+/*  src: url('../fonts/AT.otf');*/
+/*}*/
+
 body {
   background: url("../public/backgoundImage.jpg") no-repeat;
   background-size: cover;
-  font-family: Comic Sans MS, Comic Sans;
+  font-family: Monotype Corsiva, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 a {
   color: inherit;
 }
 
-* {
-  box-sizing: border-box;
-}
+

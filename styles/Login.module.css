@@ -51,7 +51,7 @@
 }
 
 .input:hover {
-  border: 2px solid black;
+  border-color: black;
 }
 
 .inputPartOne, .inputPartTwo {
@@ -68,6 +68,13 @@
 .button:hover {
   background-color: rgba(152, 118, 84, 0.6);
   border: 2px solid black;
+}
+
+.forgotPass {
+  margin-left: auto;
+  margin-bottom: 10px;
+  width: 100px;
+  cursor: pointer;
 }
 
 .main .descBlock {
@@ -136,7 +143,31 @@
   top: 200px;
 }
 
-.errorLogin {
-  margin: 5px;
-  color: red;
+.recoveryForm {
+  display: none;
+  position: absolute;
+  padding: 50px;
+  padding-top: 20px;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 300px;
+  margin-top: -150px;
+  border: 2px solid black;
+  border-radius: 5%;
+  background-color: white;
+}
+
+.recoveryClose {
+  background: url("../public/close.png") no-repeat;
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+  margin-right: -20px;
+  cursor: pointer;
+}
+
+.recoveryDesc {
+  margin: 15px 0;
 }
