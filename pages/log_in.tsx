@@ -9,6 +9,7 @@ const SignUp: NextPage = () => {
   const [response, setResponse] = useState('')
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
+  const [click, isClick] = useState(false)
 
   async function handleLogin() {
     const {data} = await axios.post('http://localhost:3001/api/login', {
@@ -19,13 +20,11 @@ const SignUp: NextPage = () => {
   }
 
   function showRecovery() {
-    let form = document.getElementById('recForm');
-    form.style.display = 'block';
+    isClick(true);
   }
 
   function hideRecovery() {
-    let form = document.getElementById('recForm');
-    form.style.display = 'none';
+    isClick(false);
   }
 
   return (
@@ -58,7 +57,7 @@ const SignUp: NextPage = () => {
             )}
 
             <div className={styles.forgotPass} onClick={showRecovery}>
-              <a href="">Забыли пароль?</a>
+              <u>Забыли пароль?</u>
             </div>
 
             <button type="submit" onClick={handleLogin} className={styles.button}>Войти</button>
@@ -66,16 +65,6 @@ const SignUp: NextPage = () => {
             <div>
               Первый раз у нас? <a href="/sign_up">Зарегистрироваться</a>
             </div>
-          </div>
-
-          <div id="recForm" className={styles.recoveryForm}>
-            <div className={styles.recoveryClose} onClick={hideRecovery}></div>
-            <h2>Восстановление пароля</h2>
-            <div className={styles.recoveryDesc}>
-              Для получения инструкций по восстановлению пароля введите email, указанный при регистрации
-            </div>
-            <input type="text" className={styles.input} placeholder="E-mail" />
-            <button type="submit" className={styles.button}>Выслать</button>
           </div>
         </div>
 
@@ -98,6 +87,19 @@ const SignUp: NextPage = () => {
           <div className={styles.shadow + ' ' + styles.shadowSmallTop}></div>
         </div>
       </main>
+
+      <div className={ click ? (styles.recoveryBlock + ' ' + styles.recoveryOpened) : (styles.recoveryBlock) }>
+        <div className={styles.recoveryForm}>
+          <div className={styles.recoveryClose} onClick={hideRecovery}></div>
+          <h2>Восстановление пароля</h2>
+          <div className={styles.recoveryDesc}>
+            Для получения инструкций по восстановлению пароля введите email, указанный при регистрации
+          </div>
+          <input type="text" className={styles.input} placeholder="E-mail" />
+          <button type="submit" className={styles.button}>Выслать</button>
+        </div>
+        <div className={styles.blackout} onClick={hideRecovery}></div>
+      </div>
 
     </div>
   )

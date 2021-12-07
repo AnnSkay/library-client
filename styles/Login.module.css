@@ -143,17 +143,34 @@
   top: 200px;
 }
 
-.recoveryForm {
+.recoveryBlock {
+  position: fixed;
+  top: 0;
+  left: 0;
   display: none;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 10;
+  opacity: 0;
+}
+
+.blackout {
   position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.recoveryForm {
   padding: 50px;
   padding-top: 20px;
   z-index: 2;
-  top: 50%;
-  left: 50%;
   width: 500px;
   height: 300px;
-  margin-top: -150px;
   border: 2px solid black;
   border-radius: 5%;
   background-color: white;
@@ -170,4 +187,15 @@
 
 .recoveryDesc {
   margin: 15px 0;
+}
+
+.recoveryOpened {
+  display: flex;
+  opacity: 1;
+  animation: opac 0.5s;
+}
+
+@keyframes opac {
+  from { opacity: 0;}
+  to {opacity: 1;}
 }
