@@ -11,11 +11,6 @@
   border-top-left-radius: 10px;
 }
 
-.logo {
-  position: absolute;
-  top: 20px;
-  left: 25px;
-}
 
 .registration {
   position: absolute;
@@ -171,8 +166,7 @@
 }
 
 .recoveryForm {
-  padding: 50px;
-  padding-top: 20px;
+  padding: 20px 50px 50px;
   z-index: 2;
   width: 500px;
   height: 300px;
@@ -197,10 +191,10 @@
 .recoveryOpened {
   display: flex;
   opacity: 1;
-  animation: opac 0.5s;
+  animation: animation-opacity 0.5s;
 }
 
-@keyframes opac {
+@keyframes animation-opacity {
   from { opacity: 0;}
   to {opacity: 1;}
 }

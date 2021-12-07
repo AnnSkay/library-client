@@ -1,6 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import styles from './styles.module.css';
+import Image1 from './library-reg-1.jpeg';
+import Image2 from './library-reg-2.jpeg';
 
 export function AuthDescription() {
   return (
@@ -10,11 +12,11 @@ export function AuthDescription() {
       </h1>
 
       <div className={`${styles.image} ${styles.imageTop}`}>
-        <Image src="/libraryReg1.jpeg" width={150} height={150} alt="Картинка" />
+        <Image src={Image1} width={150} height={150} alt="" />
       </div>
 
       <div className={`${styles.image} ${styles.imageBottom}`}>
-        <Image src="/libraryReg2.jpg" width={150} height={150} alt="Картинка" />
+        <Image src={Image2} width={150} height={150} alt="" />
       </div>
 
       <div className={`${styles.shadow} ${styles.shadowBig}`} />
