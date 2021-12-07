@@ -1,56 +1,60 @@
-import type { NextPage } from 'next'
-import axios from "axios";
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Login.module.css'
-import React, { useState } from "react";
-import ValidatorWrapper, { rules, ValidatorField } from '@coxy/react-validator';
+import Head from 'next/head';
+import Link from 'next/link';
+import Image from 'next/image';
+import React, { useRef, useState } from 'react';
+// @ts-ignore
+import ValidatorWrapper, { ValidatorField } from '@coxy/react-validator';
+import cn from 'classnames';
+import styles from '../styles/Login.module.css';
 
-const validator = React.createRef();
-
-const rules = {
+const myRules = {
   email: [{
-    rule: value => value !== '' && value.length > 0,
+    rule: (value: string) => value !== '' && value.length > 0,
     message: 'Email обязателен',
   }, {
-    rule: value => (/^[\w-\.]+@[\w-]+\.[a-z]{2,4}$/i).test(value),
-    message: 'Формат email неккоректный',
+    rule: (value: string) => (/^[\w-.]+@[\w-]+\.[a-z]{2,4}$/i).test(value),
+    message: 'Формат email некорректный',
   }],
   password: [{
-    rule: value => value !== '' && value.length > 0,
+    rule: (value: string) => value !== '' && value.length > 0,
     message: 'Пароль обязателен',
   }, {
-    rule: value => value.length > 5,
+    rule: (value: string) => value.length > 5,
     message: 'Пароль должен быть не меньше 6 символов',
   }],
   phone: [{
-    rule: value => value !== '' && value.length > 0,
+    rule: (value: string) => value !== '' && value.length > 0,
     message: 'Телефон обязателен',
   }, {
-    rule: value => (/^((\+7|7|8)+([0-9]){10})$/).test(value),
-    message: 'Формат телефона неккоректный'
-  }]
-}
-
-const handleSubmit = () => {
-  const { isValid, message, errors } = validator.current.validate();
-  if (!isValid) {
-    console.log(isValid, message, errors);
-    return;
-  }
-  // Success
+    rule: (value: string) => (/^((\+7|7|8)+([0-9]){10})$/).test(value),
+    message: 'Формат телефона некорректный',
+  }],
 };
 
-const SignUp: NextPage = () => {
-
+export default function SignInPage(): JSX.Element {
   const [email, handleChangeEmail] = useState('');
   const [phone, handleChangePhone] = useState('');
   const [password, handleChangePassword] = useState('');
   const [repeatPass, handleChangeRepeatPass] = useState('');
 
+  const validator = useRef<any>();
+
+  const handleSubmit = () => {
+    const { isValid, message, errors } = validator.current.validate();
+    if (!isValid) {
+      console.log(isValid, message, errors);
+    }
+    // Success
+  };
+
+  const emailInputClass = (isValid: boolean) => cn(styles.input, {
+    [styles.redBorder]: !isValid && email.length !== 0,
+    [styles.greenBorder]: isValid,
+  });
+
   return (
     <div className={styles.container}>
-      
+
       <Head>
         <title>Sign up</title>
       </Head>
@@ -58,9 +62,11 @@ const SignUp: NextPage = () => {
       <main className={styles.main}>
         <div className={styles.regBlock}>
           <div className={styles.logo}>
-            <a href="/">
-              <Image src="/libraryLogo.png" width={50} height={50} alt="Логотип" />
-            </a>
+            <Link href="/">
+              <a>
+                <Image src="/libraryLogo.png" width={50} height={50} alt="Логотип" />
+              </a>
+            </Link>
           </div>
           <div className={styles.registration}>
             <h1 className={styles.regTitle}>
@@ -70,18 +76,18 @@ const SignUp: NextPage = () => {
             <ValidatorWrapper ref={validator}>
 
               <div className={styles.blockInput}>
-                <input type="text" className={styles.input + ' ' + styles.inputPartOne} placeholder="Имя" />
-                <input type="text" className={styles.input + ' ' + styles.inputPartTwo} placeholder="Фамилия"  />
+                <input type="text" className={`${styles.input} ${styles.inputPartOne}`} placeholder="Имя" />
+                <input type="text" className={`${styles.input} ${styles.inputPartTwo}`} placeholder="Фамилия" />
               </div>
 
-              <ValidatorField value={email} rules={rules.email}>
+              <ValidatorField value={email} rules={myRules.email}>
                 {({ isValid, message }) => (
                   <>
                     <input
                       type="text"
                       value={email}
                       onChange={({ target: { value } }) => handleChangeEmail(value)}
-                      className={ !isValid && email.length !== 0 ? styles.input + ' ' + styles.redBorder : email.length !== 0 ? styles.input + ' ' + styles.greenBorder: styles.input }
+                      className={emailInputClass(isValid)}
                       placeholder="E-mail"
                     />
                     {!isValid && <div className={styles.errorInput}>{message}</div>}
@@ -89,14 +95,14 @@ const SignUp: NextPage = () => {
                 )}
               </ValidatorField>
 
-              <ValidatorField value={phone} rules={rules.phone}>
+              <ValidatorField value={phone} rules={myRules.phone}>
                 {({ isValid, message }) => (
                   <>
                     <input
                       type="text"
                       value={phone}
                       onChange={({ target: { value } }) => handleChangePhone(value)}
-                      className={ !isValid && phone.length !== 0 ? styles.input + ' ' + styles.redBorder : phone.length !== 0 ? styles.input + ' ' + styles.greenBorder: styles.input }
+                      className={!isValid && phone.length !== 0 ? `${styles.input} ${styles.redBorder}` : phone.length !== 0 ? `${styles.input} ${styles.greenBorder}` : styles.input}
                       placeholder="Телефон"
                     />
                     {!isValid && <div className={styles.errorInput}>{message}</div>}
@@ -104,14 +110,14 @@ const SignUp: NextPage = () => {
                 )}
               </ValidatorField>
 
-              <ValidatorField value={password} rules={rules.password}>
+              <ValidatorField value={password} rules={myRules.password}>
                 {({ isValid, message }) => (
                   <>
                     <input
                       type="password"
                       value={password}
                       onChange={({ target: { value } }) => handleChangePassword(value)}
-                      className={ !isValid && password.length !== 0 ? styles.input + ' ' + styles.redBorder : password.length !== 0 ? styles.input + ' ' + styles.greenBorder: styles.input }
+                      className={!isValid && password.length !== 0 ? `${styles.input} ${styles.redBorder}` : password.length !== 0 ? `${styles.input} ${styles.greenBorder}` : styles.input}
                       placeholder="Пароль"
                     />
                     {!isValid && <div className={styles.errorInput}>{message}</div>}
@@ -123,22 +129,25 @@ const SignUp: NextPage = () => {
                 type="password"
                 value={repeatPass}
                 onChange={({ target: { value } }) => handleChangeRepeatPass(value)}
-                className={ (password !== repeatPass) && password && repeatPass ? styles.input + ' ' + styles.redBorder : password === repeatPass && repeatPass ? styles.input + ' ' + styles.greenBorder: styles.input }
+                className={(password !== repeatPass) && password && repeatPass ? `${styles.input} ${styles.redBorder}` : password === repeatPass && repeatPass ? `${styles.input} ${styles.greenBorder}` : styles.input}
                 placeholder="Повторите пароль"
               />
-              { (password !== repeatPass) && password && repeatPass ?
-                <div className={styles.errorInput}>Пароли не совпадают</div>
-                : null
-              }
+              {(password !== repeatPass) && password && repeatPass
+                ? <div className={styles.errorInput}>Пароли не совпадают</div>
+                : null}
 
               <button className={styles.button} onClick={handleSubmit} type="button">Зарегистрироваться</button>
 
             </ValidatorWrapper>
 
             <div>
-              Уже участник? <a href="/log_in" className={styles.loginLink}>Войти</a>
+              Уже участник?
+              {' '}
+              <Link href="/login">
+                <a className={styles.loginLink}>Войти</a>
+              </Link>
             </div>
-          </div>  
+          </div>
         </div>
 
         <div className={styles.descBlock}>
@@ -146,23 +155,21 @@ const SignUp: NextPage = () => {
             Библиотека — место встречи идей и людей
           </h1>
 
-          <div className={styles.image + ' ' + styles.imageTop}>
+          <div className={`${styles.image} ${styles.imageTop}`}>
             <Image src="/libraryReg1.jpeg" width={150} height={150} alt="Картинка" />
           </div>
 
-          <div className={styles.image + ' ' + styles.imageBottom}>
+          <div className={`${styles.image} ${styles.imageBottom}`}>
             <Image src="/libraryReg2.jpg" width={150} height={150} alt="Картинка" />
           </div>
 
-          <div className={styles.shadow + ' ' + styles.shadowBig}></div>
-          <div className={styles.shadow + ' ' + styles.shadowNormal}></div>
-          <div className={styles.shadow + ' ' + styles.shadowSmallBottom}></div>
-          <div className={styles.shadow + ' ' + styles.shadowSmallTop}></div>
+          <div className={`${styles.shadow} ${styles.shadowBig}`} />
+          <div className={`${styles.shadow} ${styles.shadowNormal}`} />
+          <div className={`${styles.shadow} ${styles.shadowSmallBottom}`} />
+          <div className={`${styles.shadow} ${styles.shadowSmallTop}`} />
         </div>
       </main>
-      
-    </div>
-  )
-}
 
-export default SignUp
+    </div>
+  );
+}
