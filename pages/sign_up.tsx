@@ -123,7 +123,7 @@ const SignUp: NextPage = () => {
                 type="password"
                 value={repeatPass}
                 onChange={({ target: { value } }) => handleChangeRepeatPass(value)}
-                className={ (password !== repeatPass) && password && repeatPass ? styles.input + ' ' + styles.redBorder : password === repeatPass ? styles.input + ' ' + styles.greenBorder: styles.input }
+                className={ (password !== repeatPass) && password && repeatPass ? styles.input + ' ' + styles.redBorder : password === repeatPass && repeatPass ? styles.input + ' ' + styles.greenBorder: styles.input }
                 placeholder="Повторите пароль"
               />
               { (password !== repeatPass) && password && repeatPass ?
