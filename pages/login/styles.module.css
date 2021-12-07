@@ -2,15 +2,7 @@
 
 }
 
-.main {
-  display: flex;
-  flex-direction: row;
-  margin: 50px auto;
-  width: 80%;
-  height: 700px;
-}
-
-.main .regBlock {
+.regBlock {
   position: relative;
   width: 50%;
   height: 100%;
@@ -190,7 +182,7 @@
 }
 
 .recoveryClose {
-  background: url("../public/close.png") no-repeat;
+  background: url("../../public/close.png") no-repeat;
   width: 24px;
   height: 24px;
   margin-left: auto;

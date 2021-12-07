@@ -1,9 +1,12 @@
 import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
-import styles from '../styles/Login.module.css';
+import styles from './styles.module.css';
+import { AuthMainWrapper } from '../../components/ui/auth-main-wrapper';
+import { AuthTitle } from '../../components/ui/auth-title';
+import { AuthLogo } from '../../components/ui/auth-logo';
+import { AuthDescription } from '../../components/ui/auth-description';
 
 export default function PageLogin(): JSX.Element {
   const [response, setResponse] = useState('');
@@ -19,13 +22,8 @@ export default function PageLogin(): JSX.Element {
     setResponse(data);
   }
 
-  function showRecovery() {
-    isClick(true);
-  }
-
-  function hideRecovery() {
-    isClick(false);
-  }
+  const showRecovery = () => isClick(true);
+  const hideRecovery = () => isClick(false);
 
   return (
     <div className={styles.container}>
@@ -34,19 +32,11 @@ export default function PageLogin(): JSX.Element {
         <title>Log in</title>
       </Head>
 
-      <main className={styles.main}>
+      <AuthMainWrapper>
         <div className={styles.regBlock}>
-          <div className={styles.logo}>
-            <Link href="/">
-              <a>
-                <Image src="/libraryLogo.png" width={50} height={50} alt="Логотип" />
-              </a>
-            </Link>
-          </div>
+          <AuthLogo />
           <div className={styles.registration}>
-            <h1 className={styles.regTitle}>
-              Вход
-            </h1>
+            <AuthTitle title="Вход" />
 
             <input
               value={login}
@@ -83,41 +73,24 @@ export default function PageLogin(): JSX.Element {
             </div>
           </div>
         </div>
-
-        <div className={styles.descBlock}>
-          <h1 className={styles.descPhrase}>
-            Библиотека — место встречи идей и людей
-          </h1>
-
-          <div className={`${styles.image} ${styles.imageTop}`}>
-            <Image src="/libraryReg1.jpeg" width={150} height={150} alt="Картинка" />
-          </div>
-
-          <div className={`${styles.image} ${styles.imageBottom}`}>
-            <Image src="/libraryReg2.jpg" width={150} height={150} alt="Картинка" />
-          </div>
-
-          <div className={`${styles.shadow} ${styles.shadowBig}`} />
-          <div className={`${styles.shadow} ${styles.shadowNormal}`} />
-          <div className={`${styles.shadow} ${styles.shadowSmallBottom}`} />
-          <div className={`${styles.shadow} ${styles.shadowSmallTop}`} />
-        </div>
-      </main>
+        <AuthDescription />
+      </AuthMainWrapper>
 
       <div className={click ? (`${styles.recoveryBlock} ${styles.recoveryOpened}`) : (styles.recoveryBlock)}>
         <div className={styles.recoveryForm}>
           <div className={styles.recoveryClose} onClick={hideRecovery} />
           <h2>Восстановление пароля</h2>
+
           <div className={styles.recoveryDesc}>
             Для получения инструкций по восстановлению пароля введите email,
             указанный при регистрации
           </div>
+
           <input type="text" className={styles.input} placeholder="E-mail" />
           <button type="submit" className={styles.button}>Выслать</button>
         </div>
         <div className={styles.blackout} onClick={hideRecovery} />
       </div>
-
     </div>
   );
 }

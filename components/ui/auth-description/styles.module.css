@@ -1,0 +1,26 @@
+.descBlock {
+    width: 50%;
+    background-color: rgb(152, 118, 84);
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    position: relative;
+}
+
+.descPhrase {
+    margin: 300px auto;
+    width: 70%;
+    text-align: center;
+    color: white;
+}
+
+.image {
+    position: absolute;
+    transform: skewY(20deg);
+    box-shadow: 15px -15px saddlebrown;
+}
+
+.shadow {
+    position: absolute;
+    transform: skewY(20deg);
+    background-color: sandybrown;
+}

@@ -1,11 +1,14 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import Image from 'next/image';
 import React, { useRef, useState } from 'react';
 // @ts-ignore
 import ValidatorWrapper, { ValidatorField } from '@coxy/react-validator';
 import cn from 'classnames';
-import styles from '../styles/Login.module.css';
+import styles from '../login/styles.module.css';
+import { AuthMainWrapper } from '../../components/ui/auth-main-wrapper';
+import { AuthTitle } from '../../components/ui/auth-title';
+import { AuthLogo } from '../../components/ui/auth-logo';
+import { AuthDescription } from '../../components/ui/auth-description';
 
 const myRules = {
   email: [{
@@ -59,24 +62,16 @@ export default function SignInPage(): JSX.Element {
         <title>Sign up</title>
       </Head>
 
-      <main className={styles.main}>
+      <AuthMainWrapper>
         <div className={styles.regBlock}>
-          <div className={styles.logo}>
-            <Link href="/">
-              <a>
-                <Image src="/libraryLogo.png" width={50} height={50} alt="Логотип" />
-              </a>
-            </Link>
-          </div>
+          <AuthLogo />
           <div className={styles.registration}>
-            <h1 className={styles.regTitle}>
-              Регистрация
-            </h1>
+            <AuthTitle title="Вход" />
 
             <ValidatorWrapper ref={validator}>
 
               <div className={styles.blockInput}>
-                <input type="text" className={`${styles.input} ${styles.inputPartOne}`} placeholder="Имя" />
+                <input type="text" className={cn(styles.input, styles.inputPartOne)} placeholder="Имя" />
                 <input type="text" className={`${styles.input} ${styles.inputPartTwo}`} placeholder="Фамилия" />
               </div>
 
@@ -132,9 +127,10 @@ export default function SignInPage(): JSX.Element {
                 className={(password !== repeatPass) && password && repeatPass ? `${styles.input} ${styles.redBorder}` : password === repeatPass && repeatPass ? `${styles.input} ${styles.greenBorder}` : styles.input}
                 placeholder="Повторите пароль"
               />
-              {(password !== repeatPass) && password && repeatPass
-                ? <div className={styles.errorInput}>Пароли не совпадают</div>
-                : null}
+
+              {((password !== repeatPass) && password && repeatPass) && (
+                <div className={styles.errorInput}>Пароли не совпадают</div>
+              )}
 
               <button className={styles.button} onClick={handleSubmit} type="button">Зарегистрироваться</button>
 
@@ -150,25 +146,8 @@ export default function SignInPage(): JSX.Element {
           </div>
         </div>
 
-        <div className={styles.descBlock}>
-          <h1 className={styles.descPhrase}>
-            Библиотека — место встречи идей и людей
-          </h1>
-
-          <div className={`${styles.image} ${styles.imageTop}`}>
-            <Image src="/libraryReg1.jpeg" width={150} height={150} alt="Картинка" />
-          </div>
-
-          <div className={`${styles.image} ${styles.imageBottom}`}>
-            <Image src="/libraryReg2.jpg" width={150} height={150} alt="Картинка" />
-          </div>
-
-          <div className={`${styles.shadow} ${styles.shadowBig}`} />
-          <div className={`${styles.shadow} ${styles.shadowNormal}`} />
-          <div className={`${styles.shadow} ${styles.shadowSmallBottom}`} />
-          <div className={`${styles.shadow} ${styles.shadowSmallTop}`} />
-        </div>
-      </main>
+        <AuthDescription />
+      </AuthMainWrapper>
 
     </div>
   );
