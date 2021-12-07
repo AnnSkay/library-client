@@ -24,6 +24,9 @@ const rules = {
     message: 'Пароль должен быть не меньше 6 символов',
   }],
   phone: [{
+    rule: value => value !== '' && value.length > 0,
+    message: 'Телефон обязателен',
+  }, {
     rule: value => (/^((\+7|7|8)+([0-9]){10})$/).test(value),
     message: 'Формат телефона неккоректный'
   }]
@@ -74,39 +77,58 @@ const SignUp: NextPage = () => {
               <ValidatorField value={email} rules={rules.email}>
                 {({ isValid, message }) => (
                   <>
-                    <input type="text" id="email" title={message} value={email} onChange={({ target: { value } }) => handleChangeEmail(value)} className={styles.input} placeholder="E-mail" />
+                    <input
+                      type="text"
+                      value={email}
+                      onChange={({ target: { value } }) => handleChangeEmail(value)}
+                      className={ !isValid && email.length !== 0 ? styles.input + ' ' + styles.redBorder : email.length !== 0 ? styles.input + ' ' + styles.greenBorder: styles.input }
+                      placeholder="E-mail"
+                    />
                     {!isValid && <div className={styles.errorInput}>{message}</div>}
                   </>
                 )}
               </ValidatorField>
 
-              <div className={styles.blockInput}>
-                <input type="text" className={styles.input + ' ' + styles.inputPartOne} placeholder="День Рождения" />
-
-                <ValidatorField value={phone} rules={rules.phone}>
-                  {({ isValid, message }) => (
-                    <>
-                      <input type="text" value={phone} onChange={({ target: { value } }) => handleChangePhone(value)} className={styles.input + ' ' + styles.inputPartTwo} placeholder="Телефон" />
-                      {!isValid && <div className={styles.errorInput}>{message}</div>}
-                    </>
-                  )}
-                </ValidatorField>
-              </div>
+              <ValidatorField value={phone} rules={rules.phone}>
+                {({ isValid, message }) => (
+                  <>
+                    <input
+                      type="text"
+                      value={phone}
+                      onChange={({ target: { value } }) => handleChangePhone(value)}
+                      className={ !isValid && phone.length !== 0 ? styles.input + ' ' + styles.redBorder : phone.length !== 0 ? styles.input + ' ' + styles.greenBorder: styles.input }
+                      placeholder="Телефон"
+                    />
+                    {!isValid && <div className={styles.errorInput}>{message}</div>}
+                  </>
+                )}
+              </ValidatorField>
 
               <ValidatorField value={password} rules={rules.password}>
                 {({ isValid, message }) => (
                   <>
-                    <input type="password" className={styles.input} value={password} onChange={({ target: { value } }) => handleChangePassword(value)} placeholder="Пароль" />
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={({ target: { value } }) => handleChangePassword(value)}
+                      className={ !isValid && password.length !== 0 ? styles.input + ' ' + styles.redBorder : password.length !== 0 ? styles.input + ' ' + styles.greenBorder: styles.input }
+                      placeholder="Пароль"
+                    />
                     {!isValid && <div className={styles.errorInput}>{message}</div>}
                   </>
                 )}
               </ValidatorField>
 
-              <input type="password" className={styles.input} value={repeatPass} onChange={({ target: { value } }) => handleChangeRepeatPass(value)} placeholder="Повторите пароль" />
+              <input
+                type="password"
+                value={repeatPass}
+                onChange={({ target: { value } }) => handleChangeRepeatPass(value)}
+                className={ (password !== repeatPass) && password && repeatPass ? styles.input + ' ' + styles.redBorder : password === repeatPass ? styles.input + ' ' + styles.greenBorder: styles.input }
+                placeholder="Повторите пароль"
+              />
               { (password !== repeatPass) && password && repeatPass ?
                 <div className={styles.errorInput}>Пароли не совпадают</div>
-                 :
-                null
+                : null
               }
 
               <button className={styles.button} onClick={handleSubmit} type="button">Зарегистрироваться</button>

@@ -45,17 +45,30 @@
 .input, .button {
   width: 100%;
   padding: 10px;
-  border: 2px solid rgba(152, 118, 84, 0.8);
+  border: 2px solid rgba(152, 118, 84, 0.7);
   border-radius: 5px;
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
-.input:hover {
-  border-color: black;
+.input:focus {
+  outline: none;
 }
 
 .inputPartOne, .inputPartTwo {
   width: 48%;
+}
+
+.errorInput {
+  margin-bottom: 10px;
+  color: red;
+}
+
+.redBorder {
+  border: 2px solid red;
+}
+
+.greenBorder {
+  border: 2px solid green;
 }
 
 .button {
