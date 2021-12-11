@@ -19,8 +19,46 @@
     box-shadow: 15px -15px saddlebrown;
 }
 
+.imageTop {
+    right: 5%;
+    top: 7%;
+}
+
+.imageBottom {
+    left: -60px;
+    bottom: 40px;
+}
+
 .shadow {
     position: absolute;
     transform: skewY(20deg);
     background-color: sandybrown;
+}
+
+.shadowBig {
+    width: 150px;
+    height: 150px;
+    left: -60px;
+    top: 60px;
+}
+
+.shadowNormal {
+    width: 100px;
+    height: 100px;
+    right: 80px;
+    bottom: 80px;
+}
+
+.shadowSmallBottom {
+    width: 50px;
+    height: 50px;
+    left: 150px;
+    bottom: 210px;
+}
+
+.shadowSmallTop {
+    width: 50px;
+    height: 50px;
+    left: 200px;
+    top: 200px;
 }

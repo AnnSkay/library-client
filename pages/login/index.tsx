@@ -1,18 +1,24 @@
 import axios from 'axios';
-import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styles from './styles.module.css';
+import cn from 'classnames';
 import { AuthMainWrapper } from '../../components/ui/auth-main-wrapper';
 import { AuthTitle } from '../../components/ui/auth-title';
 import { AuthLogo } from '../../components/ui/auth-logo';
 import { AuthDescription } from '../../components/ui/auth-description';
+import { AuthLeftWrapper } from '../../components/ui/auth-left-wrapper';
+import { HeadBlock } from '../../components/ui/head-block';
 
-export default function PageLogin(): JSX.Element {
+export default function LogInPage(): JSX.Element {
   const [response, setResponse] = useState('');
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [click, isClick] = useState(false);
+  const [showRecoveryForm, isShowRecoveryFrom] = useState(false);
+
+  const showRecoveryClass = () => cn(styles.recoveryBlock, {
+    [styles.recoveryOpened]: showRecoveryForm,
+  });
 
   async function handleLogin() {
     const { data } = await axios.post('http://localhost:3001/api/login', {
@@ -22,19 +28,18 @@ export default function PageLogin(): JSX.Element {
     setResponse(data);
   }
 
-  const showRecovery = () => isClick(true);
-  const hideRecovery = () => isClick(false);
+  const showRecovery = () => isShowRecoveryFrom(true);
+  const hideRecovery = () => isShowRecoveryFrom(false);
 
   return (
     <div className={styles.container}>
 
-      <Head>
-        <title>Log in</title>
-      </Head>
+      <HeadBlock title="Log in"/>
 
       <AuthMainWrapper>
-        <div className={styles.regBlock}>
+        <AuthLeftWrapper>
           <AuthLogo />
+
           <div className={styles.registration}>
             <AuthTitle title="Вход" />
 
@@ -62,23 +67,30 @@ export default function PageLogin(): JSX.Element {
               <u>Забыли пароль?</u>
             </div>
 
-            <button type="submit" onClick={handleLogin} className={styles.button}>Войти</button>
+            <button
+              type="submit"
+              onClick={handleLogin}
+              className={styles.button}
+            >
+              Войти
+            </button>
 
-            <div>
+            <div className={styles.linkToAuth}>
               Первый раз у нас?
               {' '}
-              <Link href="/signup">
+              <Link href="../signup">
                 <a>Зарегистрироваться</a>
               </Link>
             </div>
           </div>
-        </div>
+        </AuthLeftWrapper>
+
         <AuthDescription />
       </AuthMainWrapper>
 
-      <div className={click ? (`${styles.recoveryBlock} ${styles.recoveryOpened}`) : (styles.recoveryBlock)}>
+      <div className={showRecoveryClass()}>
         <div className={styles.recoveryForm}>
-          <div className={styles.recoveryClose} onClick={hideRecovery} />
+          <div className={styles.recoveryClose} onClick={hideRecovery}/>
           <h2>Восстановление пароля</h2>
 
           <div className={styles.recoveryDesc}>
@@ -86,10 +98,12 @@ export default function PageLogin(): JSX.Element {
             указанный при регистрации
           </div>
 
-          <input type="text" className={styles.input} placeholder="E-mail" />
+          <input type="text" className={styles.input} placeholder="E-mail"/>
+
           <button type="submit" className={styles.button}>Выслать</button>
         </div>
-        <div className={styles.blackout} onClick={hideRecovery} />
+
+        <div className={styles.blackout} onClick={hideRecovery}/>
       </div>
     </div>
   );

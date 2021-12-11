@@ -1,14 +1,15 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import React, { useRef, useState } from 'react';
 // @ts-ignore
 import ValidatorWrapper, { ValidatorField } from '@coxy/react-validator';
 import cn from 'classnames';
-import styles from '../login/styles.module.css';
+import styles from './styles.module.css';
 import { AuthMainWrapper } from '../../components/ui/auth-main-wrapper';
 import { AuthTitle } from '../../components/ui/auth-title';
 import { AuthLogo } from '../../components/ui/auth-logo';
 import { AuthDescription } from '../../components/ui/auth-description';
+import { AuthLeftWrapper } from '../../components/ui/auth-left-wrapper';
+import { HeadBlock } from '../../components/ui/head-block';
 
 const myRules = {
   email: [{
@@ -34,7 +35,7 @@ const myRules = {
   }],
 };
 
-export default function SignInPage(): JSX.Element {
+export default function SignInPage(bytes: BufferSource): JSX.Element {
   const [email, handleChangeEmail] = useState('');
   const [phone, handleChangePhone] = useState('');
   const [password, handleChangePassword] = useState('');
@@ -42,80 +43,105 @@ export default function SignInPage(): JSX.Element {
 
   const validator = useRef<any>();
 
+  interface Validation {
+    isValid: boolean;
+    message: string;
+    errors: string;
+  }
+
   const handleSubmit = () => {
-    const { isValid, message, errors } = validator.current.validate();
+    const { isValid, message, errors }: Validation = validator.current.validate(bytes);
     if (!isValid) {
       console.log(isValid, message, errors);
     }
     // Success
   };
 
-  const emailInputClass = (isValid: boolean) => cn(styles.input, {
-    [styles.redBorder]: !isValid && email.length !== 0,
+  const inputClass = (isValid: boolean, inputValue: string) => cn(styles.input, {
+    [styles.redBorder]: !isValid && inputValue.length !== 0,
     [styles.greenBorder]: isValid,
   });
+
+  const repeatPassClass = () => cn(styles.input, {
+    [styles.redBorder]: password !== repeatPass && password && repeatPass,
+    [styles.greenBorder]: password === repeatPass && repeatPass,
+  });
+
+  const validationMessageBlock = (validationMessage: string) =>
+    <div className={styles.errorInput}>{validationMessage}</div>
 
   return (
     <div className={styles.container}>
 
-      <Head>
-        <title>Sign up</title>
-      </Head>
+      <HeadBlock title="Sign up"/>
 
       <AuthMainWrapper>
-        <div className={styles.regBlock}>
+        <AuthLeftWrapper>
           <AuthLogo />
+
           <div className={styles.registration}>
-            <AuthTitle title="Вход" />
+            <AuthTitle title="Регистрация" />
 
             <ValidatorWrapper ref={validator}>
 
               <div className={styles.blockInput}>
-                <input type="text" className={cn(styles.input, styles.inputPartOne)} placeholder="Имя" />
-                <input type="text" className={`${styles.input} ${styles.inputPartTwo}`} placeholder="Фамилия" />
+                <input
+                  type="text"
+                  className={cn(styles.input, styles.inputPartOne)}
+                  placeholder="Имя"
+                />
+
+                <input
+                  type="text"
+                  className={cn(styles.input, styles.inputPartTwo)}
+                  placeholder="Фамилия"
+                />
               </div>
 
               <ValidatorField value={email} rules={myRules.email}>
-                {({ isValid, message }) => (
+                {({ isValid, message }: Validation) => (
                   <>
                     <input
                       type="text"
                       value={email}
                       onChange={({ target: { value } }) => handleChangeEmail(value)}
-                      className={emailInputClass(isValid)}
+                      className={inputClass(isValid, email)}
                       placeholder="E-mail"
                     />
-                    {!isValid && <div className={styles.errorInput}>{message}</div>}
+
+                    {!isValid && validationMessageBlock(message)}
                   </>
                 )}
               </ValidatorField>
 
               <ValidatorField value={phone} rules={myRules.phone}>
-                {({ isValid, message }) => (
+                {({ isValid, message }: Validation) => (
                   <>
                     <input
                       type="text"
                       value={phone}
                       onChange={({ target: { value } }) => handleChangePhone(value)}
-                      className={!isValid && phone.length !== 0 ? `${styles.input} ${styles.redBorder}` : phone.length !== 0 ? `${styles.input} ${styles.greenBorder}` : styles.input}
+                      className={inputClass(isValid, phone)}
                       placeholder="Телефон"
                     />
-                    {!isValid && <div className={styles.errorInput}>{message}</div>}
+
+                    {!isValid && validationMessageBlock(message)}
                   </>
                 )}
               </ValidatorField>
 
               <ValidatorField value={password} rules={myRules.password}>
-                {({ isValid, message }) => (
+                {({ isValid, message }: Validation) => (
                   <>
                     <input
                       type="password"
                       value={password}
                       onChange={({ target: { value } }) => handleChangePassword(value)}
-                      className={!isValid && password.length !== 0 ? `${styles.input} ${styles.redBorder}` : password.length !== 0 ? `${styles.input} ${styles.greenBorder}` : styles.input}
+                      className={inputClass(isValid, password)}
                       placeholder="Пароль"
                     />
-                    {!isValid && <div className={styles.errorInput}>{message}</div>}
+
+                    {!isValid && validationMessageBlock(message)}
                   </>
                 )}
               </ValidatorField>
@@ -124,27 +150,34 @@ export default function SignInPage(): JSX.Element {
                 type="password"
                 value={repeatPass}
                 onChange={({ target: { value } }) => handleChangeRepeatPass(value)}
-                className={(password !== repeatPass) && password && repeatPass ? `${styles.input} ${styles.redBorder}` : password === repeatPass && repeatPass ? `${styles.input} ${styles.greenBorder}` : styles.input}
+                className={repeatPassClass()}
                 placeholder="Повторите пароль"
               />
 
-              {((password !== repeatPass) && password && repeatPass) && (
-                <div className={styles.errorInput}>Пароли не совпадают</div>
-              )}
+              {
+                password !== repeatPass && password && repeatPass &&
+                validationMessageBlock('Пароли не совпадают')
+              }
 
-              <button className={styles.button} onClick={handleSubmit} type="button">Зарегистрироваться</button>
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className={styles.button}
+              >
+                Зарегистрироваться
+              </button>
 
             </ValidatorWrapper>
 
-            <div>
+            <div className={styles.linkToAuth}>
               Уже участник?
               {' '}
-              <Link href="/login">
+              <Link href="../login">
                 <a className={styles.loginLink}>Войти</a>
               </Link>
             </div>
           </div>
-        </div>
+        </AuthLeftWrapper>
 
         <AuthDescription />
       </AuthMainWrapper>
