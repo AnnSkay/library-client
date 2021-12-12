@@ -200,7 +200,7 @@ export default (): JSX.Element => {
                              year
                            }, index) => {
               return (
-                <div className={notAvailableClass(isAvailable)} key={index} onClick={isAvailable ? takeBook : null}>
+                <div className={notAvailableClass(isAvailable)} key={index} onClick={isAvailable ? takeBook : undefined}>
                   <div className={styles.bookTitle}>"{title}"</div>
                   <div><b>Автор:</b> {author}</div>
                   <div><b>Издательство:</b> {house}</div>
