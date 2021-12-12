@@ -1,12 +1,12 @@
-/*@font-face {*/
-/*  font-family: AT;*/
-/*  src: url('../fonts/AT.otf');*/
-/*}*/
+@font-face {
+  font-family: Monotype Cors;
+  src: url('../fonts/monotypecorsiva.ttf');
+}
 
 body {
   background: url("../public/backgound-image.jpg") no-repeat;
   background-size: cover;
-  font-family: Monotype Corsiva, sans-serif;
+  font-family: Monotype Cors, sans-serif;
 }
 
 * {
@@ -17,4 +17,7 @@ a {
   color: inherit;
 }
 
+a, button, input, select {
+  cursor: pointer;
+}
 

@@ -44,6 +44,7 @@ export default function LogInPage(): JSX.Element {
             <AuthTitle title="Вход" />
 
             <input
+              type="text"
               value={login}
               onChange={(e) => setLogin(e.target.value)}
               className={styles.input}
@@ -51,6 +52,7 @@ export default function LogInPage(): JSX.Element {
             />
 
             <input
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={styles.input}
