@@ -2,10 +2,8 @@ import React, {useState} from "react";
 import styles from '../styles/styles.module.css';
 import cn from 'classnames';
 import { HeadBlock } from '../components/ui/head-block';
-import Link from "next/link";
-import Image from "next/image";
-import Logo from '../public/library-logo.png';
 import axios from "axios";
+import { HeaderBlock } from "../components/ui/header-block";
 
 export default (): JSX.Element => {
   const [booksList, setBooksList] = useState([]);
@@ -67,36 +65,11 @@ export default (): JSX.Element => {
 
   return (
     <div className={styles.container}>
-
       <HeadBlock title="Main Page" />
 
 
       <div className={styles.mainWrapper}>
-        <div className={styles.header}>
-          <Link href="/">
-            <a className={styles.link}>
-              <div className={styles.logo}>
-                <Image src={Logo} width={50} height={50} alt="Logo" />
-              </div>
-
-              <div className={styles.libraryName}>
-                Электронная библиотека "Знания"
-              </div>
-            </a>
-          </Link>
-
-          <h1 className={styles.headerTitle}>
-            Добро пожаловать в электронную библиотеку!
-          </h1>
-
-          <div className={styles.authorization}>
-            <Link href="/login">
-              <a className={styles.link}>
-                Личный кабинет
-              </a>
-            </Link>
-          </div>
-        </div>
+        <HeaderBlock />
 
         <table className={styles.searchForm}>
           <caption className={styles.searchTitle}>Каталог книг</caption>

@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './styles.module.css';
-import Logo from '../../../public/library-logo.png';
+import Logo from '../header-block/library-logo.png';
 
 export function AuthLogo() {
   return (

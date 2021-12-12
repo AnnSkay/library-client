@@ -1,0 +1,45 @@
+.link {
+    text-decoration: none;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.header a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 15%;
+}
+
+.headerTitle {
+    width: 50%;
+    text-align: center;
+}
+
+.libraryName {
+    font-size: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 70%;
+}
+
+.authorization {
+    font-size: 18px;
+    width: 100px;
+    height: 45px;
+    border: 2px solid rgb(152, 118, 84);
+    background-color: rgba(152, 118, 84, 0.7);
+    color: white;
+}
+
+.authorization a {
+    width: 100%;
+    text-align: center;
+}
