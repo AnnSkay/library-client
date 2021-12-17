@@ -6,7 +6,7 @@ import axios from "axios";
 import {MainHeaderWrapper} from "../components/ui/main-header-wrapper";
 import {MainLogo} from "../components/ui/main-logo";
 import {MainGreeting} from "../components/ui/main-greeting";
-import {LoginToAccountLink} from "../components/ui/login-to-account-link";
+// import {LoginToAccountLink} from "../components/ui/login-to-account-link";
 import {MainMenuUsers} from "../components/ui/main-menu-users";
 
 export default (): JSX.Element => {
