@@ -3,7 +3,11 @@ import styles from '../styles/styles.module.css';
 import cn from 'classnames';
 import { HeadBlock } from '../components/ui/head-block';
 import axios from "axios";
-import { HeaderBlock } from "../components/ui/header-block";
+import {MainHeaderWrapper} from "../components/ui/main-header-wrapper";
+import {MainLogo} from "../components/ui/main-logo";
+import {MainGreeting} from "../components/ui/main-greeting";
+import {LoginToAccountLink} from "../components/ui/login-to-account-link";
+import {MainMenuUsers} from "../components/ui/main-menu-users";
 
 export default (): JSX.Element => {
   const [booksList, setBooksList] = useState([]);
@@ -69,7 +73,12 @@ export default (): JSX.Element => {
 
 
       <div className={styles.mainWrapper}>
-        <HeaderBlock />
+        <MainHeaderWrapper>
+          <MainLogo/>
+          <MainGreeting name="Гость"/>
+          {/*<LoginToAccountLink />*/}
+          <MainMenuUsers folder="user page"/>
+        </MainHeaderWrapper>
 
         <table className={styles.searchForm}>
           <caption className={styles.searchTitle}>Каталог книг</caption>

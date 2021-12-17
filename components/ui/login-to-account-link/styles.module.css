@@ -1,0 +1,15 @@
+.authorization {
+    font-size: 18px;
+    width: 100px;
+    height: 45px;
+    border: 2px solid rgb(152, 118, 84);
+    background-color: rgba(152, 118, 84, 0.7);
+    color: white;
+}
+
+.authorization .link {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+}

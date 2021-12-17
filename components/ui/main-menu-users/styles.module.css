@@ -1,0 +1,42 @@
+.menuBlock {
+    width: 10%;
+}
+
+.menuTitle {
+    width: 40px;
+}
+
+.menuList {
+    list-style: none;
+    padding: 5px;
+    margin: 0;
+    width: 130px;
+    border-radius: 0 10px 10px;
+    position: absolute;
+    /*color: white;*/
+}
+
+.hideMenu {
+    max-height: 0;
+    overflow: hidden;
+    /*transition: max-height 0.2s linear;*/
+    animation: roll-up 0.5s;
+}
+
+@keyframes roll-up {
+    from { max-height: 100%;}
+    to {max-height: 0;}
+}
+
+.brown {
+    background-color: rgba(152, 118, 84, 0.3);
+    transition-duration: 0.5s;
+    transition-property: background-color;
+}
+
+.white {
+    background-color: white;
+    transition-duration: 0.5s;
+    transition-property: background-color;
+}
+
