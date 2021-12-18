@@ -10,6 +10,8 @@ import { AuthDescription } from '../../components/ui/auth-description';
 import { AuthLeftWrapper } from '../../components/ui/auth-left-wrapper';
 import { HeadBlock } from '../../components/ui/head-block';
 
+import Router from 'next/router';
+
 export default function LogInPage(): JSX.Element {
   const [response, setResponse] = useState('');
   const [login, setLogin] = useState('');
@@ -26,6 +28,10 @@ export default function LogInPage(): JSX.Element {
       password,
     });
     setResponse(data);
+
+    if (response !== 'failed' && response !== '') {
+      Router.push(`/main-users/${login}`);
+    }
   }
 
   const showRecovery = () => isShowRecoveryFrom(true);
@@ -59,11 +65,10 @@ export default function LogInPage(): JSX.Element {
               placeholder="Пароль"
             />
 
-            {(response !== 'failed') ? (
-              <div>{response}</div>
-            ) : (
+            {(!(response === '') && response === 'failed') ? (
               <div className={styles.errorLogin}>Неверный логин/пароль</div>
-            )}
+            ) : null
+            }
 
             <div className={styles.forgotPass} onClick={showRecovery}>
               <u>Забыли пароль?</u>
