@@ -4,7 +4,9 @@ import Image from "next/image";
 import ListIcon from "./icon-list.png";
 import CloseIcon from "./icon-close.png";
 import cn from "classnames";
-import {ListMenuUsers} from "../list-menu-users";
+import {ListMenuReaders} from "../list-menu-readers";
+import {ListMenuLibrarians} from "../list-menu-librarians";
+import {ListMenuAdmins} from "../list-menu-admins";
 
 export function MainMenuUsers({ folder}: { folder: string }): JSX.Element {
   const [showMenu,setShowMenu] = useState(false);
@@ -25,7 +27,9 @@ export function MainMenuUsers({ folder}: { folder: string }): JSX.Element {
       </div>
 
       <ul className={menuListClass()}>
-        {folder == 'user page' ? <ListMenuUsers/> : <div>тут список для библиотекаря</div>}
+        {folder === 'USER' ? <ListMenuReaders/> : null}
+        {folder === 'LIBR' ? <ListMenuLibrarians/> : null}
+        {folder === 'ADMIN' ? <ListMenuAdmins/> : null}
       </ul>
     </div>
   );

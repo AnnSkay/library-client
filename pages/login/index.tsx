@@ -13,7 +13,7 @@ import { HeadBlock } from '../../components/ui/head-block';
 import Router from 'next/router';
 
 export default function LogInPage(): JSX.Element {
-  const [response, setResponse] = useState('');
+  const [response, setResponse] = useState('failed');
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [showRecoveryForm, isShowRecoveryFrom] = useState(false);
@@ -29,8 +29,8 @@ export default function LogInPage(): JSX.Element {
     });
     setResponse(data);
 
-    if (response !== 'failed' && response !== '') {
-      Router.push(`/main-users/${login}`);
+    if (response !== 'failed') {
+       await Router.push(`/main-users/${response}`)
     }
   }
 
@@ -65,7 +65,7 @@ export default function LogInPage(): JSX.Element {
               placeholder="Пароль"
             />
 
-            {(!(response === '') && response === 'failed') ? (
+            {(response === 'failed') ? (
               <div className={styles.errorLogin}>Неверный логин/пароль</div>
             ) : null
             }
