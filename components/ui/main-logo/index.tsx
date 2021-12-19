@@ -4,9 +4,9 @@ import Logo from "./library-logo.png";
 import Link from "next/link";
 import React from "react";
 
-export function MainLogo(): JSX.Element {
+export function MainLogo({link}: { link: string }): JSX.Element {
   return (
-    <Link href="/">
+    <Link href={link}>
       <a className={styles.link}>
         <div>
           <Image src={Logo} width={50} height={50} alt="Logo"/>

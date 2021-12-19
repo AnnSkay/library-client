@@ -14,7 +14,7 @@ export default (): JSX.Element => {
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo/>
+          <MainLogo link={'/'}/>
 
           <MainGreeting name="Гость"/>
 

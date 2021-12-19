@@ -9,11 +9,33 @@
 .menuList {
     list-style: none;
     padding: 5px;
-    margin: 0;
-    width: 130px;
-    border-radius: 0 10px 10px;
+    margin-top: 0;
+    margin-right: 5px;
+    width: 200px;
+    border-radius: 10px;
     position: absolute;
-    /*color: white;*/
+    right: 0;
+}
+
+.li {
+    padding: 8px 0 5px 10px;
+}
+
+.link {
+    text-decoration: none;
+    padding: 3px;
+}
+
+.link:hover {
+    background-color: rgba(152, 118, 84, 0.7);
+    border-radius: 10px;
+    color: white;
+}
+
+.linkActive {
+    background-color: rgba(152, 118, 84, 0.7);
+    border-radius: 10px;
+    color: white;
 }
 
 .hideMenu {

@@ -7,8 +7,9 @@ import cn from "classnames";
 import { ListMenuReaders } from "../list-menu-readers";
 import { ListMenuLibrarians } from "../list-menu-librarians";
 import { ListMenuAdmins } from "../list-menu-admins";
+import Link from "next/link";
 
-export function MainMenuUsers({ folder}: { folder: string }): JSX.Element {
+export function MainMenuUsers({folder, page}: { folder: string, page: string }): JSX.Element {
   const [showMenu,setShowMenu] = useState(false);
 
   const showListMenu = () => {
@@ -23,13 +24,17 @@ export function MainMenuUsers({ folder}: { folder: string }): JSX.Element {
   const selectMenuList = () => {
     switch (folder) {
       case 'USER':
-        return <ListMenuReaders/>
+        return <ListMenuReaders page={page}/>
       case 'LIBR':
-        return <ListMenuLibrarians/>
+        return <ListMenuLibrarians page={page}/>
       case 'ADMIN':
-        return <ListMenuAdmins/>
+        return <ListMenuAdmins page={page}/>
     }
   }
+
+  const linkClass = (linkName: string) => cn(styles.link, {
+    [styles.linkActive]: page === 'persAcc' && linkName === 'persAcc',
+  });
 
   return <div className={styles.menuBlock}>
     <div className={styles.menuTitle} onClick={showListMenu}>
@@ -37,7 +42,19 @@ export function MainMenuUsers({ folder}: { folder: string }): JSX.Element {
     </div>
 
     <ul className={menuListClass()}>
+      <li className={styles.li}>
+        <Link href={"/personal-account"}>
+          <a className={linkClass('persAcc')}>Личный кабинет</a>
+        </Link>
+      </li>
+
       {selectMenuList()}
+
+      <li className={styles.li}>
+        <Link href={"/"}>
+          <a className={styles.link}>Выйти</a>
+        </Link>
+      </li>
     </ul>
   </div>;
 }

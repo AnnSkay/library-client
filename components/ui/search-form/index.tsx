@@ -75,7 +75,7 @@ export function SearchForm() {
           Каталог книг
         </caption>
 
-        <tr className={styles.inputBlock}>
+        <tr>
           <td className={styles.inputTitle}>
             <label htmlFor="bookTitle">
               Название книги
@@ -93,7 +93,7 @@ export function SearchForm() {
           </td>
         </tr>
 
-        <tr className={styles.inputBlock}>
+        <tr>
           <td className={styles.inputTitle}>
             <label htmlFor="bookAuthor">
               ФИО автора
@@ -111,7 +111,7 @@ export function SearchForm() {
           </td>
         </tr>
 
-        <tr className={styles.inputBlock}>
+        <tr>
           <td className={styles.inputTitle}>
             <label htmlFor="bookPublishHouse">
               Издательство
@@ -138,7 +138,7 @@ export function SearchForm() {
           </td>
         </tr>
 
-        <tr className={styles.inputBlock}>
+        <tr>
           <td className={styles.inputTitle}>
             <label htmlFor="bookGenre">
               Жанр
@@ -165,7 +165,7 @@ export function SearchForm() {
           </td>
         </tr>
 
-        <tr className={styles.inputBlock}>
+        <tr>
           <td className={styles.inputTitle}>
             <label htmlFor="bookPublishYear">
               Год издания
@@ -185,7 +185,7 @@ export function SearchForm() {
           </td>
         </tr>
 
-        <tr className={styles.inputBlock}>
+        <tr>
           <td className={styles.inputTitle}>
             <label htmlFor="bookIsAvailable">
               В наличии

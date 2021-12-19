@@ -1,0 +1,38 @@
+.headerTitle {
+    width: 60%;
+    text-align: center;
+}
+
+.personalAccBlock {
+    width: 40%;
+    margin-left: 20px;
+}
+
+.inputBlock {
+    height: 60px;
+}
+
+.input, .button {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid rgba(152, 118, 84, 0.7);
+    border-radius: 5px;
+}
+
+.input:focus {
+    outline: none;
+}
+
+.inputTitle {
+    width: 20%;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.redBorder {
+    border: 2px solid red;
+}
+
+.greenBorder {
+    border: 2px solid green;
+}

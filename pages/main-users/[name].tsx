@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 export default function MainUsersPage(): JSX.Element {
   const router = useRouter();
   const { name } = router.query;
-  const role = 'ADMIN';
+  const role = 'USER';
 
   return (
     <div>
@@ -19,9 +19,9 @@ export default function MainUsersPage(): JSX.Element {
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo/>
+          <MainLogo link={`/main-users/${name}`}/>
           <MainGreeting name={name} />
-          <MainMenuUsers folder={role}/>
+          <MainMenuUsers folder={role} page={"main"}/>
         </MainHeaderWrapper>
 
         <SearchForm/>
