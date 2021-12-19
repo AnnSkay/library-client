@@ -9,11 +9,10 @@ import { AuthLogo } from '../../components/ui/auth-logo';
 import { AuthDescription } from '../../components/ui/auth-description';
 import { AuthLeftWrapper } from '../../components/ui/auth-left-wrapper';
 import { HeadBlock } from '../../components/ui/head-block';
-
 import Router from 'next/router';
 
 export default function LogInPage(): JSX.Element {
-  const [response, setResponse] = useState('failed');
+  const [serverAnswer, setServerAnswer] = useState('');
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [showRecoveryForm, isShowRecoveryFrom] = useState(false);
@@ -23,15 +22,16 @@ export default function LogInPage(): JSX.Element {
   });
 
   async function handleLogin() {
-    const { data } = await axios.post('http://localhost:3001/api/login', {
-      login,
-      password,
-    });
-    setResponse(data);
-
-    if (response !== 'failed') {
-       await Router.push(`/main-users/${response}`)
-    }
+    await axios
+      .post('http://localhost:3001/api/login', {
+        login,
+        password,
+      }).then(response => {
+        setServerAnswer(response.data);
+        if (response.data !== 'failed') {
+          Router.push(`/main-users/${response.data}`);
+        }
+      });
   }
 
   const showRecovery = () => isShowRecoveryFrom(true);
@@ -39,7 +39,6 @@ export default function LogInPage(): JSX.Element {
 
   return (
     <div className={styles.container}>
-
       <HeadBlock title="Log in"/>
 
       <AuthMainWrapper>
@@ -65,9 +64,9 @@ export default function LogInPage(): JSX.Element {
               placeholder="Пароль"
             />
 
-            {(response === 'failed') ? (
+            {(serverAnswer === 'failed') ? (
               <div className={styles.errorLogin}>Неверный логин/пароль</div>
-            ) : null
+              ) : null
             }
 
             <div className={styles.forgotPass} onClick={showRecovery}>

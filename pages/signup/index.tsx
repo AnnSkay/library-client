@@ -19,6 +19,7 @@ const myRules = {
     rule: (value: string) => (/^[\w-.]+@[\w-]+\.[a-z]{2,4}$/i).test(value),
     message: 'Формат email некорректный',
   }],
+
   password: [{
     rule: (value: string) => value !== '' && value.length > 0,
     message: 'Пароль обязателен',
@@ -26,6 +27,7 @@ const myRules = {
     rule: (value: string) => value.length > 5,
     message: 'Пароль должен быть не меньше 6 символов',
   }],
+
   phone: [{
     rule: (value: string) => value !== '' && value.length > 0,
     message: 'Телефон обязателен',
@@ -51,10 +53,13 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
 
   const handleSubmit = () => {
     const { isValid, message, errors }: Validation = validator.current.validate(bytes);
-    if (!isValid) {
+
+    if (!isValid || repeatPass !== password || repeatPass === '') {
       console.log(isValid, message, errors);
+    } else {
+      // тут будет проверка пользователя в базе по email и добавление пользователя в БД, далее переход в личный кабинет
+      alert('Регистрация прошла успешно');
     }
-    // Success
   };
 
   const inputClass = (isValid: boolean, inputValue: string) => cn(styles.input, {

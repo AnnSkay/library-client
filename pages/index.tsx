@@ -12,11 +12,12 @@ export default (): JSX.Element => {
     <div>
       <HeadBlock title="Main Page" />
 
-
       <MainPageWrapper>
         <MainHeaderWrapper>
           <MainLogo/>
+
           <MainGreeting name="Гость"/>
+
           <LoginToAccountLink />
         </MainHeaderWrapper>
 

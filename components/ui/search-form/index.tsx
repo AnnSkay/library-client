@@ -1,7 +1,8 @@
 import styles from "./styles.module.css";
 import cn from "classnames";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import Router from "next/router";
 
 export function SearchForm() {
   const [booksList, setBooksList] = useState([]);
@@ -58,46 +59,65 @@ export function SearchForm() {
   });
 
   const takeBook = () => {
-    alert('Чтобы взять книгу, надо войти');
+    if (confirm('Чтобы взять книгу, надо войти. Войти?')) {
+      Router.push(`/login`);
+    }
+  }
+
+  const unavailableBook = () => {
+    alert('Эта книга уже взята');
   }
 
   return (
     <div>
       <table className={styles.searchForm}>
-        <caption className={styles.searchTitle}>Каталог книг</caption>
+        <caption className={styles.searchTitle}>
+          Каталог книг
+        </caption>
 
         <tr className={styles.inputBlock}>
           <td className={styles.inputTitle}>
-            <label htmlFor="bookTitle">Название книги</label>
+            <label htmlFor="bookTitle">
+              Название книги
+            </label>
           </td>
+
           <td>
             <input
               type="text"
               id="bookTitle"
               value={bookTitle}
               onChange={(e) => setBookTitle(e.target.value)}
-              className={styles.input}/>
+              className={styles.input}
+            />
           </td>
         </tr>
 
         <tr className={styles.inputBlock}>
           <td className={styles.inputTitle}>
-            <label htmlFor="bookAuthor">ФИО автора</label>
+            <label htmlFor="bookAuthor">
+              ФИО автора
+            </label>
           </td>
+
           <td>
             <input
               type="text"
               id="bookAuthor"
               value={bookAuthor}
               onChange={(e) => setBookAuthor(e.target.value)}
-              className={styles.input}/>
+              className={styles.input}
+            />
           </td>
         </tr>
 
         <tr className={styles.inputBlock}>
           <td className={styles.inputTitle}>
-            <label htmlFor="bookPublishHouse">Издательство</label>
+            <label htmlFor="bookPublishHouse">
+              Издательство
+            </label>
           </td>
+
           <td>
             <select
               id="bookPublishHouse"
@@ -107,9 +127,11 @@ export function SearchForm() {
             >
               <option hidden selected disabled/>
               {publishingHouses &&
-              publishingHouses.map((publishingHouse, index) => {
+               publishingHouses.map((publishingHouse, index) => {
                 return (
-                  <option key={index}>{publishingHouse}</option>
+                  <option key={index}>
+                    {publishingHouse}
+                  </option>
                 );
               })}
             </select>
@@ -118,8 +140,11 @@ export function SearchForm() {
 
         <tr className={styles.inputBlock}>
           <td className={styles.inputTitle}>
-            <label htmlFor="bookGenre">Жанр</label>
+            <label htmlFor="bookGenre">
+              Жанр
+            </label>
           </td>
+
           <td>
             <select
               id="bookGenre"
@@ -129,9 +154,11 @@ export function SearchForm() {
             >
               <option hidden selected disabled/>
               {genres &&
-              genres.map((genre, index) => {
+               genres.map((genre, index) => {
                 return (
-                  <option key={index}>{genre}</option>
+                  <option key={index}>
+                    {genre}
+                  </option>
                 );
               })}
             </select>
@@ -140,8 +167,11 @@ export function SearchForm() {
 
         <tr className={styles.inputBlock}>
           <td className={styles.inputTitle}>
-            <label htmlFor="bookPublishYear">Год издания</label>
+            <label htmlFor="bookPublishYear">
+              Год издания
+            </label>
           </td>
+
           <td>
             <input
               type="number"
@@ -150,31 +180,43 @@ export function SearchForm() {
               id="bookPublishYear"
               value={bookPublishYear}
               onChange={(e) => setBookPublishYear(e.target.value)}
-              className={cn(styles.input, styles.inputYear)}/>
+              className={cn(styles.input, styles.inputYear)}
+            />
           </td>
         </tr>
 
         <tr className={styles.inputBlock}>
           <td className={styles.inputTitle}>
-            <label htmlFor="bookIsAvailable">В наличии</label>
+            <label htmlFor="bookIsAvailable">
+              В наличии
+            </label>
           </td>
+
           <td>
             <input
               type="checkbox"
               id="bookIsAvailable"
               className={styles.checkbox}
               checked={bookIsAvailable}
-              onChange={(e) => setBookIsAvailable(e.target.checked)}/>
+              onChange={(e) => setBookIsAvailable(e.target.checked)}
+            />
             <label htmlFor="bookIsAvailable" className={styles.label}/>
           </td>
         </tr>
+
         <tr>
           <td colSpan={2} className={styles.buttonGroup}>
-            <button className={styles.button} onClick={searchBooks}>Поиск</button>
-            <button className={styles.button} onClick={resetAllInputs}>Очистить</button>
+            <button className={styles.button} onClick={searchBooks}>
+              Поиск
+            </button>
+
+            <button className={styles.button} onClick={resetAllInputs}>
+              Очистить
+            </button>
           </td>
         </tr>
       </table>
+
       <div className={styles.booksContainer}>
         {!(booksList.length === 0 && searchClick) ? (
           booksList &&
@@ -187,8 +229,11 @@ export function SearchForm() {
                            year
                          }, index) => {
             return (
-              <div className={notAvailableClass(isAvailable)} key={index}
-                   onClick={isAvailable ? takeBook : undefined}>
+              <div
+                className={notAvailableClass(isAvailable)}
+                key={index}
+                onClick={isAvailable ? takeBook : unavailableBook}
+              >
                 <div className={styles.bookTitle}>"{title}"</div>
                 <div><b>Автор:</b> {author}</div>
                 <div><b>Издательство:</b> {house}</div>

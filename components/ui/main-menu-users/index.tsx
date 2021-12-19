@@ -1,12 +1,12 @@
 import styles from "./styles.module.css";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import ListIcon from "./icon-list.png";
 import CloseIcon from "./icon-close.png";
 import cn from "classnames";
-import {ListMenuReaders} from "../list-menu-readers";
-import {ListMenuLibrarians} from "../list-menu-librarians";
-import {ListMenuAdmins} from "../list-menu-admins";
+import { ListMenuReaders } from "../list-menu-readers";
+import { ListMenuLibrarians } from "../list-menu-librarians";
+import { ListMenuAdmins } from "../list-menu-admins";
 
 export function MainMenuUsers({ folder}: { folder: string }): JSX.Element {
   const [showMenu,setShowMenu] = useState(false);
@@ -20,17 +20,24 @@ export function MainMenuUsers({ folder}: { folder: string }): JSX.Element {
     [styles.white]: !showMenu,
   });
 
-  return (
-    <div className={styles.menuBlock}>
-      <div className={styles.menuTitle} onClick={showListMenu}>
-        <Image src={!showMenu ? ListIcon: CloseIcon} width={24} height={24} alt="Открыть меню" />
-      </div>
+  const selectMenuList = () => {
+    switch (folder) {
+      case 'USER':
+        return <ListMenuReaders/>
+      case 'LIBR':
+        return <ListMenuLibrarians/>
+      case 'ADMIN':
+        return <ListMenuAdmins/>
+    }
+  }
 
-      <ul className={menuListClass()}>
-        {folder === 'USER' ? <ListMenuReaders/> : null}
-        {folder === 'LIBR' ? <ListMenuLibrarians/> : null}
-        {folder === 'ADMIN' ? <ListMenuAdmins/> : null}
-      </ul>
+  return <div className={styles.menuBlock}>
+    <div className={styles.menuTitle} onClick={showListMenu}>
+      <Image src={!showMenu ? ListIcon: CloseIcon} width={24} height={24} alt="Открыть меню" />
     </div>
-  );
+
+    <ul className={menuListClass()}>
+      {selectMenuList()}
+    </ul>
+  </div>;
 }
