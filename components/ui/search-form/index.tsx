@@ -1,56 +1,66 @@
 import styles from "./styles.module.css";
 import cn from "classnames";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Router from "next/router";
 
 export function SearchForm() {
+
   const [booksList, setBooksList] = useState([]);
+  const [genresList, setGenresList] = useState([]);
+  const [housesList, setHousesList] = useState([]);
   const [searchClick, setSearchClick] = useState(false);
 
-  const [bookTitle, setBookTitle] = useState('');
-  const [bookAuthor, setBookAuthor] = useState('');
-  const [bookPublishHouse, setBookPublishHouse] = useState('');
-  const [bookGenre, setBookGenre] = useState('');
-  const [bookPublishYear, setBookPublishYear] = useState('');
+  const [bookValue, setBookValue] = useState({
+    title: '',
+    author: '',
+    publishHouse: '',
+    genre: '',
+    publishYear: ''
+  });
+
+  const inputOnChange = ({target}: any) => {
+    setBookValue({...bookValue, [target.name]:target.value});
+  }
+
+  // const [bookTitle, setBookTitle] = useState('');
+  // const [bookAuthor, setBookAuthor] = useState('');
+  // const [bookPublishHouse, setBookPublishHouse] = useState('');
+  // const [bookGenre, setBookGenre] = useState('');
+  // const [bookPublishYear, setBookPublishYear] = useState('');
   const [bookIsAvailable, setBookIsAvailable] = useState(false);
 
-  const publishingHouses = [
-    'РОСМЭН',
-    'Издательство1',
-    'Издательство2',
-    'Издательство3',
-    'Издательство4',
-  ];
-
-  const genres = [
-    'Фантастика',
-    'Фэнтэзи',
-    'Ужасы',
-    'Комедия',
-    'Сказки',
-  ]
-
   const resetAllInputs = () => {
-    setBookTitle('');
-    setBookAuthor('');
-    setBookPublishHouse('');
-    setBookGenre('');
-    setBookPublishYear('');
+    setBookValue({...bookValue, title: ''});
+    setBookValue({...bookValue, author: ''});
+    setBookValue({...bookValue, publishHouse: ''});
+    setBookValue({...bookValue, genre: ''});
+    setBookValue({...bookValue, publishYear: ''});
     setBookIsAvailable(false);
   }
 
+  const searchHouses = async () => {
+    const response = await axios.get('http://localhost:3001/api/houses');
+    setHousesList(response.data);
+  }
+
+  const searchGenres = async () => {
+    const response = await axios.get('http://localhost:3001/api/genres');
+    setGenresList(response.data);
+  }
+
+  useEffect(() => {
+    searchGenres();
+    searchHouses()
+  }, []);
+
   const searchBooks = async () => {
-    const responce = await axios.post('http://localhost:3001/api/books', {
-      bookTitle,
-      bookAuthor,
-      bookPublishHouse,
-      bookGenre,
-      bookPublishYear,
+    const response = await axios.post('http://localhost:3001/api/books', {
+      bookValue,
       bookIsAvailable
     });
 
-    setBooksList(responce.data);
+    setBooksList(response.data);
     setSearchClick(true);
   }
 
@@ -86,8 +96,9 @@ export function SearchForm() {
             <input
               type="text"
               id="bookTitle"
-              value={bookTitle}
-              onChange={(e) => setBookTitle(e.target.value)}
+              name="title"
+              value={bookValue.title}
+              onChange={inputOnChange}
               className={styles.input}
             />
           </td>
@@ -104,8 +115,9 @@ export function SearchForm() {
             <input
               type="text"
               id="bookAuthor"
-              value={bookAuthor}
-              onChange={(e) => setBookAuthor(e.target.value)}
+              name="author"
+              value={bookValue.author}
+              onChange={inputOnChange}
               className={styles.input}
             />
           </td>
@@ -121,16 +133,17 @@ export function SearchForm() {
           <td>
             <select
               id="bookPublishHouse"
-              value={bookPublishHouse}
-              onChange={(e) => setBookPublishHouse(e.target.value)}
+              name="publishHouse"
+              value={bookValue.publishHouse}
+              onChange={inputOnChange}
               className={styles.input}
             >
               <option hidden selected disabled/>
-              {publishingHouses &&
-               publishingHouses.map((publishingHouse, index) => {
+              {genresList &&
+              genresList.map(({genre}, index) => {
                 return (
                   <option key={index}>
-                    {publishingHouse}
+                    {genre}
                   </option>
                 );
               })}
@@ -148,16 +161,17 @@ export function SearchForm() {
           <td>
             <select
               id="bookGenre"
-              value={bookGenre}
-              onChange={(e) => setBookGenre(e.target.value)}
+              name="genre"
+              value={bookValue.genre}
+              onChange={inputOnChange}
               className={styles.input}
             >
               <option hidden selected disabled/>
-              {genres &&
-               genres.map((genre, index) => {
+              {housesList &&
+               housesList.map(({house}, index) => {
                 return (
                   <option key={index}>
-                    {genre}
+                    {house}
                   </option>
                 );
               })}
@@ -178,8 +192,9 @@ export function SearchForm() {
               min="1800"
               max="2021"
               id="bookPublishYear"
-              value={bookPublishYear}
-              onChange={(e) => setBookPublishYear(e.target.value)}
+              name="publishYear"
+              value={bookValue.publishYear}
+              onChange={inputOnChange}
               className={cn(styles.input, styles.inputYear)}
             />
           </td>
@@ -196,9 +211,11 @@ export function SearchForm() {
             <input
               type="checkbox"
               id="bookIsAvailable"
+              name="isAvailable"
               className={styles.checkbox}
               checked={bookIsAvailable}
               onChange={(e) => setBookIsAvailable(e.target.checked)}
+              // onChange={inputOnChange}
             />
             <label htmlFor="bookIsAvailable" className={styles.label}/>
           </td>
