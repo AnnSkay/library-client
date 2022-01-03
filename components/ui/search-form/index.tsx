@@ -12,15 +12,16 @@ export function SearchForm() {
   const [searchClick, setSearchClick] = useState(false);
 
   const [bookValue, setBookValue] = useState({
-    title: '',
-    author: '',
-    publishHouse: '',
-    genre: '',
-    publishYear: ''
+    'title': '',
+    'author': '',
+    'publishHouse': '',
+    'genre': '',
+    'publishYear': ''
   });
 
   const inputOnChange = ({target}: any) => {
-    setBookValue({...bookValue, [target.name]:target.value});
+    setBookValue({...bookValue, [target.name]: target.value});
+    console.log([target.name], bookValue);
   }
 
   // const [bookTitle, setBookTitle] = useState('');
@@ -31,7 +32,7 @@ export function SearchForm() {
   const [bookIsAvailable, setBookIsAvailable] = useState(false);
 
   const resetAllInputs = () => {
-    setBookValue({...bookValue, title: '', author: ''});
+    setBookValue(prevState => ({...prevState, ['title']: ''}));
     setBookValue({...bookValue, author: ''});
     setBookValue({...bookValue, publishHouse: ''});
     setBookValue({...bookValue, genre: ''});
