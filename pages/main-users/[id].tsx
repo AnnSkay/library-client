@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {HeadBlock} from '../../components/ui/head-block';
 import {MainHeaderWrapper} from "../../components/ui/main-header-wrapper";
 import {MainLogo} from "../../components/ui/main-logo";
@@ -10,8 +11,21 @@ import { useRouter } from "next/router";
 
 export default function MainUsersPage(): JSX.Element {
   const router = useRouter();
-  const { name } = router.query;
-  const role = 'USER';
+  const { id } = router.query;
+
+  const [userData, setUserData] = useState({});
+
+  const getUserName = async () => {
+    const response = await axios.post('http://localhost:3001/api/user', {
+      id
+    });
+
+    setUserData(response.data);
+  }  
+
+  useEffect(() => {
+    getUserName();
+  }, []);
 
   return (
     <div>
@@ -19,9 +33,9 @@ export default function MainUsersPage(): JSX.Element {
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo link={`/main-users/${name}`}/>
-          <MainGreeting name={name} />
-          <MainMenuUsers folder={role} page={"main"}/>
+          <MainLogo link={"/main-users/"}/>
+          <MainGreeting name={userData.name} />
+          <MainMenuUsers user={userData} page={"main"}/>
         </MainHeaderWrapper>
 
         <SearchForm/>

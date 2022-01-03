@@ -1,4 +1,6 @@
-import React, {useRef, useState} from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
 import {HeadBlock} from '../../components/ui/head-block';
 import {MainHeaderWrapper} from "../../components/ui/main-header-wrapper";
 import {MainLogo} from "../../components/ui/main-logo";
@@ -36,19 +38,33 @@ const myRules = {
 };
 
 export default function PersonalAccountPage(): JSX.Element {
-  const user = {
-    name: 'Петя',
-    lastname: 'Петров',
-    role: 'USER',
-    login: 'petya@mail.ru',
-    phone: '89991112233',
-    password: '123',
-  };
+  const router = useRouter();
 
-  const [name, handleChangeName] = useState(user.name);
-  const [lastname, handleChangeLastname] = useState(user.lastname);
-  const [email, handleChangeEmail] = useState(user.login);
-  const [phone, handleChangePhone] = useState(user.phone);
+  const [userData, setUserData] = useState({});
+  const [id, setId] = useState({});
+
+  const [name, handleChangeName] = useState('');
+  const [lastname, handleChangeLastname] = useState('');
+  const [email, handleChangeEmail] = useState('');
+  const [phone, handleChangePhone] = useState('');
+
+  const getUserName = async () => {
+    await axios
+    .post('http://localhost:3001/api/user', {
+      id
+    }).then(response => {
+      setUserData(response.data);
+      handleChangeName(userData.name);
+      handleChangeLastname(userData.lastname);
+      handleChangeEmail(userData.login);
+      handleChangePhone(userData.phone);
+    });
+  }  
+
+  useEffect(() => {
+    setId(router.query); 
+    getUserName();
+  }, [router]);
 
   const validator = useRef<any>();
 
@@ -88,11 +104,11 @@ export default function PersonalAccountPage(): JSX.Element {
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo link={`/main-users/${user.login}`}/>
+          <MainLogo link={`/main-users/${userData.id}`}/>
           <h1 className={styles.headerTitle}>
             Личный кабинет
           </h1>
-          <MainMenuUsers folder={user.role} page={'persAcc'}/>
+          <MainMenuUsers user={userData} page={'persAcc'}/>
         </MainHeaderWrapper>
 
         <table className={styles.personalAccBlock}>
@@ -174,7 +190,7 @@ export default function PersonalAccountPage(): JSX.Element {
                         type="text"
                         id="phone"
                         value={phone}
-                        onChange={({ target: { value } }) => handleChangeEmail(value)}
+                        onChange={({ target: { value } }) => handleChangePhone(value)}
                         className={inputClass(isValid, email)}
                       />
 

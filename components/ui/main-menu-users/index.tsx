@@ -9,7 +9,7 @@ import { ListMenuLibrarians } from "../list-menu-librarians";
 import { ListMenuAdmins } from "../list-menu-admins";
 import Link from "next/link";
 
-export function MainMenuUsers({folder, page}: { folder: string, page: string }): JSX.Element {
+export function MainMenuUsers({user, page}: { user: any, page: string }): JSX.Element {
   const [showMenu,setShowMenu] = useState(false);
 
   const showListMenu = () => {
@@ -22,7 +22,7 @@ export function MainMenuUsers({folder, page}: { folder: string, page: string }):
   });
 
   const selectMenuList = () => {
-    switch (folder) {
+    switch (user.role) {
       case 'USER':
         return <ListMenuReaders page={page}/>
       case 'LIBR':
@@ -43,7 +43,7 @@ export function MainMenuUsers({folder, page}: { folder: string, page: string }):
 
     <ul className={menuListClass()}>
       <li className={styles.li}>
-        <Link href={"/personal-account"}>
+        <Link href={`/personal-account/${user.id}`}>
           <a className={linkClass('persAcc')}>Личный кабинет</a>
         </Link>
       </li>
