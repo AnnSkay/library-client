@@ -6,62 +6,55 @@ import Router from "next/router";
 
 export function SearchForm() {
 
-  const [booksList, setBooksList] = useState([]);
-  const [genresList, setGenresList] = useState([]);
-  const [housesList, setHousesList] = useState([]);
   const [searchClick, setSearchClick] = useState(false);
 
-  const [bookValue, setBookValue] = useState({
-    'title': '',
-    'author': '',
-    'publishHouse': '',
-    'genre': '',
-    'publishYear': ''
+  const [lists, setLists] = useState({
+    books: [],
+    genres: [],
+    houses: []
   });
 
-  const inputOnChange = ({target}: any) => {
-    setBookValue({...bookValue, [target.name]: target.value});
-    console.log([target.name], bookValue);
+  const [bookValue, setBookValue] = useState({
+    title: '',
+    author: '',
+    publishHouse: '',
+    genre: '',
+    publishYear: '',
+    isAvailable: false
+  });
+
+  const inputOnChange = (name: string, value: any) => {
+    setBookValue({...bookValue, [name]: value});
   }
 
-  // const [bookTitle, setBookTitle] = useState('');
-  // const [bookAuthor, setBookAuthor] = useState('');
-  // const [bookPublishHouse, setBookPublishHouse] = useState('');
-  // const [bookGenre, setBookGenre] = useState('');
-  // const [bookPublishYear, setBookPublishYear] = useState('');
-  const [bookIsAvailable, setBookIsAvailable] = useState(false);
-
-  const resetAllInputs = () => {
-    setBookValue(prevState => ({...prevState, ['title']: ''}));
-    setBookValue({...bookValue, author: ''});
-    setBookValue({...bookValue, publishHouse: ''});
-    setBookValue({...bookValue, genre: ''});
-    setBookValue({...bookValue, publishYear: ''});
-    setBookIsAvailable(false);
-  }
-
-  const searchHouses = async () => {
-    const response = await axios.get('http://localhost:3001/api/houses');
-    setHousesList(response.data);
-  }
-
-  const searchGenres = async () => {
-    const response = await axios.get('http://localhost:3001/api/genres');
-    setGenresList(response.data);
+  const searchGenresAndHouses = async () => {
+    const responseHouses = await axios.get('http://localhost:3001/api/houses');
+    const responseGenres = await axios.get('http://localhost:3001/api/genres');
+    setLists({...lists, houses: responseHouses.data, genres: responseGenres.data});
   }
 
   useEffect(() => {
-    searchGenres();
-    searchHouses()
+    searchGenresAndHouses();
   }, []);
+
+  const resetAllInputs = () => {
+    setBookValue({
+      ...bookValue, 
+      title: '',
+      author: '',
+      publishHouse: '',
+      genre: '',
+      publishYear: '',
+      isAvailable: false
+    });
+  }
 
   const searchBooks = async () => {
     const response = await axios.post('http://localhost:3001/api/books', {
-      bookValue,
-      bookIsAvailable
+      ...bookValue
     });
 
-    setBooksList(response.data);
+    setLists({...lists, books: response.data});
     setSearchClick(true);
   }
 
@@ -99,7 +92,7 @@ export function SearchForm() {
               id="bookTitle"
               name="title"
               value={bookValue.title}
-              onChange={inputOnChange}
+              onChange={(e) => inputOnChange(e.target.name, e.target.value)}
               className={styles.input}
             />
           </td>
@@ -118,7 +111,7 @@ export function SearchForm() {
               id="bookAuthor"
               name="author"
               value={bookValue.author}
-              onChange={inputOnChange}
+              onChange={(e) => inputOnChange(e.target.name, e.target.value)}
               className={styles.input}
             />
           </td>
@@ -136,15 +129,15 @@ export function SearchForm() {
               id="bookPublishHouse"
               name="publishHouse"
               value={bookValue.publishHouse}
-              onChange={inputOnChange}
+              onChange={(e) => inputOnChange(e.target.name, e.target.value)}
               className={styles.input}
             >
               <option hidden selected disabled/>
-              {genresList &&
-              genresList.map(({genre}, index) => {
+              {lists.houses &&
+               lists.houses.map(({house}, index) => {
                 return (
                   <option key={index}>
-                    {genre}
+                    {house}
                   </option>
                 );
               })}
@@ -164,15 +157,15 @@ export function SearchForm() {
               id="bookGenre"
               name="genre"
               value={bookValue.genre}
-              onChange={inputOnChange}
+              onChange={(e) => inputOnChange(e.target.name, e.target.value)}
               className={styles.input}
             >
               <option hidden selected disabled/>
-              {housesList &&
-               housesList.map(({house}, index) => {
+              {lists.genres &&
+               lists.genres.map(({genre}, index) => {
                 return (
                   <option key={index}>
-                    {house}
+                    {genre}
                   </option>
                 );
               })}
@@ -195,7 +188,7 @@ export function SearchForm() {
               id="bookPublishYear"
               name="publishYear"
               value={bookValue.publishYear}
-              onChange={inputOnChange}
+              onChange={(e) => inputOnChange(e.target.name, e.target.value)}
               className={cn(styles.input, styles.inputYear)}
             />
           </td>
@@ -214,9 +207,9 @@ export function SearchForm() {
               id="bookIsAvailable"
               name="isAvailable"
               className={styles.checkbox}
-              checked={bookIsAvailable}
-              onChange={(e) => setBookIsAvailable(e.target.checked)}
-              // onChange={inputOnChange}
+              checked={bookValue.isAvailable}
+              // onChange={(e) => setBookIsAvailable(e.target.checked)}
+              onChange={(e) => inputOnChange(e.target.name, e.target.checked)}
             />
             <label htmlFor="bookIsAvailable" className={styles.label}/>
           </td>
@@ -236,9 +229,9 @@ export function SearchForm() {
       </table>
 
       <div className={styles.booksContainer}>
-        {!(booksList.length === 0 && searchClick) ? (
-          booksList &&
-          booksList.map(({
+        {!(lists.books.length === 0 && searchClick) ? (
+          lists.books &&
+          lists.books.map(({
                            author,
                            genre,
                            house,
