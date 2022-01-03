@@ -31,7 +31,7 @@ export function SearchForm() {
   const [bookIsAvailable, setBookIsAvailable] = useState(false);
 
   const resetAllInputs = () => {
-    setBookValue({...bookValue, title: ''});
+    setBookValue({...bookValue, title: '', author: ''});
     setBookValue({...bookValue, author: ''});
     setBookValue({...bookValue, publishHouse: ''});
     setBookValue({...bookValue, genre: ''});
