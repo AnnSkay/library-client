@@ -41,18 +41,23 @@ export default function PersonalAccountPage(): JSX.Element {
   const router = useRouter();
 
   const [userData, setUserData] = useState({});
-
-  const [userId, handleChangeUserId] = useState('');
-  const [name, handleChangeName] = useState('');
-  const [lastname, handleChangeLastname] = useState('');
-  const [email, handleChangeEmail] = useState('');
-  const [phone, handleChangePhone] = useState('');
-  const [oldPassword, handleChangeOldPassword] = useState('');
-  const [newPassword, handleChangeNewPassword] = useState('');
-  const [repeatNewPassword, handleChangeRepeatNewPassword] = useState('');
-
   const [changeDataClick, setChangeDataClick] = useState(true);
   const [changePassordClick, setChangePassordClick] = useState(false);
+
+  const [userValue, setUserValue] = useState({
+    userId: '',
+    name: '',
+    lastname: '',
+    email: '',
+    phone: '',
+    oldPassword: '',
+    newPassword: '',
+    repeatNewPassword: ''
+  });
+
+  const inputOnChange = ({target}: any) => {
+    setUserValue({...userValue, [target.name]: target.value});
+  }
 
   const getUserName = async (id: string) => {
     await axios
@@ -60,36 +65,37 @@ export default function PersonalAccountPage(): JSX.Element {
       id
     }).then(response => {
       setUserData(response.data);
-      handleChangeUserId(response.data.id);
-      handleChangeName(response.data.name);
-      handleChangeLastname(response.data.lastname);
-      handleChangeEmail(response.data.login);
-      handleChangePhone(response.data.phone);
+      setUserValue({
+        ...userValue, 
+        userId: response.data.id,
+        name: response.data.name,
+        lastname: response.data.lastname,
+        email: response.data.login,
+        phone: response.data.phone
+      });
     });
   }  
 
   const sendDataChange = async () => {
     await axios
     .post('http://localhost:3001/api/changeUserData', {
-      userId,
-      name,
-      lastname,
-      email,
-      phone
+      ...userValue
     }).then(response => {
       setUserData(response.data);
-      handleChangeName(response.data.name);
-      handleChangeLastname(response.data.lastname);
-      handleChangeEmail(response.data.login);
-      handleChangePhone(response.data.phone);
+      setUserValue({
+        ...userValue, 
+        name: response.data.name,
+        lastname: response.data.lastname,
+        email: response.data.login,
+        phone: response.data.phone
+      });
     });
   }  
 
   const sendPasswordChange = async () => {
     await axios
     .post('http://localhost:3001/api/changeUserPassword', {
-      userId,
-      newPassword
+      ...userValue
     }).then(response => {
       setUserData(response.data);
     });
@@ -115,8 +121,8 @@ export default function PersonalAccountPage(): JSX.Element {
   });
 
   const repeatNewPassordClass = () => cn(styles.input, {
-    [styles.redBorder]: newPassword !== repeatNewPassword && newPassword && repeatNewPassword,
-    [styles.greenBorder]: newPassword === repeatNewPassword && repeatNewPassword,
+    [styles.redBorder]: userValue.newPassword !== userValue.repeatNewPassword && userValue.newPassword && userValue.repeatNewPassword,
+    [styles.greenBorder]: userValue.newPassword === userValue.repeatNewPassword && userValue.repeatNewPassword,
   });
 
   const validationMessageBlock = (validationMessage: string) =>
@@ -152,7 +158,7 @@ export default function PersonalAccountPage(): JSX.Element {
   const handlePasswordSubmit = () => {
     const { isValid, message, errors }: Validation = validator.current.validate();
     
-    if (oldPassword !== userData.password || repeatNewPassword !== newPassword || repeatNewPassword === '') {
+    if (userValue.oldPassword !== userData.password || userValue.repeatNewPassword !== userValue.newPassword || userValue.repeatNewPassword === '') {
       console.log(isValid, message, errors);
     } else {
       sendPasswordChange();
@@ -193,8 +199,9 @@ export default function PersonalAccountPage(): JSX.Element {
                   <input
                     type="text"
                     id="name"
-                    value={name}
-                    onChange={(e) => handleChangeName(e.target.value)}
+                    name="name"
+                    value={userValue.name}
+                    onChange={inputOnChange}
                     className={styles.input}
                   />
                 </td>
@@ -211,8 +218,9 @@ export default function PersonalAccountPage(): JSX.Element {
                   <input
                     type="text"
                     id="lastname"
-                    value={lastname}
-                    onChange={(e) => handleChangeLastname(e.target.value)}
+                    name="lastname"
+                    value={userValue.lastname}
+                    onChange={inputOnChange}
                     className={styles.input}
                   />
                 </td>
@@ -226,15 +234,16 @@ export default function PersonalAccountPage(): JSX.Element {
                 </td>
 
                 <td>
-                  <ValidatorField value={email} rules={myRules.email}>
+                  <ValidatorField value={userValue.email} rules={myRules.email}>
                     {({ isValid, message }: Validation) => (
                       <>
                         <input
                           type="text"
                           id="email"
-                          value={email}
-                          onChange={({ target: { value } }) => handleChangeEmail(value)}
-                          className={inputClass(isValid, email)}
+                          name="email"
+                          value={userValue.email}
+                          onChange={inputOnChange}
+                          className={inputClass(isValid, userValue.email)}
                         />
 
                         {!isValid && validationMessageBlock(message)}
@@ -252,15 +261,16 @@ export default function PersonalAccountPage(): JSX.Element {
                 </td>
 
                 <td>
-                  <ValidatorField value={phone} rules={myRules.phone}>
+                  <ValidatorField value={userValue.phone} rules={myRules.phone}>
                     {({ isValid, message }: Validation) => (
                       <>
                         <input
                           type="text"
                           id="phone"
-                          value={phone}
-                          onChange={({ target: { value } }) => handleChangePhone(value)}
-                          className={inputClass(isValid, phone)}
+                          name="phone"
+                          value={userValue.phone}
+                          onChange={inputOnChange}
+                          className={inputClass(isValid, userValue.phone)}
                         />
 
                         {!isValid && validationMessageBlock(message)}
@@ -301,8 +311,9 @@ export default function PersonalAccountPage(): JSX.Element {
                   <input
                     type="password"
                     id="oldPassword"
-                    value={oldPassword}
-                    onChange={(e) => handleChangeOldPassword(e.target.value)}
+                    name="oldPassword"
+                    value={userValue.oldPassword}
+                    onChange={inputOnChange}
                     className={styles.input}
                   />
                 </td>
@@ -316,15 +327,16 @@ export default function PersonalAccountPage(): JSX.Element {
                 </td>
 
                 <td>
-                  <ValidatorField value={newPassword} rules={myRules.newPassword}>
+                  <ValidatorField value={userValue.newPassword} rules={myRules.newPassword}>
                     {({ isValid, message }: Validation) => (
                       <>
                         <input
                           type="password"
                           id="newPassword"
-                          value={newPassword}
-                          onChange={({ target: { value } }) => handleChangeNewPassword(value)}
-                          className={inputClass(isValid, newPassword)}
+                          name="newPassword"
+                          value={userValue.newPassword}
+                          onChange={inputOnChange}
+                          className={inputClass(isValid, userValue.newPassword)}
                         />
 
                         {!isValid && validationMessageBlock(message)}
@@ -345,13 +357,16 @@ export default function PersonalAccountPage(): JSX.Element {
                   <input
                     type="password"
                     id="repeatNewPassword"
-                    value={repeatNewPassword}
-                    onChange={(e) => handleChangeRepeatNewPassword(e.target.value)}
+                    name="repeatNewPassword"
+                    value={userValue.repeatNewPassword}
+                    onChange={inputOnChange}
                     className={repeatNewPassordClass()}
                   />
 
                   {
-                    newPassword !== repeatNewPassword && newPassword && repeatNewPassword &&
+                    userValue.newPassword !== userValue.repeatNewPassword && 
+                    userValue.newPassword && 
+                    userValue.repeatNewPassword &&
                     validationMessageBlock('Пароли не совпадают')
                   }
                 </td>

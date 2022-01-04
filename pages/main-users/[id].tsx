@@ -18,9 +18,12 @@ export default function MainUsersPage(): JSX.Element {
   const getUserName = async () => {
     const response = await axios.post('http://localhost:3001/api/user', {
       id
+    }).then (response => {
+      if (response.data.name === '') {
+        response.data.name = 'Читатель';
+      }
+      setUserData(response.data);
     });
-
-    setUserData(response.data);
   }  
 
   useEffect(() => {
@@ -33,7 +36,7 @@ export default function MainUsersPage(): JSX.Element {
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo link={"/main-users/"}/>
+          <MainLogo link={`/main-users/${userData.id}`}/>
           <MainGreeting name={userData.name} />
           <MainMenuUsers user={userData} page={"main"}/>
         </MainHeaderWrapper>

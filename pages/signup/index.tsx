@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React, { useRef, useState } from 'react';
+import axios from "axios";
 // @ts-ignore
 import ValidatorWrapper, { ValidatorField } from '@coxy/react-validator';
 import cn from 'classnames';
@@ -38,10 +39,18 @@ const myRules = {
 };
 
 export default function SignInPage(bytes: BufferSource): JSX.Element {
-  const [email, handleChangeEmail] = useState('');
-  const [phone, handleChangePhone] = useState('');
-  const [password, handleChangePassword] = useState('');
-  const [repeatPass, handleChangeRepeatPass] = useState('');
+  const [userValue, setUserValue] = useState({
+    name: '',
+    lastname: '',
+    email: '',
+    phone: '',
+    password: '',
+    repeatPass: ''
+  });
+
+  const inputOnChange = ({target}: any) => {
+    setUserValue({...userValue, [target.name]: target.value});
+  }
 
   const validator = useRef<any>();
 
@@ -51,29 +60,37 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
     errors: string;
   }
 
-  const handleSubmit = () => {
-    const { isValid, message, errors }: Validation = validator.current.validate(bytes);
-
-    if (!isValid || repeatPass !== password || repeatPass === '') {
-      console.log(isValid, message, errors);
-    } else {
-      // тут будет проверка пользователя в базе по email и добавление пользователя в БД, далее переход в личный кабинет
-      alert('Регистрация прошла успешно');
-    }
-  };
-
   const inputClass = (isValid: boolean, inputValue: string) => cn(styles.input, {
     [styles.redBorder]: !isValid && inputValue.length !== 0,
     [styles.greenBorder]: isValid,
   });
 
   const repeatPassClass = () => cn(styles.input, {
-    [styles.redBorder]: password !== repeatPass && password && repeatPass,
-    [styles.greenBorder]: password === repeatPass && repeatPass,
+    [styles.redBorder]: userValue.password !== userValue.repeatPass && userValue.password && userValue.repeatPass,
+    [styles.greenBorder]: userValue.password === userValue.repeatPass && userValue.repeatPass,
   });
 
   const validationMessageBlock = (validationMessage: string) =>
     <div className={styles.errorInput}>{validationMessage}</div>
+
+  const addUser = async () => {
+    await axios
+    .post('http://localhost:3001/api/addUser', {
+      ...userValue 
+    }).then(response => {
+      alert(response.data);
+    });
+  }   
+
+  const handleSubmit = () => {
+    const { isValid, message, errors }: Validation = validator.current.validate(bytes);
+
+    if (!isValid ||  userValue.repeatPass !==  userValue.password ||  userValue.repeatPass === '') {
+      console.log(isValid, message, errors);
+    } else {
+      addUser();
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -92,25 +109,32 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
               <div className={styles.blockInput}>
                 <input
                   type="text"
+                  name="name"
+                  value={userValue.name}
+                  onChange={inputOnChange}
                   className={cn(styles.input, styles.inputPartOne)}
                   placeholder="Имя"
                 />
 
                 <input
                   type="text"
+                  name="lastname"
+                  value={userValue.lastname}
+                  onChange={inputOnChange}
                   className={cn(styles.input, styles.inputPartTwo)}
                   placeholder="Фамилия"
                 />
               </div>
 
-              <ValidatorField value={email} rules={myRules.email}>
+              <ValidatorField value={ userValue.email} rules={myRules.email}>
                 {({ isValid, message }: Validation) => (
                   <>
                     <input
                       type="text"
-                      value={email}
-                      onChange={({ target: { value } }) => handleChangeEmail(value)}
-                      className={inputClass(isValid, email)}
+                      name="email"
+                      value={userValue.email}
+                      onChange={inputOnChange}
+                      className={inputClass(isValid, userValue.email)}
                       placeholder="E-mail"
                     />
 
@@ -119,14 +143,15 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
                 )}
               </ValidatorField>
 
-              <ValidatorField value={phone} rules={myRules.phone}>
+              <ValidatorField value={userValue.phone} rules={myRules.phone}>
                 {({ isValid, message }: Validation) => (
                   <>
                     <input
                       type="text"
-                      value={phone}
-                      onChange={({ target: { value } }) => handleChangePhone(value)}
-                      className={inputClass(isValid, phone)}
+                      name="phone"
+                      value={userValue.phone}
+                      onChange={inputOnChange}
+                      className={inputClass(isValid, userValue.phone)}
                       placeholder="Телефон"
                     />
 
@@ -135,14 +160,15 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
                 )}
               </ValidatorField>
 
-              <ValidatorField value={password} rules={myRules.password}>
+              <ValidatorField value={userValue.password} rules={myRules.password}>
                 {({ isValid, message }: Validation) => (
                   <>
                     <input
                       type="password"
-                      value={password}
-                      onChange={({ target: { value } }) => handleChangePassword(value)}
-                      className={inputClass(isValid, password)}
+                      name="password"
+                      value={userValue.password}
+                      onChange={inputOnChange}
+                      className={inputClass(isValid, userValue.password)}
                       placeholder="Пароль"
                     />
 
@@ -153,14 +179,17 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
 
               <input
                 type="password"
-                value={repeatPass}
-                onChange={({ target: { value } }) => handleChangeRepeatPass(value)}
+                name="repeatPass"
+                value={userValue.repeatPass}
+                onChange={inputOnChange}
                 className={repeatPassClass()}
                 placeholder="Повторите пароль"
               />
 
               {
-                password !== repeatPass && password && repeatPass &&
+                userValue.password !== userValue.repeatPass && 
+                userValue.password &&
+                userValue.repeatPass &&
                 validationMessageBlock('Пароли не совпадают')
               }
 
