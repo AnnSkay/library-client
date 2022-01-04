@@ -1,15 +1,15 @@
 import axios from 'axios';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import styles from './styles.module.css';
 import cn from 'classnames';
+import Router from 'next/router';
+import styles from './styles.module.css';
 import { AuthMainWrapper } from '../../components/ui/auth-main-wrapper';
 import { AuthTitle } from '../../components/ui/auth-title';
 import { AuthLogo } from '../../components/ui/auth-logo';
 import { AuthDescription } from '../../components/ui/auth-description';
 import { AuthLeftWrapper } from '../../components/ui/auth-left-wrapper';
 import { HeadBlock } from '../../components/ui/head-block';
-import Router from 'next/router';
 
 export default function LogInPage(): JSX.Element {
   const [serverAnswer, setServerAnswer] = useState('');
@@ -26,7 +26,7 @@ export default function LogInPage(): JSX.Element {
       .post('http://localhost:3001/api/login', {
         login,
         password,
-      }).then(response => {
+      }).then((response) => {
         setServerAnswer(response.data);
         if (response.data !== 'failed') {
           Router.push(`/main-users/${response.data}`);
@@ -39,7 +39,7 @@ export default function LogInPage(): JSX.Element {
 
   return (
     <div className={styles.container}>
-      <HeadBlock title="Log in"/>
+      <HeadBlock title="Log in" />
 
       <AuthMainWrapper>
         <AuthLeftWrapper>
@@ -66,7 +66,7 @@ export default function LogInPage(): JSX.Element {
 
             {(serverAnswer === 'failed') ? (
               <div className={styles.errorLogin}>Неверный логин/пароль</div>
-              ) : null
+            ) : null
             }
 
             <div className={styles.forgotPass} onClick={showRecovery}>
@@ -96,7 +96,7 @@ export default function LogInPage(): JSX.Element {
 
       <div className={showRecoveryClass()}>
         <div className={styles.recoveryForm}>
-          <div className={styles.recoveryClose} onClick={hideRecovery}/>
+          <div className={styles.recoveryClose} onClick={hideRecovery} />
           <h2>Восстановление пароля</h2>
 
           <div className={styles.recoveryDesc}>
@@ -104,12 +104,14 @@ export default function LogInPage(): JSX.Element {
             указанный при регистрации
           </div>
 
-          <input type="text" className={styles.input} placeholder="E-mail"/>
+          <input type="text" className={styles.input} placeholder="E-mail" />
 
-          <button type="submit" className={styles.button}>Выслать</button>
+          <button type="submit" className={styles.button}>
+            Выслать
+          </button>
         </div>
 
-        <div className={styles.blackout} onClick={hideRecovery}/>
+        <div className={styles.blackout} onClick={hideRecovery} />
       </div>
     </div>
   );

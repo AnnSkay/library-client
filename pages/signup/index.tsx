@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React, { useRef, useState } from 'react';
-import axios from "axios";
+import axios from 'axios';
 // @ts-ignore
 import ValidatorWrapper, { ValidatorField } from '@coxy/react-validator';
 import cn from 'classnames';
@@ -45,12 +45,12 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
     email: '',
     phone: '',
     password: '',
-    repeatPass: ''
+    repeatPass: '',
   });
 
-  const inputOnChange = ({target}: any) => {
-    setUserValue({...userValue, [target.name]: target.value});
-  }
+  const inputOnChange = ({ target }: any) => {
+    setUserValue({ ...userValue, [target.name]: target.value });
+  };
 
   const validator = useRef<any>();
 
@@ -66,26 +66,29 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
   });
 
   const repeatPassClass = () => cn(styles.input, {
-    [styles.redBorder]: userValue.password !== userValue.repeatPass && userValue.password && userValue.repeatPass,
-    [styles.greenBorder]: userValue.password === userValue.repeatPass && userValue.repeatPass,
+    [styles.redBorder]: userValue.password !== userValue.repeatPass 
+                        && userValue.password 
+                        && userValue.repeatPass,
+    [styles.greenBorder]: userValue.password === userValue.repeatPass 
+                          && userValue.repeatPass,
   });
 
-  const validationMessageBlock = (validationMessage: string) =>
-    <div className={styles.errorInput}>{validationMessage}</div>
+  const validationMessageBlock = (validationMessage: string) => 
+    <div className={styles.errorInput}>{validationMessage}</div>;
 
   const addUser = async () => {
     await axios
-    .post('http://localhost:3001/api/addUser', {
-      ...userValue 
-    }).then(response => {
-      alert(response.data);
-    });
-  }   
+      .post('http://localhost:3001/api/addUser', {
+        ...userValue,
+      }).then((response) => {
+        alert(response.data);
+      });
+  };
 
   const handleSubmit = () => {
     const { isValid, message, errors }: Validation = validator.current.validate(bytes);
 
-    if (!isValid ||  userValue.repeatPass !==  userValue.password ||  userValue.repeatPass === '') {
+    if (!isValid || userValue.repeatPass !== userValue.password || userValue.repeatPass === '') {
       console.log(isValid, message, errors);
     } else {
       addUser();
@@ -95,7 +98,7 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
   return (
     <div className={styles.container}>
 
-      <HeadBlock title="Sign up"/>
+      <HeadBlock title="Sign up" />
 
       <AuthMainWrapper>
         <AuthLeftWrapper>
@@ -126,7 +129,7 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
                 />
               </div>
 
-              <ValidatorField value={ userValue.email} rules={myRules.email}>
+              <ValidatorField value={userValue.email} rules={myRules.email}>
                 {({ isValid, message }: Validation) => (
                   <>
                     <input
@@ -187,10 +190,10 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
               />
 
               {
-                userValue.password !== userValue.repeatPass && 
-                userValue.password &&
-                userValue.repeatPass &&
-                validationMessageBlock('Пароли не совпадают')
+                userValue.password !== userValue.repeatPass
+                && userValue.password
+                && userValue.repeatPass
+                && validationMessageBlock('Пароли не совпадают')
               }
 
               <button
@@ -207,7 +210,9 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
               Уже участник?
               {' '}
               <Link href="../login">
-                <a className={styles.loginLink}>Войти</a>
+                <a className={styles.loginLink}>
+                  Войти
+                </a>
               </Link>
             </div>
           </div>

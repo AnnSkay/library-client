@@ -1,5 +1,5 @@
-import styles from "./styles.module.css";
-import React from "react";
+import React from 'react';
+import styles from './styles.module.css';
 
 export function MainHeaderWrapper(props: any): JSX.Element {
   return (

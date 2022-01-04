@@ -1,15 +1,15 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import axios from "axios";
-import {HeadBlock} from '../../components/ui/head-block';
-import {MainHeaderWrapper} from "../../components/ui/main-header-wrapper";
-import {MainLogo} from "../../components/ui/main-logo";
-import {MainMenuUsers} from "../../components/ui/main-menu-users";
-import {MainPageWrapper} from "../../components/ui/main-page-wrapper";
-import styles from "./styles.module.css";
+import React, { useRef, useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 // @ts-ignore
 import ValidatorWrapper, { ValidatorField } from '@coxy/react-validator';
-import cn from "classnames";
+import cn from 'classnames';
+import { HeadBlock } from '../../components/ui/head-block';
+import { MainHeaderWrapper } from '../../components/ui/main-header-wrapper';
+import { MainLogo } from '../../components/ui/main-logo';
+import { MainMenuUsers } from '../../components/ui/main-menu-users';
+import { MainPageWrapper } from '../../components/ui/main-page-wrapper';
+import styles from './styles.module.css';
 
 const myRules = {
   email: [{
@@ -56,8 +56,8 @@ export default function PersonalAccountPage(): JSX.Element {
     repeatNewPassword: ''
   });
 
-  const inputOnChange = ({target}: any) => {
-    setUserValue({...userValue, [target.name]: target.value});
+  const inputOnChange = ({ target }: any) => {
+    setUserValue({ ...userValue, [target.name]: target.value });
   }
 
   const validator = useRef<any>();
@@ -68,52 +68,52 @@ export default function PersonalAccountPage(): JSX.Element {
     errors: string;
   }
 
-  const getUserName = async (id: string) => {
+  const getUserName = async (userId: string) => {
     await axios
-    .post('http://localhost:3001/api/user', {
-      id
-    }).then(response => {
-      setUserData(response.data);
-      setUserValue({
-        ...userValue, 
-        userId: response.data.id,
-        name: response.data.name,
-        lastname: response.data.lastname,
-        email: response.data.login,
-        phone: response.data.phone
+      .post('http://localhost:3001/api/user', {
+        userId
+      }).then((response) => {
+        setUserData(response.data);
+        setUserValue({
+          ...userValue,
+          userId: response.data.id,
+          name: response.data.name,
+          lastname: response.data.lastname,
+          email: response.data.login,
+          phone: response.data.phone
+        });
       });
-    });
-  }  
+  }
 
   const sendDataChange = async () => {
     await axios
-    .post('http://localhost:3001/api/changeUserData', {
-      ...userValue
-    }).then(response => {
-      setUserData(response.data);
-      setUserValue({
-        ...userValue, 
-        name: response.data.name,
-        lastname: response.data.lastname,
-        email: response.data.login,
-        phone: response.data.phone
+      .post('http://localhost:3001/api/changeUserData', {
+        ...userValue
+      }).then((response) => {
+        setUserData(response.data);
+        setUserValue({
+          ...userValue,
+          name: response.data.name,
+          lastname: response.data.lastname,
+          email: response.data.login,
+          phone: response.data.phone
+        });
       });
-    });
-  }  
+  }
 
   const sendPasswordChange = async () => {
     await axios
-    .post('http://localhost:3001/api/changeUserPassword', {
-      ...userValue
-    }).then(response => {
-      setUserData(response.data);
-    });
-  }  
+      .post('http://localhost:3001/api/changeUserPassword', {
+        ...userValue
+      }).then((response) => {
+        setUserData(response.data);
+      });
+  };
 
   useEffect(() => {
     if (!id) {
       return;
-    } 
+    }
     getUserName(id);
   }, [id]);
 
@@ -123,8 +123,11 @@ export default function PersonalAccountPage(): JSX.Element {
   });
 
   const repeatNewPassordClass = () => cn(styles.input, {
-    [styles.redBorder]: userValue.newPassword !== userValue.repeatNewPassword && userValue.newPassword && userValue.repeatNewPassword,
-    [styles.greenBorder]: userValue.newPassword === userValue.repeatNewPassword && userValue.repeatNewPassword,
+    [styles.redBorder]: userValue.newPassword !== userValue.repeatNewPassword
+                        && userValue.newPassword
+                        && userValue.repeatNewPassword,
+    [styles.greenBorder]: userValue.newPassword === userValue.repeatNewPassword
+                          && userValue.repeatNewPassword,
   });
 
   const validationMessageBlock = (validationMessage: string) =>
@@ -148,25 +151,25 @@ export default function PersonalAccountPage(): JSX.Element {
 
   const handleDataSubmit = () => {
     const { isValid, message, errors }: Validation = validator.current.validate();
-    
+
     if (!isValid && message !== 'Пароль обязателен' && message !== 'Пароль должен быть не меньше 6 символов') {
       console.log(isValid, message, errors);
     } else {
       sendDataChange();
       alert('Изменения прошли успешно');
     }
-  };  
+  };
 
   const handlePasswordSubmit = () => {
     const { isValid, message, errors }: Validation = validator.current.validate();
-    
+
     if (userValue.oldPassword !== userData.password || userValue.repeatNewPassword !== userValue.newPassword || userValue.repeatNewPassword === '') {
       console.log(isValid, message, errors);
     } else {
       sendPasswordChange();
       alert('Изменения прошли успешно');
     }
-  }; 
+  };
 
   return (
     <div>
@@ -174,13 +177,13 @@ export default function PersonalAccountPage(): JSX.Element {
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo link={`/main-users/${userData.id}`}/>
+          <MainLogo link={`/main-users/${userData.id}`} />
           <h1 className={styles.headerTitle}>
             Личный кабинет
           </h1>
-          <MainMenuUsers user={userData} page={'persAcc'}/>
+          <MainMenuUsers user={userData} page="persAcc" />
         </MainHeaderWrapper>
-        
+
         <div className={styles.flexBox}>
           <ValidatorWrapper ref={validator}>
             <table className={changeDataTableClass()}>
@@ -284,18 +287,18 @@ export default function PersonalAccountPage(): JSX.Element {
 
               <tr className={cn(styles.inputBlock, styles.twoColumns)}>
                 <td colSpan={2}>
-                <button
-                  type="button"
-                  onClick={handleDataSubmit}
-                  className={styles.button}
-                >
-                  Изменить данные
-                </button>
+                  <button
+                    type="button"
+                    onClick={handleDataSubmit}
+                    className={styles.button}
+                  >
+                    Изменить данные
+                  </button>
                 </td>
               </tr>
-            </table>  
+            </table>
 
-            <table className={changePassordTableClass()}>            
+            <table className={changePassordTableClass()}>
               <tr className={cn(styles.inputBlock, styles.twoColumns)}>
                 <td colSpan={2}>
                   Смена пароля
@@ -366,37 +369,43 @@ export default function PersonalAccountPage(): JSX.Element {
                   />
 
                   {
-                    userValue.newPassword !== userValue.repeatNewPassword && 
-                    userValue.newPassword && 
-                    userValue.repeatNewPassword &&
-                    validationMessageBlock('Пароли не совпадают')
+                    userValue.newPassword !== userValue.repeatNewPassword
+                    && userValue.newPassword
+                    && userValue.repeatNewPassword
+                    && validationMessageBlock('Пароли не совпадают')
                   }
                 </td>
               </tr>
 
               <tr className={cn(styles.inputBlock, styles.twoColumns)}>
                 <td colSpan={2}>
-                <button
-                  type="button"
-                  onClick={handlePasswordSubmit}
-                  className={styles.button}
-                >
-                  Изменить пароль
-                </button>
+                  <button
+                    type="button"
+                    onClick={handlePasswordSubmit}
+                    className={styles.button}
+                  >
+                    Изменить пароль
+                  </button>
                 </td>
               </tr>
             </table>
-            </ValidatorWrapper>  
+          </ValidatorWrapper>
 
           <div className={styles.menuDataChange}>
-              <div className={activeDataItemClass()} onClick={() => {setChangeDataClick(true); setChangePassordClick(false);}}>
-                Личные данные
-              </div>
-              <div className={activePasswordItemClass()} onClick={() => {setChangeDataClick(false); setChangePassordClick(true);}}>
-                Пароль
-              </div>
+            <div 
+              className={activeDataItemClass()} 
+              onClick={() => { setChangeDataClick(true); setChangePassordClick(false); }}
+            >
+              Личные данные
+            </div>
+            <div 
+              className={activePasswordItemClass()} 
+              onClick={() => { setChangeDataClick(false); setChangePassordClick(true); }}
+            >
+              Пароль
+            </div>
           </div>
-        </div>  
+        </div>
       </MainPageWrapper>
     </div>
   );

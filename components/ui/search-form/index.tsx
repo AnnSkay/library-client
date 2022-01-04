@@ -1,11 +1,10 @@
-import styles from "./styles.module.css";
-import cn from "classnames";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Router from "next/router";
+import cn from 'classnames';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Router from 'next/router';
+import styles from './styles.module.css';
 
-export function SearchForm({id}: { id: string }) {
-
+export function SearchForm({ id }: { id: string }) {
   const [searchClick, setSearchClick] = useState(false);
 
   const [lists, setLists] = useState({
@@ -24,13 +23,13 @@ export function SearchForm({id}: { id: string }) {
   });
 
   const inputOnChange = (name: string, value: any) => {
-    setBookValue({...bookValue, [name]: value});
+    setBookValue({ ...bookValue, [name]: value });
   }
 
   const searchGenresAndHouses = async () => {
     const responseHouses = await axios.get('http://localhost:3001/api/houses');
     const responseGenres = await axios.get('http://localhost:3001/api/genres');
-    setLists({...lists, houses: responseHouses.data, genres: responseGenres.data});
+    setLists({ ...lists, houses: responseHouses.data, genres: responseGenres.data });
   }
 
   useEffect(() => {
@@ -54,7 +53,7 @@ export function SearchForm({id}: { id: string }) {
       ...bookValue
     });
 
-    setLists({...lists, books: response.data});
+    setLists({ ...lists, books: response.data });
     setSearchClick(true);
   }
 
@@ -65,14 +64,13 @@ export function SearchForm({id}: { id: string }) {
   const takeBook = (title: string, bookId: number) => {
     if (id === 'гость') {
       if (confirm('Чтобы взять книгу, надо войти. Войти?')) {
-        Router.push(`/login`);
+        Router.push('/login');
       }
     } else {
       if (confirm(`Вы уверены, что хотите взять книгу "${title}"?`)) {
         alert(`Книга c ID: ${bookId} взята`);
       }
     }
-     
   }
 
   const unavailableBook = () => {
@@ -139,9 +137,9 @@ export function SearchForm({id}: { id: string }) {
               onChange={(e) => inputOnChange(e.target.name, e.target.value)}
               className={styles.input}
             >
-              <option hidden selected disabled/>
-              {lists.houses &&
-               lists.houses.map(({house}, index) => {
+              <option hidden selected disabled />
+              {lists.houses
+               && lists.houses.map(({ house }, index) => {
                 return (
                   <option key={index}>
                     {house}
@@ -168,13 +166,13 @@ export function SearchForm({id}: { id: string }) {
               className={styles.input}
             >
               <option hidden selected disabled/>
-              {lists.genres &&
-               lists.genres.map(({genre}, index) => {
-                return (
-                  <option key={index}>
-                    {genre}
-                  </option>
-                );
+              {lists.genres
+               && lists.genres.map(({ genre }, index) => {
+                  return (
+                    <option key={index}>
+                      {genre}
+                    </option>
+                  );
               })}
             </select>
           </td>
@@ -239,14 +237,14 @@ export function SearchForm({id}: { id: string }) {
         {!(lists.books.length === 0 && searchClick) ? (
           lists.books &&
           lists.books.map(({
-                           id,
-                           author,
-                           genre,
-                           house,
-                           isAvailable,
-                           title,
-                           year
-                         }, index) => {
+            id,
+            author,
+            genre,
+            house,
+            isAvailable,
+            title,
+            year
+          }, index) => {
             return (
               <div
                 className={notAvailableClass(isAvailable)}

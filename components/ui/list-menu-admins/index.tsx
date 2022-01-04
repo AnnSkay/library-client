@@ -1,7 +1,7 @@
-import React from "react";
-import styles from "./styles.module.css";
+import React from 'react';
+import styles from './styles.module.css';
 
-export function ListMenuAdmins({page}: { page: string }): JSX.Element {
+export function ListMenuAdmins(): JSX.Element {
   return (
     <>
       <li className={styles.li}>Управление пользователями</li>

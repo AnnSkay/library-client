@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import {HeadBlock} from '../../components/ui/head-block';
-import {MainHeaderWrapper} from "../../components/ui/main-header-wrapper";
-import {MainLogo} from "../../components/ui/main-logo";
-import {MainGreeting} from "../../components/ui/main-greeting";
-import {MainMenuUsers} from "../../components/ui/main-menu-users";
-import {SearchForm} from "../../components/ui/search-form";
-import {MainPageWrapper} from "../../components/ui/main-page-wrapper";
-import { useRouter } from "next/router";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { HeadBlock } from '../../components/ui/head-block';
+import { MainHeaderWrapper } from '../../components/ui/main-header-wrapper';
+import { MainLogo } from '../../components/ui/main-logo';
+import { MainGreeting } from '../../components/ui/main-greeting';
+import { MainMenuUsers } from '../../components/ui/main-menu-users';
+import { SearchForm } from '../../components/ui/search-form';
+import { MainPageWrapper } from '../../components/ui/main-page-wrapper';
 
 export default function MainUsersPage(): JSX.Element {
   const router = useRouter();
@@ -16,14 +16,15 @@ export default function MainUsersPage(): JSX.Element {
   const [userData, setUserData] = useState({});
 
   const getUserName = async () => {
-    const response = await axios.post('http://localhost:3001/api/user', {
-      id
-    }).then (response => {
-      if (response.data.name === '') {
-        response.data.name = 'Читатель';
-      }
-      setUserData(response.data);
-    });
+    await axios
+      .post('http://localhost:3001/api/user', {
+        id
+      }).then ((response) => {
+        if (response.data.name === '') {
+          response.data.name = 'Читатель';
+        }
+        setUserData(response.data);
+      });
   }  
 
   useEffect(() => {
@@ -39,9 +40,9 @@ export default function MainUsersPage(): JSX.Element {
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo link={`/main-users/${userData.id}`}/>
+          <MainLogo link={`/main-users/${userData.id}`} />
           <MainGreeting name={userData.name} />
-          <MainMenuUsers user={userData} page={"main"}/>
+          <MainMenuUsers user={userData} page="main" />
         </MainHeaderWrapper>
 
         <SearchForm id={id} />
