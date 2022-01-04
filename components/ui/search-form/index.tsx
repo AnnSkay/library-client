@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Router from "next/router";
 
-export function SearchForm() {
+export function SearchForm({id}: { id: string }) {
 
   const [searchClick, setSearchClick] = useState(false);
 
@@ -62,10 +62,17 @@ export function SearchForm() {
     [styles.bookNotAvailable]: !isAvailable,
   });
 
-  const takeBook = () => {
-    if (confirm('Чтобы взять книгу, надо войти. Войти?')) {
-      Router.push(`/login`);
+  const takeBook = (title: string, bookId: number) => {
+    if (id === 'гость') {
+      if (confirm('Чтобы взять книгу, надо войти. Войти?')) {
+        Router.push(`/login`);
+      }
+    } else {
+      if (confirm(`Вы уверены, что хотите взять книгу "${title}"?`)) {
+        alert(`Книга c ID: ${bookId} взята`);
+      }
     }
+     
   }
 
   const unavailableBook = () => {
@@ -232,6 +239,7 @@ export function SearchForm() {
         {!(lists.books.length === 0 && searchClick) ? (
           lists.books &&
           lists.books.map(({
+                           id,
                            author,
                            genre,
                            house,
@@ -243,7 +251,7 @@ export function SearchForm() {
               <div
                 className={notAvailableClass(isAvailable)}
                 key={index}
-                onClick={isAvailable ? takeBook : unavailableBook}
+                onClick={isAvailable ? () => takeBook(title, id) : unavailableBook}
               >
                 <div className={styles.bookTitle}>"{title}"</div>
                 <div><b>Автор:</b> {author}</div>

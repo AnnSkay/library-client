@@ -39,6 +39,7 @@ const myRules = {
 
 export default function PersonalAccountPage(): JSX.Element {
   const router = useRouter();
+  const { id } = router.query;
 
   const [userData, setUserData] = useState({});
   const [changeDataClick, setChangeDataClick] = useState(true);
@@ -57,6 +58,14 @@ export default function PersonalAccountPage(): JSX.Element {
 
   const inputOnChange = ({target}: any) => {
     setUserValue({...userValue, [target.name]: target.value});
+  }
+
+  const validator = useRef<any>();
+
+  interface Validation {
+    isValid: boolean;
+    message: string;
+    errors: string;
   }
 
   const getUserName = async (id: string) => {
@@ -102,18 +111,11 @@ export default function PersonalAccountPage(): JSX.Element {
   }  
 
   useEffect(() => {
-    const { id } = router.query;;
-    console.log(id);  
+    if (!id) {
+      return;
+    } 
     getUserName(id);
-  }, [router]);
-
-  const validator = useRef<any>();
-
-  interface Validation {
-    isValid: boolean;
-    message: string;
-    errors: string;
-  }
+  }, [id]);
 
   const inputClass = (isValid: boolean, inputValue: string) => cn(styles.input, {
     [styles.redBorder]: !isValid && inputValue.length !== 0,

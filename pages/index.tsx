@@ -21,7 +21,7 @@ export default (): JSX.Element => {
           <LoginToAccountLink />
         </MainHeaderWrapper>
 
-        <SearchForm/>
+        <SearchForm id={'гость'} />
       </MainPageWrapper>
     </div>
   );

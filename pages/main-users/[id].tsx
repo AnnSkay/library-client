@@ -27,8 +27,11 @@ export default function MainUsersPage(): JSX.Element {
   }  
 
   useEffect(() => {
-    getUserName();
-  }, []);
+    if (!id) {
+      return;
+    } 
+    getUserName(id);
+  }, [id]);
 
   return (
     <div>
@@ -41,7 +44,7 @@ export default function MainUsersPage(): JSX.Element {
           <MainMenuUsers user={userData} page={"main"}/>
         </MainHeaderWrapper>
 
-        <SearchForm/>
+        <SearchForm id={id} />
       </MainPageWrapper>
     </div>
   );
