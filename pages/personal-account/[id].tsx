@@ -20,7 +20,7 @@ const myRules = {
     message: 'Формат email некорректный',
   }],
 
-  password: [{
+  newPassword: [{
     rule: (value: string) => value !== '' && value.length > 0,
     message: 'Пароль обязателен',
   }, {
@@ -41,29 +41,64 @@ export default function PersonalAccountPage(): JSX.Element {
   const router = useRouter();
 
   const [userData, setUserData] = useState({});
-  const [id, setId] = useState({});
 
+  const [userId, handleChangeUserId] = useState('');
   const [name, handleChangeName] = useState('');
   const [lastname, handleChangeLastname] = useState('');
   const [email, handleChangeEmail] = useState('');
   const [phone, handleChangePhone] = useState('');
+  const [oldPassword, handleChangeOldPassword] = useState('');
+  const [newPassword, handleChangeNewPassword] = useState('');
+  const [repeatNewPassword, handleChangeRepeatNewPassword] = useState('');
 
-  const getUserName = async () => {
+  const [changeDataClick, setChangeDataClick] = useState(true);
+  const [changePassordClick, setChangePassordClick] = useState(false);
+
+  const getUserName = async (id: string) => {
     await axios
     .post('http://localhost:3001/api/user', {
       id
     }).then(response => {
       setUserData(response.data);
-      handleChangeName(userData.name);
-      handleChangeLastname(userData.lastname);
-      handleChangeEmail(userData.login);
-      handleChangePhone(userData.phone);
+      handleChangeUserId(response.data.id);
+      handleChangeName(response.data.name);
+      handleChangeLastname(response.data.lastname);
+      handleChangeEmail(response.data.login);
+      handleChangePhone(response.data.phone);
+    });
+  }  
+
+  const sendDataChange = async () => {
+    await axios
+    .post('http://localhost:3001/api/changeUserData', {
+      userId,
+      name,
+      lastname,
+      email,
+      phone
+    }).then(response => {
+      setUserData(response.data);
+      handleChangeName(response.data.name);
+      handleChangeLastname(response.data.lastname);
+      handleChangeEmail(response.data.login);
+      handleChangePhone(response.data.phone);
+    });
+  }  
+
+  const sendPasswordChange = async () => {
+    await axios
+    .post('http://localhost:3001/api/changeUserPassword', {
+      userId,
+      newPassword
+    }).then(response => {
+      setUserData(response.data);
     });
   }  
 
   useEffect(() => {
-    setId(router.query); 
-    getUserName();
+    const { id } = router.query;;
+    console.log(id);  
+    getUserName(id);
   }, [router]);
 
   const validator = useRef<any>();
@@ -74,29 +109,56 @@ export default function PersonalAccountPage(): JSX.Element {
     errors: string;
   }
 
-  // const handleSubmit = () => {
-  //   const { isValid, message, errors }: Validation = validator.current.validate(bytes);
-  //
-  //   if (!isValid || repeatPass !== password || repeatPass === '') {
-  //     console.log(isValid, message, errors);
-  //   } else {
-  //     // тут будет проверка пользователя в базе по email и добавление пользователя в БД, далее переход в личный кабинет
-  //     alert('Изменения прошли успешно');
-  //   }
-  // };
-
   const inputClass = (isValid: boolean, inputValue: string) => cn(styles.input, {
     [styles.redBorder]: !isValid && inputValue.length !== 0,
     [styles.greenBorder]: isValid,
   });
 
-  // const repeatPassClass = () => cn(styles.input, {
-  //   [styles.redBorder]: password !== repeatPass && password && repeatPass,
-  //   [styles.greenBorder]: password === repeatPass && repeatPass,
-  // });
+  const repeatNewPassordClass = () => cn(styles.input, {
+    [styles.redBorder]: newPassword !== repeatNewPassword && newPassword && repeatNewPassword,
+    [styles.greenBorder]: newPassword === repeatNewPassword && repeatNewPassword,
+  });
 
   const validationMessageBlock = (validationMessage: string) =>
     <div className={styles.errorInput}>{validationMessage}</div>
+
+  const changeDataTableClass = () => cn(styles.personalAccBlock, {
+    [styles.noDisplay]: !changeDataClick,
+  });
+
+  const changePassordTableClass = () => cn(styles.personalAccBlock, {
+    [styles.noDisplay]: !changePassordClick,
+  });
+
+  const activeDataItemClass = () => cn(styles.menuChangeItem, {
+    [styles.activeItem]: changeDataClick,
+  });
+
+  const activePasswordItemClass = () => cn(styles.menuChangeItem, {
+    [styles.activeItem]: changePassordClick,
+  });
+
+  const handleDataSubmit = () => {
+    const { isValid, message, errors }: Validation = validator.current.validate();
+    
+    if (!isValid && message !== 'Пароль обязателен' && message !== 'Пароль должен быть не меньше 6 символов') {
+      console.log(isValid, message, errors);
+    } else {
+      sendDataChange();
+      alert('Изменения прошли успешно');
+    }
+  };  
+
+  const handlePasswordSubmit = () => {
+    const { isValid, message, errors }: Validation = validator.current.validate();
+    
+    if (oldPassword !== userData.password || repeatNewPassword !== newPassword || repeatNewPassword === '') {
+      console.log(isValid, message, errors);
+    } else {
+      sendPasswordChange();
+      alert('Изменения прошли успешно');
+    }
+  }; 
 
   return (
     <div>
@@ -110,100 +172,214 @@ export default function PersonalAccountPage(): JSX.Element {
           </h1>
           <MainMenuUsers user={userData} page={'persAcc'}/>
         </MainHeaderWrapper>
-
-        <table className={styles.personalAccBlock}>
+        
+        <div className={styles.flexBox}>
           <ValidatorWrapper ref={validator}>
-            <tr className={styles.inputBlock}>
-              <td className={styles.inputTitle}>
-                <label htmlFor="name">
-                  Имя
-                </label>
-              </td>
+            <table className={changeDataTableClass()}>
+              <tr className={cn(styles.inputBlock, styles.twoColumns)}>
+                <td colSpan={2}>
+                  Смена личных данных
+                </td>
+              </tr>
 
-              <td>
-                <input
-                  type="text"
-                  id="name"
-                  value={name}
-                  onChange={(e) => handleChangeName(e.target.value)}
-                  className={styles.input}
-                />
-              </td>
-            </tr>
+              <tr className={styles.inputBlock}>
+                <td className={styles.inputTitle}>
+                  <label htmlFor="name">
+                    Имя
+                  </label>
+                </td>
 
-            <tr className={styles.inputBlock}>
-              <td className={styles.inputTitle}>
-                <label htmlFor="lastname">
-                  Фамилия
-                </label>
-              </td>
+                <td>
+                  <input
+                    type="text"
+                    id="name"
+                    value={name}
+                    onChange={(e) => handleChangeName(e.target.value)}
+                    className={styles.input}
+                  />
+                </td>
+              </tr>
 
-              <td>
-                <input
-                  type="text"
-                  id="lastname"
-                  value={lastname}
-                  onChange={(e) => handleChangeLastname(e.target.value)}
-                  className={styles.input}
-                />
-              </td>
-            </tr>
+              <tr className={styles.inputBlock}>
+                <td className={styles.inputTitle}>
+                  <label htmlFor="lastname">
+                    Фамилия
+                  </label>
+                </td>
 
-            <tr className={styles.inputBlock}>
-              <td className={styles.inputTitle}>
-                <label htmlFor="email">
-                  E-mail
-                </label>
-              </td>
+                <td>
+                  <input
+                    type="text"
+                    id="lastname"
+                    value={lastname}
+                    onChange={(e) => handleChangeLastname(e.target.value)}
+                    className={styles.input}
+                  />
+                </td>
+              </tr>
 
-              <td>
-                <ValidatorField value={email} rules={myRules.email}>
-                  {({ isValid, message }: Validation) => (
-                    <>
-                      <input
-                        type="text"
-                        id="email"
-                        value={email}
-                        onChange={({ target: { value } }) => handleChangeEmail(value)}
-                        className={inputClass(isValid, email)}
-                      />
+              <tr className={styles.inputBlock}>
+                <td className={styles.inputTitle}>
+                  <label htmlFor="email">
+                    E-mail
+                  </label>
+                </td>
 
-                      {!isValid && validationMessageBlock(message)}
-                    </>
-                  )}
-                </ValidatorField>
-              </td>
-            </tr>
+                <td>
+                  <ValidatorField value={email} rules={myRules.email}>
+                    {({ isValid, message }: Validation) => (
+                      <>
+                        <input
+                          type="text"
+                          id="email"
+                          value={email}
+                          onChange={({ target: { value } }) => handleChangeEmail(value)}
+                          className={inputClass(isValid, email)}
+                        />
 
-            <tr className={styles.inputBlock}>
-              <td className={styles.inputTitle}>
-                <label htmlFor="phone">
-                  Телефон
-                </label>
-              </td>
+                        {!isValid && validationMessageBlock(message)}
+                      </>
+                    )}
+                  </ValidatorField>
+                </td>
+              </tr>
 
-              <td>
-                <ValidatorField value={phone} rules={myRules.phone}>
-                  {({ isValid, message }: Validation) => (
-                    <>
-                      <input
-                        type="text"
-                        id="phone"
-                        value={phone}
-                        onChange={({ target: { value } }) => handleChangePhone(value)}
-                        className={inputClass(isValid, email)}
-                      />
+              <tr className={styles.inputBlock}>
+                <td className={styles.inputTitle}>
+                  <label htmlFor="phone">
+                    Телефон
+                  </label>
+                </td>
 
-                      {!isValid && validationMessageBlock(message)}
-                    </>
-                  )}
-                </ValidatorField>
-              </td>
-            </tr>
+                <td>
+                  <ValidatorField value={phone} rules={myRules.phone}>
+                    {({ isValid, message }: Validation) => (
+                      <>
+                        <input
+                          type="text"
+                          id="phone"
+                          value={phone}
+                          onChange={({ target: { value } }) => handleChangePhone(value)}
+                          className={inputClass(isValid, phone)}
+                        />
 
+                        {!isValid && validationMessageBlock(message)}
+                      </>
+                    )}
+                  </ValidatorField>
+                </td>
+              </tr>
 
-          </ValidatorWrapper>
-        </table>
+              <tr className={cn(styles.inputBlock, styles.twoColumns)}>
+                <td colSpan={2}>
+                <button
+                  type="button"
+                  onClick={handleDataSubmit}
+                  className={styles.button}
+                >
+                  Изменить данные
+                </button>
+                </td>
+              </tr>
+            </table>  
+
+            <table className={changePassordTableClass()}>            
+              <tr className={cn(styles.inputBlock, styles.twoColumns)}>
+                <td colSpan={2}>
+                  Смена пароля
+                </td>
+              </tr>
+
+              <tr className={styles.inputBlock}>
+                <td className={styles.inputTitle}>
+                  <label htmlFor="oldPassword">
+                    Старый пароль
+                  </label>
+                </td>
+
+                <td>
+                  <input
+                    type="password"
+                    id="oldPassword"
+                    value={oldPassword}
+                    onChange={(e) => handleChangeOldPassword(e.target.value)}
+                    className={styles.input}
+                  />
+                </td>
+              </tr>
+
+              <tr className={styles.inputBlock}>
+                <td className={styles.inputTitle}>
+                  <label htmlFor="newPassword">
+                    Новый пароль
+                  </label>
+                </td>
+
+                <td>
+                  <ValidatorField value={newPassword} rules={myRules.newPassword}>
+                    {({ isValid, message }: Validation) => (
+                      <>
+                        <input
+                          type="password"
+                          id="newPassword"
+                          value={newPassword}
+                          onChange={({ target: { value } }) => handleChangeNewPassword(value)}
+                          className={inputClass(isValid, newPassword)}
+                        />
+
+                        {!isValid && validationMessageBlock(message)}
+                      </>
+                    )}
+                  </ValidatorField>
+                </td>
+              </tr>
+
+              <tr className={styles.inputBlock}>
+                <td className={styles.inputTitle}>
+                  <label htmlFor="repeatNewPassword">
+                    Повторите пароль
+                  </label>
+                </td>
+
+                <td>
+                  <input
+                    type="password"
+                    id="repeatNewPassword"
+                    value={repeatNewPassword}
+                    onChange={(e) => handleChangeRepeatNewPassword(e.target.value)}
+                    className={repeatNewPassordClass()}
+                  />
+
+                  {
+                    newPassword !== repeatNewPassword && newPassword && repeatNewPassword &&
+                    validationMessageBlock('Пароли не совпадают')
+                  }
+                </td>
+              </tr>
+
+              <tr className={cn(styles.inputBlock, styles.twoColumns)}>
+                <td colSpan={2}>
+                <button
+                  type="button"
+                  onClick={handlePasswordSubmit}
+                  className={styles.button}
+                >
+                  Изменить пароль
+                </button>
+                </td>
+              </tr>
+            </table>
+            </ValidatorWrapper>  
+
+          <div className={styles.menuDataChange}>
+              <div className={activeDataItemClass()} onClick={() => {setChangeDataClick(true); setChangePassordClick(false);}}>
+                Личные данные
+              </div>
+              <div className={activePasswordItemClass()} onClick={() => {setChangeDataClick(false); setChangePassordClick(true);}}>
+                Пароль
+              </div>
+          </div>
+        </div>  
       </MainPageWrapper>
     </div>
   );
