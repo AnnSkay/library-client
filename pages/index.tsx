@@ -7,14 +7,14 @@ import { LoginToAccountLink } from '../components/ui/login-to-account-link';
 import { SearchForm } from '../components/ui/search-form';
 import { MainPageWrapper } from '../components/ui/main-page-wrapper';
 
-export default (): JSX.Element => {
+export default function MainPage(): JSX.Element {
   return (
     <div>
       <HeadBlock title="Main Page" />
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo link={'/'}/>
+          <MainLogo link="/" />
 
           <MainGreeting name="Гость" />
 

@@ -251,7 +251,7 @@ export function SearchForm({ id }: { id: string }) {
                 key={index}
                 onClick={isAvailable ? () => takeBook(title, id) : unavailableBook}
               >
-                <div className={styles.bookTitle}>"{title}"</div>
+                <div className={styles.bookTitle}>&quot;{title}&quot;</div>
                 <div><b>Автор:</b> {author}</div>
                 <div><b>Издательство:</b> {house}</div>
                 <div><b>Жанр:</b> {genre}</div>
