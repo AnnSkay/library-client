@@ -24,13 +24,13 @@ export function MainMenuUsers({ user, page }: { user: any, page: string }): JSX.
   const selectMenuList = () => {
     switch (user.role) {
       case 'USER':
-        return <ListMenuReaders />
+        return <ListMenuReaders user={user} page={page} />
       case 'LIBR':
         return <ListMenuLibrarians />
       case 'ADMIN':
         return <ListMenuAdmins />
       default:
-        return <ListMenuReaders />
+        return <ListMenuReaders user={user} page={page} />
     }
   }
 

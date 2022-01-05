@@ -68,10 +68,10 @@ export default function PersonalAccountPage(): JSX.Element {
     errors: string;
   }
 
-  const getUserName = async (userId: string) => {
+  const getUserData = async (id: string) => {
     await axios
       .post('http://localhost:3001/api/user', {
-        userId
+        id
       }).then((response) => {
         setUserData(response.data);
         setUserValue({
@@ -114,7 +114,7 @@ export default function PersonalAccountPage(): JSX.Element {
     if (!id) {
       return;
     }
-    getUserName(id);
+    getUserData(id);
   }, [id]);
 
   const inputClass = (isValid: boolean, inputValue: string) => cn(styles.input, {
