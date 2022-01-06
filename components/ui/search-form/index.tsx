@@ -57,8 +57,19 @@ export function SearchForm({ id }: { id: string }) {
     setSearchClick(true);
   }
 
-  const notAvailableClass = (isAvailable: boolean) => cn(styles.book, {
-    [styles.bookNotAvailable]: !isAvailable,
+  const addTakenBook = async (bookId: string) => {
+    await axios
+      .post('http://localhost:3001/api/takeBook', {
+        bookId,
+        id
+      }).then((response) => {
+        alert(response.data);
+        searchBooks();
+      });
+  }
+
+  const notAvailableClass = (numberCopyes: number) => cn(styles.book, {
+    [styles.bookNotAvailable]: numberCopyes === 0,
   });
 
   const takeBook = (title: string, bookId: number) => {
@@ -68,7 +79,7 @@ export function SearchForm({ id }: { id: string }) {
       }
     } else {
       if (confirm(`Вы уверены, что хотите взять книгу "${title}"?`)) {
-        alert(`Книга c ID: ${bookId} взята`);
+        addTakenBook(String(bookId));
       }
     }
   }
@@ -213,7 +224,6 @@ export function SearchForm({ id }: { id: string }) {
               name="isAvailable"
               className={styles.checkbox}
               checked={bookValue.isAvailable}
-              // onChange={(e) => setBookIsAvailable(e.target.checked)}
               onChange={(e) => inputOnChange(e.target.name, e.target.checked)}
             />
             <label htmlFor="bookIsAvailable" className={styles.label}/>
@@ -241,15 +251,15 @@ export function SearchForm({ id }: { id: string }) {
             author,
             genre,
             house,
-            isAvailable,
+            numberCopyes,
             title,
             year
           }, index) => {
             return (
               <div
-                className={notAvailableClass(isAvailable)}
+                className={notAvailableClass(numberCopyes)}
                 key={index}
-                onClick={isAvailable ? () => takeBook(title, id) : unavailableBook}
+                onClick={numberCopyes > 0 ? () => takeBook(title, id) : unavailableBook}
               >
                 <div className={styles.bookTitle}>&quot;{title}&quot;</div>
                 <div><b>Автор:</b> {author}</div>

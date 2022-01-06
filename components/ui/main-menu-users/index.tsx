@@ -5,7 +5,6 @@ import Link from 'next/link';
 import styles from './styles.module.css';
 import ListIcon from './icon-list.png';
 import CloseIcon from './icon-close.png';
-import { ListMenuReaders } from '../list-menu-readers';
 import { ListMenuLibrarians } from '../list-menu-librarians';
 import { ListMenuAdmins } from '../list-menu-admins';
 
@@ -23,19 +22,18 @@ export function MainMenuUsers({ user, page }: { user: any, page: string }): JSX.
 
   const selectMenuList = () => {
     switch (user.role) {
-      case 'USER':
-        return <ListMenuReaders user={user} page={page} />
       case 'LIBR':
         return <ListMenuLibrarians />
       case 'ADMIN':
         return <ListMenuAdmins />
       default:
-        return <ListMenuReaders user={user} page={page} />
+        null
     }
   }
 
   const linkClass = (linkName: string) => cn(styles.link, {
-    [styles.linkActive]: page === 'persAcc' && linkName === 'persAcc',
+    [styles.linkActive]: page === 'persAcc' && linkName === 'persAcc' || 
+                         page === 'myBooks' && linkName === 'myBooks'
   });
 
   return (
@@ -56,6 +54,14 @@ export function MainMenuUsers({ user, page }: { user: any, page: string }): JSX.
               Личный кабинет
             </a>
           </Link>
+        </li>
+
+        <li className={styles.li}>
+          <Link href={`/my-books/${user.id}`}>
+            <a className={linkClass('myBooks')}>
+              Мои книги
+            </a>  
+          </Link>  
         </li>
 
         {selectMenuList()}

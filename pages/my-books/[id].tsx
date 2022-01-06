@@ -34,11 +34,14 @@ export default function MyBooksPage(): JSX.Element {
       });
   }
 
-  const deleteReturnedBook = async (bookId: number) => {
+  const deleteReturnedBook = async (bookId: string) => {
     await axios
-      .get('http://localhost:3001/api/returnBook', {
+      .post('http://localhost:3001/api/returnBook', {
         bookId,
         id
+      }).then((response) => {
+        alert('Книга возвращена');
+        getBorrowedUserBooks(id);
       });
   }
 
@@ -52,9 +55,7 @@ export default function MyBooksPage(): JSX.Element {
 
   const returnBook = (title: string, bookId: number) => {
     if (confirm(`Вы уверены, что хотите вернуть книгу "${title}"?`)) {
-      deleteReturnedBook(bookId);
-      getBorrowedUserBooks(id);
-      alert(`Книга возвращена`);
+      deleteReturnedBook(String(bookId));
     }
   }
 
