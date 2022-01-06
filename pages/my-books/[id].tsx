@@ -27,7 +27,7 @@ export default function MyBooksPage(): JSX.Element {
 
   const getBorrowedUserBooks = async (id: string) => {
     await axios
-      .post('http://localhost:3001/api/borrowedBooks', {
+      .post('http://localhost:3001/api/borrowedBooksByUser', {
         id
       }).then((response) => {
         setBorrowedBooks(response.data);

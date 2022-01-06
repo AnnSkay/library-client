@@ -25,11 +25,10 @@ export default function ListBorrowedBooksPage(): JSX.Element {
       });
   }
 
-  const getBorrowedBooks = async (id: string) => {
+  const getBorrowedBooks = async () => {
     await axios
-      .post('http://localhost:3001/api/borrowedBooks', {
-        id
-      }).then((response) => {
+      .get('http://localhost:3001/api/allBorrowedBooks')
+      .then((response) => {
         setBorrowedBooks(response.data);
       });
   }
@@ -59,13 +58,13 @@ export default function ListBorrowedBooksPage(): JSX.Element {
           {!(borrowedBooks.length === 0) ? (
             borrowedBooks &&
             borrowedBooks.map(({
-              id,
               author,
               genreTitle,
               houseTitle,
               title,
               year,
-              dateIssue
+              dateIssue,
+              user
             }, index) => {
               return (
                 <div
@@ -77,7 +76,11 @@ export default function ListBorrowedBooksPage(): JSX.Element {
                   <div><b>Издательство:</b> {houseTitle}</div>
                   <div><b>Жанр:</b> {genreTitle}</div>
                   <div><b>Год издания:</b> {year}</div>
-                  <div><b>Дата выдачи книги:</b> {dateIssue}</div>
+                  <div><b>Кем взята:</b></div>
+                  <div className={styles.userInf}><b>ФИ:</b> {user.lastname} {user.name}</div>
+                  <div className={styles.userInf}><b>Почта:</b> {user.login}</div>
+                  <div className={styles.userInf}><b>Телефон:</b> {user.phone}</div>
+                  <div className={styles.userInf}><b>Дата выдачи книги:</b> {dateIssue}</div>
                 </div>
               );
             })
