@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import cn from 'classnames';
 import { HeadBlock } from '../../components/ui/head-block';
 import { MainHeaderWrapper } from '../../components/ui/main-header-wrapper';
 import { MainLogo } from '../../components/ui/main-logo';
@@ -16,7 +15,7 @@ export default function MyBooksPage(): JSX.Element {
   const [userData, setUserData] = useState({});
   const [borrowedBooks, setBorrowedBooks] = useState([]);
 
-  const getUserData = async (id: string) => {
+  const getUserData = async () => {
     await axios
       .post('http://localhost:3001/api/user', {
         id
@@ -25,7 +24,7 @@ export default function MyBooksPage(): JSX.Element {
       });
   }
 
-  const getBorrowedUserBooks = async (id: string) => {
+  const getBorrowedUserBooks = async () => {
     await axios
       .post('http://localhost:3001/api/borrowedBooksByUser', {
         id
@@ -41,7 +40,7 @@ export default function MyBooksPage(): JSX.Element {
         id
       }).then(() => {
         alert('Книга возвращена');
-        getBorrowedUserBooks(id);
+        getBorrowedUserBooks();
       });
   }
 
@@ -49,8 +48,8 @@ export default function MyBooksPage(): JSX.Element {
     if (!id) {
       return;
     }
-    getUserData(id);
-    getBorrowedUserBooks(id);
+    getUserData();
+    getBorrowedUserBooks();
   }, [id]);
 
   const returnBook = (title: string, bookId: number) => {

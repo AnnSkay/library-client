@@ -41,7 +41,7 @@ export default function PersonalAccountPage(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData]: any = useState({});
   const [changeDataClick, setChangeDataClick] = useState(true);
   const [changePassordClick, setChangePassordClick] = useState(false);
 
@@ -68,7 +68,7 @@ export default function PersonalAccountPage(): JSX.Element {
     errors: string;
   }
 
-  const getUserData = async (id: string) => {
+  const getUserData = async () => {
     await axios
       .post('http://localhost:3001/api/user', {
         id
@@ -114,7 +114,7 @@ export default function PersonalAccountPage(): JSX.Element {
     if (!id) {
       return;
     }
-    getUserData(id);
+    getUserData();
   }, [id]);
 
   const inputClass = (isValid: boolean, inputValue: string) => cn(styles.input, {

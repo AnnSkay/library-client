@@ -13,7 +13,7 @@ export default function MainUsersPage(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData]: any = useState({});
 
   const getUserName = async () => {
     await axios
@@ -31,7 +31,7 @@ export default function MainUsersPage(): JSX.Element {
     if (!id) {
       return;
     } 
-    getUserName(id);
+    getUserName();
   }, [id]);
 
   return (

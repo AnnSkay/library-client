@@ -4,7 +4,7 @@ import axios from 'axios';
 import Router from 'next/router';
 import styles from './styles.module.css';
 
-export function SearchForm({ id }: { id: string }) {
+export function SearchForm({ id }: any & { id: string; }) {
   const [searchClick, setSearchClick] = useState(false);
 
   const [lists, setLists] = useState({
@@ -22,7 +22,7 @@ export function SearchForm({ id }: { id: string }) {
     isAvailable: false
   });
 
-  const inputOnChange = (name: string, value: any) => {
+  const inputOnChange = (name: string, value: unknown) => {
     setBookValue({ ...bookValue, [name]: value });
   }
 

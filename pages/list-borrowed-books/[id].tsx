@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import cn from 'classnames';
 import { HeadBlock } from '../../components/ui/head-block';
 import { MainHeaderWrapper } from '../../components/ui/main-header-wrapper';
 import { MainLogo } from '../../components/ui/main-logo';
@@ -16,7 +15,7 @@ export default function ListBorrowedBooksPage(): JSX.Element {
   const [userData, setUserData] = useState({});
   const [borrowedBooks, setBorrowedBooks] = useState([]);
 
-  const getUserData = async (id: string) => {
+  const getUserData = async () => {
     await axios
       .post('http://localhost:3001/api/user', {
         id
@@ -37,7 +36,7 @@ export default function ListBorrowedBooksPage(): JSX.Element {
     if (!id) {
       return;
     }
-    getUserData(id);
+    getUserData();
     getBorrowedBooks();
   }, [id]);
 
@@ -64,7 +63,10 @@ export default function ListBorrowedBooksPage(): JSX.Element {
               title,
               year,
               dateIssue,
-              user
+              userName,
+              userLastname,
+              userEmail,
+              userPhone
             }, index) => {
               return (
                 <div
@@ -77,9 +79,9 @@ export default function ListBorrowedBooksPage(): JSX.Element {
                   <div><b>Жанр:</b> {genreTitle}</div>
                   <div><b>Год издания:</b> {year}</div>
                   <div><b>Кем взята:</b></div>
-                  <div className={styles.userInf}><b>ФИ:</b> {user.lastname} {user.name}</div>
-                  <div className={styles.userInf}><b>Почта:</b> {user.login}</div>
-                  <div className={styles.userInf}><b>Телефон:</b> {user.phone}</div>
+                  <div className={styles.userInf}><b>ФИ:</b> {userLastname} {userName}</div>
+                  <div className={styles.userInf}><b>Почта:</b> {userEmail}</div>
+                  <div className={styles.userInf}><b>Телефон:</b> {userPhone}</div>
                   <div className={styles.userInf}><b>Дата выдачи книги:</b> {dateIssue}</div>
                 </div>
               );
