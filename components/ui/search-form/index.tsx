@@ -85,7 +85,7 @@ export function SearchForm({ id }: { id: string }) {
   }
 
   const unavailableBook = () => {
-    alert('Эта книга уже взята');
+    alert('Эта книга недоступна');
   }
 
   return (

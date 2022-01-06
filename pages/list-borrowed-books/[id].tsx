@@ -9,7 +9,7 @@ import { MainMenuUsers } from '../../components/ui/main-menu-users';
 import { MainPageWrapper } from '../../components/ui/main-page-wrapper';
 import styles from './styles.module.css';
 
-export default function MyBooksPage(): JSX.Element {
+export default function ListBorrowedBooksPage(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
@@ -25,7 +25,7 @@ export default function MyBooksPage(): JSX.Element {
       });
   }
 
-  const getBorrowedUserBooks = async (id: string) => {
+  const getBorrowedBooks = async (id: string) => {
     await axios
       .post('http://localhost:3001/api/borrowedBooks', {
         id
@@ -34,42 +34,25 @@ export default function MyBooksPage(): JSX.Element {
       });
   }
 
-  const deleteReturnedBook = async (bookId: string) => {
-    await axios
-      .post('http://localhost:3001/api/returnBook', {
-        bookId,
-        id
-      }).then(() => {
-        alert('Книга возвращена');
-        getBorrowedUserBooks(id);
-      });
-  }
-
   useEffect(() => {
     if (!id) {
       return;
     }
     getUserData(id);
-    getBorrowedUserBooks(id);
+    getBorrowedBooks();
   }, [id]);
-
-  const returnBook = (title: string, bookId: number) => {
-    if (confirm(`Вы уверены, что хотите вернуть книгу "${title}"?`)) {
-      deleteReturnedBook(String(bookId));
-    }
-  }
 
   return (
     <div>
-      <HeadBlock title="My books" />
+      <HeadBlock title="Borrowed books" />
 
       <MainPageWrapper>
         <MainHeaderWrapper>
           <MainLogo link={`/main-users/${id}`} />
           <h1 className={styles.headerTitle}>
-            Мои книги
+            Список взятых книг
           </h1>
-          <MainMenuUsers user={userData} page="myBooks" />
+          <MainMenuUsers user={userData} page="borrowedBooks" />
         </MainHeaderWrapper>
 
         <div className={styles.booksContainer}>
@@ -88,7 +71,6 @@ export default function MyBooksPage(): JSX.Element {
                 <div
                   className={styles.book}
                   key={index}
-                  onClick={() => returnBook(title, id)}
                 >
                   <div className={styles.bookTitle}>&quot;{title}&quot;</div>
                   <div><b>Автор:</b> {author}</div>
@@ -101,7 +83,7 @@ export default function MyBooksPage(): JSX.Element {
             })
           ) : (
             <div className={styles.nothingSearched}>
-              У вас нет выданных книг
+              Нет взятых книг
             </div>
           )}
         </div>

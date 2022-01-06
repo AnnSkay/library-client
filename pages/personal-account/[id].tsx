@@ -173,7 +173,7 @@ export default function PersonalAccountPage(): JSX.Element {
 
   return (
     <div>
-      <HeadBlock title="Main Page" />
+      <HeadBlock title="Personal account" />
 
       <MainPageWrapper>
         <MainHeaderWrapper>
