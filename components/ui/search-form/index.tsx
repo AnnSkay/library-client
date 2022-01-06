@@ -150,10 +150,10 @@ export function SearchForm({ id }: { id: string }) {
             >
               <option hidden selected disabled />
               {lists.houses
-               && lists.houses.map(({ house }, index) => {
+               && lists.houses.map(({ title, id }) => {
                 return (
-                  <option key={index}>
-                    {house}
+                  <option key={id}>
+                    {title}
                   </option>
                 );
               })}
@@ -178,10 +178,10 @@ export function SearchForm({ id }: { id: string }) {
             >
               <option hidden selected disabled/>
               {lists.genres
-               && lists.genres.map(({ genre }, index) => {
+               && lists.genres.map(({ title, id }) => {
                   return (
-                    <option key={index}>
-                      {genre}
+                    <option key={id}>
+                      {title}
                     </option>
                   );
               })}
@@ -249,8 +249,8 @@ export function SearchForm({ id }: { id: string }) {
           lists.books.map(({
             id,
             author,
-            genre,
-            house,
+            genreTitle,
+            houseTitle,
             numberCopyes,
             title,
             year
@@ -263,8 +263,8 @@ export function SearchForm({ id }: { id: string }) {
               >
                 <div className={styles.bookTitle}>&quot;{title}&quot;</div>
                 <div><b>Автор:</b> {author}</div>
-                <div><b>Издательство:</b> {house}</div>
-                <div><b>Жанр:</b> {genre}</div>
+                <div><b>Издательство:</b> {houseTitle}</div>
+                <div><b>Жанр:</b> {genreTitle}</div>
                 <div><b>Год издания:</b> {year}</div>
               </div>
             );

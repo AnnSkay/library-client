@@ -78,8 +78,8 @@ export default function MyBooksPage(): JSX.Element {
             borrowedBooks.map(({
               id,
               author,
-              genre,
-              house,
+              genreTitle,
+              houseTitle,
               title,
               year,
               dateIssue
@@ -92,8 +92,8 @@ export default function MyBooksPage(): JSX.Element {
                 >
                   <div className={styles.bookTitle}>&quot;{title}&quot;</div>
                   <div><b>Автор:</b> {author}</div>
-                  <div><b>Издательство:</b> {house}</div>
-                  <div><b>Жанр:</b> {genre}</div>
+                  <div><b>Издательство:</b> {houseTitle}</div>
+                  <div><b>Жанр:</b> {genreTitle}</div>
                   <div><b>Год издания:</b> {year}</div>
                   <div><b>Дата выдачи книги:</b> {dateIssue}</div>
                 </div>
