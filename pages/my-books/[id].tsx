@@ -17,7 +17,7 @@ export default function MyBooksPage(): JSX.Element {
 
   const getUserData = async () => {
     await axios
-      .post('http://localhost:3001/api/user', {
+      .post('http://localhost:3002/api/user', {
         id
       }).then((response) => {
         setUserData(response.data);
@@ -26,7 +26,7 @@ export default function MyBooksPage(): JSX.Element {
 
   const getBorrowedUserBooks = async () => {
     await axios
-      .post('http://localhost:3001/api/borrowedBooksByUser', {
+      .post('http://localhost:3002/api/borrowedBooksByUser', {
         id
       }).then((response) => {
         setBorrowedBooks(response.data);
@@ -35,7 +35,7 @@ export default function MyBooksPage(): JSX.Element {
 
   const deleteReturnedBook = async (bookId: string) => {
     await axios
-      .post('http://localhost:3001/api/returnBook', {
+      .post('http://localhost:3002/api/returnBook', {
         bookId,
         id
       }).then(() => {

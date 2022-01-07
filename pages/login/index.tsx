@@ -23,7 +23,7 @@ export default function LogInPage(): JSX.Element {
 
   async function handleLogin() {
     await axios
-      .post('http://localhost:3001/api/login', {
+      .post('http://localhost:3002/api/login', {
         login,
         password,
       }).then((response) => {

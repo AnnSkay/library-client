@@ -66,19 +66,19 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
   });
 
   const repeatPassClass = () => cn(styles.input, {
-    [styles.redBorder]: userValue.password !== userValue.repeatPass 
-                        && userValue.password 
+    [styles.redBorder]: userValue.password !== userValue.repeatPass
+                        && userValue.password
                         && userValue.repeatPass,
-    [styles.greenBorder]: userValue.password === userValue.repeatPass 
+    [styles.greenBorder]: userValue.password === userValue.repeatPass
                           && userValue.repeatPass,
   });
 
-  const validationMessageBlock = (validationMessage: string) => 
+  const validationMessageBlock = (validationMessage: string) =>
     <div className={styles.errorInput}>{validationMessage}</div>;
 
   const addUser = async () => {
     await axios
-      .post('http://localhost:3001/api/addUser', {
+      .post('http://localhost:3002/api/addUser', {
         ...userValue,
       }).then((response) => {
         alert(response.data);

@@ -27,8 +27,8 @@ export function SearchForm({ id }: any & { id: string; }) {
   }
 
   const searchGenresAndHouses = async () => {
-    const responseHouses = await axios.get('http://localhost:3001/api/houses');
-    const responseGenres = await axios.get('http://localhost:3001/api/genres');
+    const responseHouses = await axios.get('http://localhost:3002/api/houses');
+    const responseGenres = await axios.get('http://localhost:3002/api/genres');
     setLists({ ...lists, houses: responseHouses.data, genres: responseGenres.data });
   }
 
@@ -49,7 +49,7 @@ export function SearchForm({ id }: any & { id: string; }) {
   }
 
   const searchBooks = async () => {
-    const response = await axios.post('http://localhost:3001/api/books', {
+    const response = await axios.post('http://localhost:3002/api/books', {
       ...bookValue
     });
 
@@ -59,7 +59,7 @@ export function SearchForm({ id }: any & { id: string; }) {
 
   const addTakenBook = async (bookId: string) => {
     await axios
-      .post('http://localhost:3001/api/takeBook', {
+      .post('http://localhost:3002/api/takeBook', {
         bookId,
         id
       }).then((response) => {

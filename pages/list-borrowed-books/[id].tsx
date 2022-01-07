@@ -17,7 +17,7 @@ export default function ListBorrowedBooksPage(): JSX.Element {
 
   const getUserData = async () => {
     await axios
-      .post('http://localhost:3001/api/user', {
+      .post('http://localhost:3002/api/user', {
         id
       }).then((response) => {
         setUserData(response.data);
@@ -26,7 +26,7 @@ export default function ListBorrowedBooksPage(): JSX.Element {
 
   const getBorrowedBooks = async () => {
     await axios
-      .get('http://localhost:3001/api/allBorrowedBooks')
+      .get('http://localhost:3002/api/allBorrowedBooks')
       .then((response) => {
         setBorrowedBooks(response.data);
       });

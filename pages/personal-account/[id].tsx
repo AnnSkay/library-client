@@ -70,7 +70,7 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
 
   const getUserData = async () => {
     await axios
-      .post('http://localhost:3001/api/user', {
+      .post('http://localhost:3002/api/user', {
         id
       }).then((response) => {
         setUserData(response.data);
@@ -87,7 +87,7 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
 
   const sendDataChange = async () => {
     await axios
-      .post('http://localhost:3001/api/changeUserData', {
+      .post('http://localhost:3002/api/changeUserData', {
         ...userValue
       }).then((response) => {
         setUserData(response.data);
@@ -103,7 +103,7 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
 
   const sendPasswordChange = async () => {
     await axios
-      .post('http://localhost:3001/api/changeUserPassword', {
+      .post('http://localhost:3002/api/changeUserPassword', {
         ...userValue
       }).then((response) => {
         setUserData(response.data);

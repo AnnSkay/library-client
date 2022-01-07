@@ -17,7 +17,7 @@ export default function MainUsersPage(): JSX.Element {
 
   const getUserName = async () => {
     await axios
-      .post('http://localhost:3001/api/user', {
+      .post('http://localhost:3002/api/user', {
         id
       }).then ((response) => {
         if (response.data.name === '') {
@@ -25,12 +25,12 @@ export default function MainUsersPage(): JSX.Element {
         }
         setUserData(response.data);
       });
-  }  
+  }
 
   useEffect(() => {
     if (!id) {
       return;
-    } 
+    }
     getUserName();
   }, [id]);
 
