@@ -38,7 +38,7 @@ export function SearchForm({ id }: any & { id: string; }) {
 
   const resetAllInputs = () => {
     setBookValue({
-      ...bookValue, 
+      ...bookValue,
       title: '',
       author: '',
       publishHouse: '',
@@ -251,15 +251,15 @@ export function SearchForm({ id }: any & { id: string; }) {
             author,
             genreTitle,
             houseTitle,
-            numberCopyes,
+            numberCopies,
             title,
             year
           }, index) => {
             return (
               <div
-                className={notAvailableClass(numberCopyes)}
+                className={notAvailableClass(numberCopies)}
                 key={index}
-                onClick={numberCopyes > 0 ? () => takeBook(title, id) : unavailableBook}
+                onClick={numberCopies > 0 ? () => takeBook(title, id) : unavailableBook}
               >
                 <div className={styles.bookTitle}>&quot;{title}&quot;</div>
                 <div><b>Автор:</b> {author}</div>

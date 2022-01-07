@@ -37,7 +37,7 @@ const myRules = {
   }],
 };
 
-export default function PersonalAccountPage(): JSX.Element {
+export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
@@ -150,7 +150,7 @@ export default function PersonalAccountPage(): JSX.Element {
   });
 
   const handleDataSubmit = () => {
-    const { isValid, message, errors }: Validation = validator.current.validate();
+    const { isValid, message, errors }: Validation = validator.current.validate(bytes);
 
     if (!isValid && message !== 'Пароль обязателен' && message !== 'Пароль должен быть не меньше 6 символов') {
       console.log(isValid, message, errors);
@@ -161,7 +161,7 @@ export default function PersonalAccountPage(): JSX.Element {
   };
 
   const handlePasswordSubmit = () => {
-    const { isValid, message, errors }: Validation = validator.current.validate();
+    const { isValid, message, errors }: Validation = validator.current.validate(bytes);
 
     if (userValue.oldPassword !== userData.password || userValue.repeatNewPassword !== userValue.newPassword || userValue.repeatNewPassword === '') {
       console.log(isValid, message, errors);
@@ -392,14 +392,14 @@ export default function PersonalAccountPage(): JSX.Element {
           </ValidatorWrapper>
 
           <div className={styles.menuDataChange}>
-            <div 
-              className={activeDataItemClass()} 
+            <div
+              className={activeDataItemClass()}
               onClick={() => { setChangeDataClick(true); setChangePassordClick(false); }}
             >
               Личные данные
             </div>
-            <div 
-              className={activePasswordItemClass()} 
+            <div
+              className={activePasswordItemClass()}
               onClick={() => { setChangeDataClick(false); setChangePassordClick(true); }}
             >
               Пароль

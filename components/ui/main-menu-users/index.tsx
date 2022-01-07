@@ -8,7 +8,7 @@ import CloseIcon from './icon-close.png';
 import { ListMenuLibrarians } from '../list-menu-librarians';
 import { ListMenuAdmins } from '../list-menu-admins';
 
-export function MainMenuUsers({ user, page }: { user: any, page: string }): JSX.Element {
+export function MainMenuUsers({ user, page }: { user: { id: number; role: string }, page: string }): JSX.Element {
   const [showMenu, setShowMenu] = useState(false);
 
   const showListMenu = () => {
@@ -26,24 +26,22 @@ export function MainMenuUsers({ user, page }: { user: any, page: string }): JSX.
         return <ListMenuLibrarians page="page" user={user} />
       case 'ADMIN':
         return <ListMenuAdmins />
-      default:
-        null
     }
   }
 
   const linkClass = (linkName: string) => cn(styles.link, {
-    [styles.linkActive]: page === 'persAcc' && linkName === 'persAcc' || 
+    [styles.linkActive]: page === 'persAcc' && linkName === 'persAcc' ||
                          page === 'myBooks' && linkName === 'myBooks'
   });
 
   return (
     <div className={styles.menuBlock}>
       <div className={styles.menuTitle} onClick={showListMenu}>
-        <Image 
-          src={!showMenu ? ListIcon : CloseIcon} 
-          width={24} 
-          height={24} 
-          alt="Открыть меню" 
+        <Image
+          src={!showMenu ? ListIcon : CloseIcon}
+          width={24}
+          height={24}
+          alt="Открыть меню"
         />
       </div>
 
@@ -60,8 +58,8 @@ export function MainMenuUsers({ user, page }: { user: any, page: string }): JSX.
           <Link href={`/my-books/${user.id}`}>
             <a className={linkClass('myBooks')}>
               Мои книги
-            </a>  
-          </Link>  
+            </a>
+          </Link>
         </li>
 
         {selectMenuList()}

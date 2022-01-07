@@ -12,7 +12,7 @@ export default function MyBooksPage(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData]: any = useState({});
   const [borrowedBooks, setBorrowedBooks] = useState([]);
 
   const getUserData = async () => {
