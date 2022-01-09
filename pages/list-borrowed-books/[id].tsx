@@ -174,7 +174,7 @@ export default function ListBorrowedBooksPage(): JSX.Element {
                     <div><b>Автор:</b> {author}</div>
                     <div><b>Издательство:</b> {houseTitle}</div>
                     <div><b>Жанр:</b> {genreTitle}</div>
-                    <div><b>Год издания:</b> {year}</div>
+                    <div><b>Год издания:</b> {year || 'Не указан'}</div>
                     <div><b>Кем взята:</b></div>
                     <div className={styles.userInf}><b>ФИ:</b> {userLastname} {userName}</div>
                     <div className={styles.userInf}><b>Почта:</b> {userEmail}</div>

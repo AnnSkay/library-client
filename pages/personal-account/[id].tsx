@@ -43,7 +43,7 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
 
   const [userData, setUserData]: any = useState({});
   const [changeDataClick, setChangeDataClick] = useState(true);
-  const [changePassordClick, setChangePassordClick] = useState(false);
+  const [changePasswordClick, setChangePasswordClick] = useState(false);
 
   const [userValue, setUserValue] = useState({
     userId: '',
@@ -137,8 +137,8 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
     [styles.noDisplay]: !changeDataClick,
   });
 
-  const changePassordTableClass = () => cn(styles.personalAccBlock, {
-    [styles.noDisplay]: !changePassordClick,
+  const changePasswordTableClass = () => cn(styles.personalAccBlock, {
+    [styles.noDisplay]: !changePasswordClick,
   });
 
   const activeDataItemClass = () => cn(styles.menuChangeItem, {
@@ -146,7 +146,7 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
   });
 
   const activePasswordItemClass = () => cn(styles.menuChangeItem, {
-    [styles.activeItem]: changePassordClick,
+    [styles.activeItem]: changePasswordClick,
   });
 
   const handleDataSubmit = () => {
@@ -298,7 +298,7 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
               </tr>
             </table>
 
-            <table className={changePassordTableClass()}>
+            <table className={changePasswordTableClass()}>
               <tr className={cn(styles.inputBlock, styles.twoColumns)}>
                 <td colSpan={2}>
                   Смена пароля
@@ -391,16 +391,17 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
             </table>
           </ValidatorWrapper>
 
-          <div className={styles.menuDataChange}>
+          <div>
             <div
               className={activeDataItemClass()}
-              onClick={() => { setChangeDataClick(true); setChangePassordClick(false); }}
+              onClick={() => { setChangeDataClick(true); setChangePasswordClick(false); }}
             >
               Личные данные
             </div>
+
             <div
               className={activePasswordItemClass()}
-              onClick={() => { setChangeDataClick(false); setChangePassordClick(true); }}
+              onClick={() => { setChangeDataClick(false); setChangePasswordClick(true); }}
             >
               Пароль
             </div>

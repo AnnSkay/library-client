@@ -296,7 +296,7 @@ export function SearchForm({ id }: any & { id: string; }) {
                 <div><b>Автор:</b> {author}</div>
                 <div><b>Издательство:</b> {houseTitle}</div>
                 <div><b>Жанр:</b> {genreTitle}</div>
-                <div><b>Год издания:</b> {year}</div>
+                <div><b>Год издания:</b> {year || 'Не указан'}</div>
               </div>
             );
           })
