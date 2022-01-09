@@ -3,6 +3,33 @@
     text-align: center;
 }
 
+.inputBlock {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.inputTitle {
+    display: inline-block;
+    width: 25%;
+    padding-right: 10px;
+}
+
+.input {
+    width: 80%;
+    padding: 5px;
+    border: 2px solid rgba(152, 118, 84, 0.7);
+    border-radius: 5px;
+}
+
+.input:focus, .input:hover {
+    border: 2px solid rgb(152, 118, 84);
+}
+
+.input:focus {
+    outline: none;
+}
+
 .booksContainer {
     display: flex;
     flex-direction: row;

@@ -107,45 +107,47 @@ export default function ListBorrowedBooksPage(): JSX.Element {
           <MainMenuUsers user={userData} page="borrowedBooks" />
         </MainHeaderWrapper>
 
-        <div>
-          <label htmlFor="sorting">
-            Сортировка:
-          </label>
-          <select
-            id="sorting"
-            name="sorting"
-            value={sorting}
-            onChange={(e) => getSort(e.target.value)}
-            className={styles.input}
-          >
-            <option hidden selected disabled />
-            <option>
-              По названию книги
-            </option>
-            <option>
-              По автору
-            </option>
-            <option>
-              По фамилии читателя
-            </option>
-            <option>
-              По дате выдачи книги
-            </option>
-          </select>
-        </div>
+        <div className={styles.inputBlock}>
+          <div className={styles.inputTitle}>
+            <label htmlFor="sorting">
+              Сортировка:
+            </label>
+            <select
+              id="sorting"
+              name="sorting"
+              value={sorting}
+              onChange={(e) => getSort(e.target.value)}
+              className={styles.input}
+            >
+              <option hidden selected disabled />
+              <option>
+                По названию книги
+              </option>
+              <option>
+                По автору
+              </option>
+              <option>
+                По фамилии читателя
+              </option>
+              <option>
+                По дате выдачи книги
+              </option>
+            </select>
+          </div>
 
-        <div>
-          <label htmlFor="sorting">
-            Фильтр по фамилии читателя
-          </label>
-          <input
-            type="text"
-            id="userLastname"
-            name="userLastname"
-            value={userLastname}
-            onChange={(e) => getFilterByUser(e.target.value)}
-            className={styles.input}
-          />
+          <div className={styles.inputTitle}>
+            <label htmlFor="userLastname">
+              Поиск по фамилии читателя:
+            </label>
+            <input
+              type="text"
+              id="userLastname"
+              name="userLastname"
+              value={userLastname}
+              onChange={(e) => getFilterByUser(e.target.value)}
+              className={styles.input}
+            />
+          </div>
         </div>
 
         <div className={styles.booksContainer}>

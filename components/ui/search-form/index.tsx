@@ -1,10 +1,13 @@
 import cn from 'classnames';
 import React, { useState, useEffect } from 'react';
+import usePagination from '../../../hooks/usePagination';
 import axios from 'axios';
 import Router from 'next/router';
 import styles from './styles.module.css';
+import { Pagination } from "../pagination";
 
 export function SearchForm({ id }: any & { id: string; }) {
+
   const [searchClick, setSearchClick] = useState(false);
 
   const [lists, setLists] = useState({
@@ -25,6 +28,19 @@ export function SearchForm({ id }: any & { id: string; }) {
   const inputOnChange = (name: string, value: unknown) => {
     setBookValue({ ...bookValue, [name]: value });
   }
+
+  const {
+    firstContentIndex,
+    lastContentIndex,
+    nextPage,
+    prevPage,
+    page,
+    setPage,
+    totalPages,
+  } = usePagination({
+    contentPerPage: 6,
+    count: lists.books.length,
+  });
 
   const searchGenresAndHouses = async () => {
     const responseHouses = await axios.get('http://localhost:3002/api/houses');
@@ -49,12 +65,13 @@ export function SearchForm({ id }: any & { id: string; }) {
   }
 
   const searchBooks = async () => {
-    const response = await axios.post('http://localhost:3002/api/books', {
+    await axios
+      .post('http://localhost:3002/api/books', {
       ...bookValue
+    }).then((response) =>{
+      setLists({ ...lists, books: response.data });
+      setSearchClick(true);
     });
-
-    setLists({ ...lists, books: response.data });
-    setSearchClick(true);
   }
 
   const addTakenBook = async (bookId: string) => {
@@ -67,10 +84,6 @@ export function SearchForm({ id }: any & { id: string; }) {
         searchBooks();
       });
   }
-
-  const notAvailableClass = (numberCopyes: number) => cn(styles.book, {
-    [styles.bookNotAvailable]: numberCopyes === 0,
-  });
 
   const takeBook = (title: string, bookId: number) => {
     if (id === 'гость') {
@@ -87,6 +100,10 @@ export function SearchForm({ id }: any & { id: string; }) {
   const unavailableBook = () => {
     alert('Эта книга недоступна');
   }
+
+  const notAvailableClass = (numberCopies: number) => cn(styles.book, {
+    [styles.bookNotAvailable]: numberCopies === 0,
+  });
 
   return (
     <div>
@@ -243,10 +260,24 @@ export function SearchForm({ id }: any & { id: string; }) {
         </tr>
       </table>
 
+      <Pagination
+        books={lists.books}
+        pagination={{
+          firstContentIndex,
+          lastContentIndex,
+          nextPage,
+          prevPage,
+          page,
+          setPage,
+          totalPages,
+        }}
+      />
+      {/*page={page} totalPages={totalPages} setPage={setPage} prevPage={prevPage} nextPage={nextPage}*/}
+
       <div className={styles.booksContainer}>
         {!(lists.books.length === 0 && searchClick) ? (
           lists.books &&
-          lists.books.map(({
+          lists.books.slice(firstContentIndex, lastContentIndex).map(({
             id,
             author,
             genreTitle,
