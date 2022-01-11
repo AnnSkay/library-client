@@ -52,7 +52,7 @@ export default function ListBorrowedBooksPage(): JSX.Element {
   const getSort = (sortingName: string) => {
     setSorting(sortingName);
 
-    // getFilterByUser(userLastname);
+    getFilterByUser(userLastname);
 
     switch (sortingName) {
       case 'По названию книги':
