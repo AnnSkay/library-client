@@ -64,6 +64,23 @@
     border: 2px solid rgba(152, 118, 84, 0.7);
     border-radius: 5px;
     width: 12%;
+    cursor: pointer;
+}
+
+.buttonContainer {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.buttonEditAndDelete {
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.buttonEditAndDelete:first-child {
+    margin-right: 10px;
 }
 
 .menuManagementItem {
@@ -86,11 +103,7 @@
 }
 
 .booksContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
+    padding: 20px 0 10px;
 }
 
 .book {
@@ -99,8 +112,7 @@
     border: 2px solid rgb(152, 118, 84);
     border-radius: 5px;
     background-color: rgba(152, 118, 84, 0.3);
-    cursor: pointer;
-    margin-bottom: 20px;
+    margin: 0 auto 20px;
 }
 
 .bookTitle {

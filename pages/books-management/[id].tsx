@@ -8,7 +8,9 @@ import { MainMenuUsers } from '../../components/ui/main-menu-users';
 import { MainPageWrapper } from '../../components/ui/main-page-wrapper';
 import styles from './styles.module.css';
 import cn from "classnames";
-import SearchIcon from './icon-search.png';
+import SearchBookIcon from './icon-search-book.png';
+import EditBookIcon from './icon-edit-book.png';
+import DeleteBookIcon from './icon-delete-book.png';
 import Image from "next/image";
 
 
@@ -358,7 +360,7 @@ export default function BooksManagementPage(): JSX.Element {
                   className={styles.buttonSearch}
                 >
                   <Image
-                    src={SearchIcon}
+                    src={SearchBookIcon}
                     width={30}
                     height={30}
                     alt="Поиск книги"
@@ -376,8 +378,7 @@ export default function BooksManagementPage(): JSX.Element {
                      genreTitle,
                      houseTitle,
                      title,
-                     year,
-                     dateIssueFormat
+                     year
                    }, index) => {
                     return (
                       <div
@@ -389,8 +390,36 @@ export default function BooksManagementPage(): JSX.Element {
                         <div><b>Издательство:</b> {houseTitle}</div>
                         <div><b>Жанр:</b> {genreTitle}</div>
                         <div><b>Год издания:</b> {year || 'Не указан'}</div>
-                        <div><b>Дата выдачи книги:</b> {dateIssueFormat}</div>
+
+                        <div className={styles.buttonContainer}>
+                          <button
+                            type="button"
+                            // onClick={}
+                            className={styles.buttonEditAndDelete}
+                          >
+                            <Image
+                              src={EditBookIcon}
+                              width={30}
+                              height={30}
+                              alt="Редактировать книгу"
+                            />
+                          </button>
+
+                          <button
+                            type="button"
+                            // onClick={}
+                            className={styles.buttonEditAndDelete}
+                          >
+                            <Image
+                              src={DeleteBookIcon}
+                              width={30}
+                              height={30}
+                              alt="Удалить книгу"
+                            />
+                          </button>
+                        </div>
                       </div>
+
                     );
                   })
                 ) : (
