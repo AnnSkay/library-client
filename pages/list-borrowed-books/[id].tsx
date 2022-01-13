@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import api from '../../services/api';
 import { HeadBlock } from '../../components/ui/head-block';
 import { MainHeaderWrapper } from '../../components/ui/main-header-wrapper';
 import { MainLogo } from '../../components/ui/main-logo';
@@ -20,8 +20,8 @@ export default function ListBorrowedBooksPage(): JSX.Element {
   const [userLastname, setUserLastname] = useState('');
 
   const getUserData = async () => {
-    await axios
-      .post('http://localhost:3002/api/user', {
+    await api
+      .post('/user', {
         id
       }).then((response) => {
         setUserData(response.data);
@@ -29,8 +29,8 @@ export default function ListBorrowedBooksPage(): JSX.Element {
   }
 
   const getBorrowedBooks = async () => {
-    await axios
-      .get('http://localhost:3002/api/allBorrowedBooks')
+    await api
+      .get('/allBorrowedBooks')
       .then((response) => {
         response.data.sort((prev: any, next: any) => {
           if ( prev.title < next.title ) return -1;

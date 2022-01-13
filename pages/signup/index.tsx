@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import React, { useRef, useState } from 'react';
-import axios from 'axios';
+import { useRef, useState } from 'react';
+import api from '../../services/api';
 // @ts-ignore
 import ValidatorWrapper, { ValidatorField } from '@coxy/react-validator';
 import cn from 'classnames';
@@ -39,6 +39,16 @@ const myRules = {
 };
 
 export default function SignInPage(bytes: BufferSource): JSX.Element {
+  const validator = useRef<any>();
+
+  interface Validation {
+    isValid: boolean;
+    message: string;
+    errors: string;
+  }
+
+  const [handleSubmitClick, isHandleSubmitClick] = useState(false);
+
   const [userValue, setUserValue] = useState({
     name: '',
     lastname: '',
@@ -52,13 +62,28 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
     setUserValue({ ...userValue, [target.name]: target.value });
   };
 
-  const validator = useRef<any>();
+  const addUser = async () => {
+    await api
+      .post('addUser', {
+        ...userValue,
+      }).then((response) => {
+        alert(response.data);
+      });
+  };
 
-  interface Validation {
-    isValid: boolean;
-    message: string;
-    errors: string;
-  }
+  const validationMessageBlock = (validationMessage: string) =>
+    <div className={styles.errorInput}>{validationMessage}</div>
+
+
+  const handleSubmit = () => {
+    const { isValid }: Validation = validator.current.validate(bytes);
+
+    isHandleSubmitClick(true);
+
+    if (isValid && userValue.repeatPass === userValue.password && userValue.repeatPass) {
+      addUser();
+    }
+  };
 
   const inputClass = (isValid: boolean, inputValue: string) => cn(styles.input, {
     [styles.redBorder]: !isValid && inputValue.length !== 0,
@@ -72,28 +97,6 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
     [styles.greenBorder]: userValue.password === userValue.repeatPass
                           && userValue.repeatPass,
   });
-
-  const validationMessageBlock = (validationMessage: string) =>
-    <div className={styles.errorInput}>{validationMessage}</div>;
-
-  const addUser = async () => {
-    await axios
-      .post('http://localhost:3002/api/addUser', {
-        ...userValue,
-      }).then((response) => {
-        alert(response.data);
-      });
-  };
-
-  const handleSubmit = () => {
-    const { isValid, message, errors }: Validation = validator.current.validate(bytes);
-
-    if (!isValid || userValue.repeatPass !== userValue.password || userValue.repeatPass === '') {
-      console.log(isValid, message, errors);
-    } else {
-      addUser();
-    }
-  };
 
   return (
     <div className={styles.container}>
@@ -141,7 +144,7 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
                       placeholder="E-mail"
                     />
 
-                    {!isValid && validationMessageBlock(message)}
+                    {!isValid && handleSubmitClick && validationMessageBlock(message)}
                   </>
                 )}
               </ValidatorField>
@@ -158,7 +161,7 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
                       placeholder="Телефон"
                     />
 
-                    {!isValid && validationMessageBlock(message)}
+                    {!isValid && handleSubmitClick && validationMessageBlock(message)}
                   </>
                 )}
               </ValidatorField>
@@ -175,7 +178,7 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
                       placeholder="Пароль"
                     />
 
-                    {!isValid && validationMessageBlock(message)}
+                    {!isValid && handleSubmitClick && validationMessageBlock(message)}
                   </>
                 )}
               </ValidatorField>
@@ -193,6 +196,7 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
                 userValue.password !== userValue.repeatPass
                 && userValue.password
                 && userValue.repeatPass
+                && handleSubmitClick
                 && validationMessageBlock('Пароли не совпадают')
               }
 

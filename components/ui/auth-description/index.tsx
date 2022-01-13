@@ -1,9 +1,8 @@
-import React from 'react';
 import Image from 'next/image';
 import cn from 'classnames';
 import styles from './styles.module.css';
-import Image1 from './library-reg-1.jpeg';
-import Image2 from './library-reg-2.jpeg';
+import Image1 from './library-decoration-1.jpeg';
+import Image2 from './library-decoration-2.jpeg';
 
 export function AuthDescription() {
   return (

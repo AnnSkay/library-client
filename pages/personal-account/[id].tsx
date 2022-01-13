@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import api from '../../services/api';
 // @ts-ignore
 import ValidatorWrapper, { ValidatorField } from '@coxy/react-validator';
 import cn from 'classnames';
@@ -38,12 +38,23 @@ const myRules = {
 };
 
 export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
+  const validator = useRef<any>();
+
   const router = useRouter();
   const { id } = router.query;
+
+  interface Validation {
+    isValid: boolean;
+    message: string;
+    errors: string;
+  }
 
   const [userData, setUserData]: any = useState({});
   const [changeDataClick, setChangeDataClick] = useState(true);
   const [changePasswordClick, setChangePasswordClick] = useState(false);
+
+  const [handleDataSubmitClick, isHandleDataSubmitClick] = useState(false);
+  const [handlePasswordSubmitClick, isHandlePasswordSubmitClick] = useState(false);
 
   const [userValue, setUserValue] = useState({
     userId: '',
@@ -60,17 +71,16 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
     setUserValue({ ...userValue, [target.name]: target.value });
   }
 
-  const validator = useRef<any>();
-
-  interface Validation {
-    isValid: boolean;
-    message: string;
-    errors: string;
-  }
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+    getUserData();
+  }, [id]);
 
   const getUserData = async () => {
-    await axios
-      .post('http://localhost:3002/api/user', {
+    await api
+      .post('/user', {
         id
       }).then((response) => {
         setUserData(response.data);
@@ -86,8 +96,8 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
   }
 
   const sendDataChange = async () => {
-    await axios
-      .post('http://localhost:3002/api/changeUserData', {
+    await api
+      .post('/changeUserData', {
         ...userValue
       }).then((response) => {
         setUserData(response.data);
@@ -102,36 +112,60 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
   }
 
   const sendPasswordChange = async () => {
-    await axios
-      .post('http://localhost:3002/api/changeUserPassword', {
+    await api
+      .post('/changeUserPassword', {
         ...userValue
       }).then((response) => {
         setUserData(response.data);
       });
   };
 
-  useEffect(() => {
-    if (!id) {
-      return;
+  const itemClick = (changeData: boolean, changePassword: boolean) => {
+    setChangeDataClick(changeData);
+    setChangePasswordClick(changePassword);
+  }
+
+  const validationMessageBlock = (validationMessage: string) =>
+    <div className={styles.errorInput}>{validationMessage}</div>
+
+  const handleDataSubmit = () => {
+    const { isValid, message }: Validation = validator.current.validate(bytes);
+
+    isHandleDataSubmitClick(true);
+
+    if (isValid
+        || message === 'Пароль обязателен'
+        || message === 'Пароль должен быть не меньше 6 символов'
+    ) {
+      sendDataChange();
+      alert('Изменения прошли успешно');
     }
-    getUserData();
-  }, [id]);
+  };
+
+  const handlePasswordSubmit = () => {
+    isHandlePasswordSubmitClick(true);
+
+    if (userValue.oldPassword === userData.password
+        && userValue.repeatNewPassword === userValue.newPassword
+        && userValue.repeatNewPassword
+    ) {
+      sendPasswordChange();
+      alert('Изменения прошли успешно');
+    }
+  };
 
   const inputClass = (isValid: boolean, inputValue: string) => cn(styles.input, {
     [styles.redBorder]: !isValid && inputValue.length !== 0,
     [styles.greenBorder]: isValid,
   });
 
-  const repeatNewPassordClass = () => cn(styles.input, {
+  const repeatNewPasswordClass = () => cn(styles.input, {
     [styles.redBorder]: userValue.newPassword !== userValue.repeatNewPassword
                         && userValue.newPassword
                         && userValue.repeatNewPassword,
     [styles.greenBorder]: userValue.newPassword === userValue.repeatNewPassword
                           && userValue.repeatNewPassword,
   });
-
-  const validationMessageBlock = (validationMessage: string) =>
-    <div className={styles.errorInput}>{validationMessage}</div>
 
   const changeDataTableClass = () => cn(styles.personalAccBlock, {
     [styles.noDisplay]: !changeDataClick,
@@ -148,28 +182,6 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
   const activePasswordItemClass = () => cn(styles.menuChangeItem, {
     [styles.activeItem]: changePasswordClick,
   });
-
-  const handleDataSubmit = () => {
-    const { isValid, message, errors }: Validation = validator.current.validate(bytes);
-
-    if (!isValid && message !== 'Пароль обязателен' && message !== 'Пароль должен быть не меньше 6 символов') {
-      console.log(isValid, message, errors);
-    } else {
-      sendDataChange();
-      alert('Изменения прошли успешно');
-    }
-  };
-
-  const handlePasswordSubmit = () => {
-    const { isValid, message, errors }: Validation = validator.current.validate(bytes);
-
-    if (userValue.oldPassword !== userData.password || userValue.repeatNewPassword !== userValue.newPassword || userValue.repeatNewPassword === '') {
-      console.log(isValid, message, errors);
-    } else {
-      sendPasswordChange();
-      alert('Изменения прошли успешно');
-    }
-  };
 
   return (
     <div>
@@ -251,7 +263,11 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
                           className={inputClass(isValid, userValue.email)}
                         />
 
-                        {!isValid && validationMessageBlock(message)}
+                        {
+                          !isValid
+                          && handleDataSubmitClick
+                          && validationMessageBlock(message)
+                        }
                       </>
                     )}
                   </ValidatorField>
@@ -278,7 +294,11 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
                           className={inputClass(isValid, userValue.phone)}
                         />
 
-                        {!isValid && validationMessageBlock(message)}
+                        {
+                          !isValid
+                          && handleDataSubmitClick
+                          && validationMessageBlock(message)
+                        }
                       </>
                     )}
                   </ValidatorField>
@@ -344,7 +364,11 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
                           className={inputClass(isValid, userValue.newPassword)}
                         />
 
-                        {!isValid && validationMessageBlock(message)}
+                        {
+                          !isValid
+                          && handlePasswordSubmitClick
+                          && validationMessageBlock(message)
+                        }
                       </>
                     )}
                   </ValidatorField>
@@ -365,13 +389,14 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
                     name="repeatNewPassword"
                     value={userValue.repeatNewPassword}
                     onChange={inputOnChange}
-                    className={repeatNewPassordClass()}
+                    className={repeatNewPasswordClass()}
                   />
 
                   {
                     userValue.newPassword !== userValue.repeatNewPassword
                     && userValue.newPassword
                     && userValue.repeatNewPassword
+                    && handlePasswordSubmitClick
                     && validationMessageBlock('Пароли не совпадают')
                   }
                 </td>
@@ -394,15 +419,14 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
           <div>
             <div
               className={activeDataItemClass()}
-              onClick={() => { setChangeDataClick(true); setChangePasswordClick(false); }}
+              onClick={() => itemClick(true, false)}
             >
               Личные данные
-            </div>
+            </div>`
 
             <div
               className={activePasswordItemClass()}
-              onClick={() => { setChangeDataClick(false); setChangePasswordClick(true); }}
-            >
+              onClick={() => itemClick(false, true)}>
               Пароль
             </div>
           </div>

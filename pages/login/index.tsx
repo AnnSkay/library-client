@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../../services/api';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import cn from 'classnames';
@@ -22,8 +22,8 @@ export default function LogInPage(): JSX.Element {
   });
 
   async function handleLogin() {
-    await axios
-      .post('http://localhost:3002/api/login', {
+    await api
+      .post('/login', {
         login,
         password,
       }).then((response) => {

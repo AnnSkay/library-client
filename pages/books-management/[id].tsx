@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import api from '../../services/api';
 import { HeadBlock } from '../../components/ui/head-block';
 import { MainHeaderWrapper } from '../../components/ui/main-header-wrapper';
 import { MainLogo } from '../../components/ui/main-logo';
@@ -51,8 +51,8 @@ export default function BooksManagementPage(): JSX.Element {
   }
 
   const getUserData = async () => {
-    await axios
-      .post('http://localhost:3002/api/user', {
+    await api
+      .post('/user', {
         id
       }).then((response) => {
         setUserData(response.data);
@@ -60,14 +60,14 @@ export default function BooksManagementPage(): JSX.Element {
   }
 
   const searchGenresAndHouses = async () => {
-    const responseHouses = await axios.get('http://localhost:3002/api/houses');
-    const responseGenres = await axios.get('http://localhost:3002/api/genres');
+    const responseHouses = await api.get('/houses');
+    const responseGenres = await api.get('/genres');
     setLists({ ...lists, houses: responseHouses.data, genres: responseGenres.data });
   }
 
   const getBooksByTitle = async () => {
-    await axios
-      .post('http://localhost:3002/api/booksByTitle', {
+    await api
+      .post('/booksByTitle', {
         searchingBookTitle
       }).then((response) => {
         setBooks(response.data);
@@ -76,8 +76,8 @@ export default function BooksManagementPage(): JSX.Element {
   }
 
   const addBook = async () => {
-    await axios
-      .post('http://localhost:3002/api/addBook', {
+    await api
+      .post('/addBook', {
         ...bookValue,
       }).then((response) => {
         alert(response.data);
@@ -117,8 +117,8 @@ export default function BooksManagementPage(): JSX.Element {
   }
 
   const deleteSelectedBook = async (bookId: number) => {
-    await axios
-      .post('http://localhost:3002/api/deleteBook', {
+    await api
+      .post('/deleteBook', {
         bookId
       }).then((response) => {
         alert(response.data);

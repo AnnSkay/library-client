@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 import Logo from './library-logo.png';
 import styles from './styles.module.css';
 

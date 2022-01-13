@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import api from '../../services/api';
 import { HeadBlock } from '../../components/ui/head-block';
 import { MainHeaderWrapper } from '../../components/ui/main-header-wrapper';
 import { MainLogo } from '../../components/ui/main-logo';
@@ -16,8 +16,8 @@ export default function MyBooksPage(): JSX.Element {
   const [borrowedBooks, setBorrowedBooks] = useState([]);
 
   const getUserData = async () => {
-    await axios
-      .post('http://localhost:3002/api/user', {
+    await api
+      .post('/user', {
         id
       }).then((response) => {
         setUserData(response.data);
@@ -25,8 +25,8 @@ export default function MyBooksPage(): JSX.Element {
   }
 
   const getBorrowedUserBooks = async () => {
-    await axios
-      .post('http://localhost:3002/api/borrowedBooksByUser', {
+    await api
+      .post('/borrowedBooksByUser', {
         id
       }).then((response) => {
         setBorrowedBooks(response.data);
@@ -34,8 +34,8 @@ export default function MyBooksPage(): JSX.Element {
   }
 
   const deleteReturnedBook = async (bookId: string) => {
-    await axios
-      .post('http://localhost:3002/api/returnBook', {
+    await api
+      .post('/returnBook', {
         bookId,
         id
       }).then(() => {

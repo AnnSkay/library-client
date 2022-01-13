@@ -1,7 +1,7 @@
 import cn from 'classnames';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import usePagination from '../../../hooks/usePagination';
-import axios from 'axios';
+import api from '../../../services/api';
 import Router from 'next/router';
 import styles from './styles.module.css';
 import { Pagination } from "../pagination";
@@ -43,8 +43,8 @@ export function SearchForm({ id }: any & { id: string; }) {
   });
 
   const searchGenresAndHouses = async () => {
-    const responseHouses = await axios.get('http://localhost:3002/api/houses');
-    const responseGenres = await axios.get('http://localhost:3002/api/genres');
+    const responseHouses = await api.get('/houses');
+    const responseGenres = await api.get('/genres');
     setLists({ ...lists, houses: responseHouses.data, genres: responseGenres.data });
   }
 
@@ -65,8 +65,8 @@ export function SearchForm({ id }: any & { id: string; }) {
   }
 
   const searchBooks = async () => {
-    await axios
-      .post('http://localhost:3002/api/books', {
+    await api
+      .post('/books', {
       ...bookValue
     }).then((response) =>{
       setLists({ ...lists, books: response.data });
@@ -75,8 +75,8 @@ export function SearchForm({ id }: any & { id: string; }) {
   }
 
   const addTakenBook = async (bookId: string) => {
-    await axios
-      .post('http://localhost:3002/api/takeBook', {
+    await api
+      .post('/takeBook', {
         bookId,
         id
       }).then((response) => {
@@ -293,7 +293,7 @@ export function SearchForm({ id }: any & { id: string; }) {
                 onClick={numberCopies > 0 ? () => takeBook(title, id) : unavailableBook}
               >
                 <div className={styles.bookTitle}>&quot;{title}&quot;</div>
-                <div><b>Автор:</b> {author}</div>
+                <div><b>Автор:</b> {author || 'Не указан'}</div>
                 <div><b>Издательство:</b> {houseTitle}</div>
                 <div><b>Жанр:</b> {genreTitle}</div>
                 <div><b>Год издания:</b> {year || 'Не указан'}</div>

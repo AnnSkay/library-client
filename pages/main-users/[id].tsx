@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 import { useRouter } from 'next/router';
 import { HeadBlock } from '../../components/ui/head-block';
 import { MainHeaderWrapper } from '../../components/ui/main-header-wrapper';
@@ -16,8 +16,8 @@ export default function MainUsersPage(): JSX.Element {
   const [userData, setUserData]: any = useState({});
 
   const getUserName = async () => {
-    await axios
-      .post('http://localhost:3002/api/user', {
+    await api
+      .post('/user', {
         id
       }).then ((response) => {
         if (response.data.name === '') {
