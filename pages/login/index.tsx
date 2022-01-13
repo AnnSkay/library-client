@@ -1,6 +1,6 @@
 import api from '../../services/api';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import cn from 'classnames';
 import Router from 'next/router';
 import styles from './styles.module.css';

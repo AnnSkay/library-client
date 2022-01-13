@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import api from '../../services/api';
 import { HeadBlock } from '../../components/ui/head-block';
