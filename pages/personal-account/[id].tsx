@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, RefObject } from 'react';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import api from '../../services/api';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -78,10 +78,13 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
 
   const getUserData = async () => {
     await api
-      .post('/user/user-data', {
+      .post('/users/user-data', {
         id
       })
       .then((response) => {
+        if (response.data === 'no user') {
+          Router.push(`/404.tsx`);
+        }
         setUserData(response.data);
         setUserValue({
           ...userValue,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { HeadBlock } from '../../components/ui/head-block';
 import { MainHeaderWrapper } from '../../components/ui/main-header-wrapper';
 import { MainLogo } from '../../components/ui/main-logo';
@@ -39,6 +39,9 @@ export default function MainUsersPage(): JSX.Element {
         id
       })
       .then((response) => {
+        if (response.data === 'no user') {
+          Router.push(`/404.tsx`);
+        }
         if (response.data.name === '') {
           response.data.name = 'Читатель';
         }

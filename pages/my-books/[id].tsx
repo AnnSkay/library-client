@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import api from '../../services/api';
 import { HeadBlock } from '../../components/ui/head-block';
 import { MainHeaderWrapper } from '../../components/ui/main-header-wrapper';
@@ -40,6 +40,9 @@ export default function MyBooksPage(): JSX.Element {
         id
       })
       .then((response) => {
+        if (response.data === 'no user') {
+          Router.push(`/404.tsx`);
+        }
         setUserData(response.data);
       });
   };

@@ -1,0 +1,41 @@
+.flexBox {
+  width: 80%;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.ohText,
+.apologiesText,
+.errorCode {
+  margin-bottom: 20px;
+}
+
+.ohText {
+  width: 100%;
+  font-size: 140px;
+  font-weight: bold;
+}
+
+.apologiesText {
+  font-size: 40px;
+}
+
+.errorCode {
+  font-size: 25px;
+  color: gray;
+  font-weight: bold;
+}
+
+.offerText {
+  font-size: 25px;
+}
+
+.linkToMain {
+  text-decoration: none;
+  color: blue;
+  margin-left: 5px;
+}
