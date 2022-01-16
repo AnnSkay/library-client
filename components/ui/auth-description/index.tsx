@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import cn from 'classnames';
 import styles from './styles.module.css';
@@ -12,17 +13,17 @@ export function AuthDescription() {
       </h1>
 
       <div className={cn(styles.image, styles.imageTop)}>
-        <Image src={Image1} width={150} height={150} alt="" />
+        <Image src={Image1} width={150} height={150} alt=""/>
       </div>
 
       <div className={cn(styles.image, styles.imageBottom)}>
-        <Image src={Image2} width={150} height={150} alt="" />
+        <Image src={Image2} width={150} height={150} alt=""/>
       </div>
 
-      <div className={cn(styles.shadow, styles.shadowBig)} />
-      <div className={cn(styles.shadow, styles.shadowNormal)} />
-      <div className={cn(styles.shadow, styles.shadowSmallBottom)} />
-      <div className={cn(styles.shadow, styles.shadowSmallTop)} />
+      <div className={cn(styles.shadow, styles.shadowBig)}/>
+      <div className={cn(styles.shadow, styles.shadowNormal)}/>
+      <div className={cn(styles.shadow, styles.shadowSmallBottom)}/>
+      <div className={cn(styles.shadow, styles.shadowSmallTop)}/>
     </div>
   );
 }

@@ -1,124 +1,128 @@
 .registration {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    width: 60%;
-    height: 50%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 60%;
+  height: 50%;
 }
 
 .blockInput {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .input, .button {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid rgba(152, 118, 84, 0.7);
-    border-radius: 5px;
-    margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  border: 2px solid rgba(152, 118, 84, 0.7);
+  border-radius: 5px;
+  margin-top: 10px;
 }
 
 .input:focus {
-    outline: none;
+  outline: none;
 }
 
 .inputPartOne, .inputPartTwo {
-    width: 48%;
+  width: 48%;
 }
 
 .errorInput {
-    margin-bottom: 10px;
-    color: red;
+  margin-bottom: 10px;
+  color: red;
 }
 
 .redBorder {
-    border: 2px solid red;
+  border: 2px solid red;
 }
 
 .greenBorder {
-    border: 2px solid green;
+  border: 2px solid green;
 }
 
 .button {
-    background-color: rgba(152, 118, 84, 0.8);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
+  background-color: rgba(152, 118, 84, 0.8);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .button:hover {
-    background-color: rgba(152, 118, 84, 0.6);
-    border: 2px solid black;
+  background-color: rgba(152, 118, 84, 0.6);
+  border: 2px solid black;
 }
 
 .forgotPass {
-    margin-left: auto;
-    margin-bottom: 10px;
-    width: 100px;
-    cursor: pointer;
+  margin-left: auto;
+  margin-bottom: 10px;
+  width: 100px;
+  cursor: pointer;
 }
 
 .linkToAuth {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 .recoveryBlock {
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: none;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 10;
-    opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 10;
+  opacity: 0;
 }
 
 .blackout {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    cursor: pointer;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  cursor: pointer;
 }
 
 .recoveryForm {
-    padding: 20px 50px 50px;
-    z-index: 2;
-    width: 500px;
-    height: 300px;
-    border: 2px solid black;
-    border-radius: 5%;
-    background-color: white;
+  padding: 20px 50px 50px;
+  z-index: 2;
+  width: 500px;
+  height: 300px;
+  border: 2px solid black;
+  border-radius: 5%;
+  background-color: white;
 }
 
 .recoveryClose {
-    background: url("../../public/close.png") no-repeat;
-    width: 24px;
-    height: 24px;
-    margin-left: auto;
-    margin-right: -20px;
-    cursor: pointer;
+  background: url("../../public/close.png") no-repeat;
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+  margin-right: -20px;
+  cursor: pointer;
 }
 
 .recoveryDesc {
-    margin: 15px 0;
+  margin: 15px 0;
 }
 
 .recoveryOpened {
-    display: flex;
-    opacity: 1;
-    animation: animation-opacity 0.5s;
+  display: flex;
+  opacity: 1;
+  animation: animation-opacity 0.5s;
 }
 
 @keyframes animation-opacity {
-    from { opacity: 0;}
-    to {opacity: 1;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

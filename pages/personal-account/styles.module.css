@@ -1,75 +1,75 @@
 .headerTitle {
-    width: 60%;
-    text-align: center;
+  width: 60%;
+  text-align: center;
 }
 
 .flexBox {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-around;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-around;
 }
 
 .personalAccBlock {
-    width: 40%;
-    margin-left: 20px;
+  width: 40%;
+  margin-left: 20px;
 }
 
 .inputBlock {
-    height: 60px;
+  height: 60px;
 }
 
 .twoColumns {
-    text-align: center;
-    font-weight: bold;
-    text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .input,
 .button {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid rgba(152, 118, 84, 0.7);
-    border-radius: 5px;
+  width: 100%;
+  padding: 10px;
+  border: 2px solid rgba(152, 118, 84, 0.7);
+  border-radius: 5px;
 }
 
 .button {
-    width: 50%;
+  width: 50%;
 }
 
 .input:focus {
-    outline: none;
+  outline: none;
 }
 
 .inputTitle {
-    width: 30%;
-    text-align: right;
-    padding-right: 10px;
+  width: 30%;
+  text-align: right;
+  padding-right: 10px;
 }
 
 .redBorder {
-    border: 2px solid red;
+  border: 2px solid red;
 }
 
 .greenBorder {
-    border: 2px solid green;
+  border: 2px solid green;
 }
 
 .menuChangeItem {
-    margin: 30px 100px 15px 0;
-    font-size: 20px;
-    text-transform: uppercase;
-    cursor: pointer;
+  margin: 30px 100px 15px 0;
+  font-size: 20px;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
 .menuChangeItem:hover {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .noDisplay {
-    display: none;
+  display: none;
 }
 
 .activeItem {
-    font-weight: bold;
+  font-weight: bold;
 }

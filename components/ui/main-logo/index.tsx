@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from './library-logo.png';
@@ -8,7 +9,7 @@ export function MainLogo({link}: { link: string }): JSX.Element {
     <Link href={link}>
       <a className={styles.link}>
         <div>
-          <Image src={Logo} width={50} height={50} alt="Logo" />
+          <Image src={Logo} width={50} height={50} alt="Logo"/>
         </div>
 
         <div className={styles.libraryName}>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { useRouter } from 'next/router';
 import { HeadBlock } from '../../components/ui/head-block';
@@ -10,22 +10,41 @@ import { SearchForm } from '../../components/ui/search-form';
 import { MainPageWrapper } from '../../components/ui/main-page-wrapper';
 
 export default function MainUsersPage(): JSX.Element {
-  const router = useRouter();
-  const { id } = router.query;
+  interface UserDataType {
+    id: number;
+    name: string;
+    lastname: string;
+    login: string;
+    password: string;
+    role: string;
+    phone: string;
+  }
 
-  const [userData, setUserData]: any = useState({});
+  const router = useRouter();
+  const {id} = router.query;
+
+  const [userData, setUserData] = useState<UserDataType>({
+    id: 0,
+    name: '',
+    lastname: '',
+    login: '',
+    password: '',
+    role: '',
+    phone: ''
+  });
 
   const getUserName = async () => {
     await api
-      .post('/user', {
+      .post('/users/user-data', {
         id
-      }).then ((response) => {
+      })
+      .then((response) => {
         if (response.data.name === '') {
           response.data.name = 'Читатель';
         }
         setUserData(response.data);
       });
-  }
+  };
 
   useEffect(() => {
     if (!id) {
@@ -36,16 +55,16 @@ export default function MainUsersPage(): JSX.Element {
 
   return (
     <div>
-      <HeadBlock title="Main Page" />
+      <HeadBlock title="Main Page"/>
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo link={`/main-users/${userData.id}`} />
-          <MainGreeting name={userData.name} />
-          <MainMenuUsers user={userData} page="main" />
+          <MainLogo link={`/main-users/${userData.id}`}/>
+          <MainGreeting name={userData.name}/>
+          <MainMenuUsers user={userData} page="main"/>
         </MainHeaderWrapper>
 
-        <SearchForm id={id} />
+        <SearchForm id={id}/>
       </MainPageWrapper>
     </div>
   );

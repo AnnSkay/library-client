@@ -1,13 +1,12 @@
 import cn from 'classnames';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import usePagination from '../../../hooks/usePagination';
 import api from '../../../services/api';
 import Router from 'next/router';
 import styles from './styles.module.css';
-import { Pagination } from "../pagination";
+import { Pagination } from '../pagination';
 
-export function SearchForm({ id }: any & { id: string; }) {
-
+export function SearchForm({id}: { id: number | string | string[] | undefined; }) {
   const [searchClick, setSearchClick] = useState(false);
 
   const [lists, setLists] = useState({
@@ -26,8 +25,11 @@ export function SearchForm({ id }: any & { id: string; }) {
   });
 
   const inputOnChange = (name: string, value: unknown) => {
-    setBookValue({ ...bookValue, [name]: value });
-  }
+    setBookValue({
+      ...bookValue,
+      [name]: value
+    });
+  };
 
   const {
     firstContentIndex,
@@ -36,21 +38,51 @@ export function SearchForm({ id }: any & { id: string; }) {
     prevPage,
     page,
     setPage,
-    totalPages,
+    totalPages
   } = usePagination({
     contentPerPage: 6,
-    count: lists.books.length,
+    count: lists.books.length
   });
 
   const searchGenresAndHouses = async () => {
-    const responseHouses = await api.get('/houses');
-    const responseGenres = await api.get('/genres');
-    setLists({ ...lists, houses: responseHouses.data, genres: responseGenres.data });
-  }
+    const responseHouses = await api.get('/books/houses');
+    const responseGenres = await api.get('/books/genres');
+    setLists({...lists, houses: responseHouses.data, genres: responseGenres.data});
+  };
 
   useEffect(() => {
     searchGenresAndHouses();
   }, []);
+
+  const searchBooks = async () => {
+    await api
+      .get('/books/found-by-filter', {
+        params: {
+          bookTitle: bookValue.title,
+          bookAuthor: bookValue.author,
+          bookPublishHouse: bookValue.publishHouse,
+          bookGenre: bookValue.genre,
+          bookPublishYear: bookValue.publishYear,
+          bookIsAvailable: bookValue.isAvailable
+        }
+      })
+      .then((response) => {
+        setLists({...lists, books: response.data});
+        setSearchClick(true);
+      });
+  };
+
+  const addTakenBook = async (bookId: string) => {
+    await api
+      .post('/books/take-book', {
+        bookId,
+        id
+      })
+      .then((response) => {
+        alert(response.data);
+        searchBooks();
+      });
+  };
 
   const resetAllInputs = () => {
     setBookValue({
@@ -62,28 +94,7 @@ export function SearchForm({ id }: any & { id: string; }) {
       publishYear: '',
       isAvailable: false
     });
-  }
-
-  const searchBooks = async () => {
-    await api
-      .post('/books', {
-      ...bookValue
-    }).then((response) =>{
-      setLists({ ...lists, books: response.data });
-      setSearchClick(true);
-    });
-  }
-
-  const addTakenBook = async (bookId: string) => {
-    await api
-      .post('/takeBook', {
-        bookId,
-        id
-      }).then((response) => {
-        alert(response.data);
-        searchBooks();
-      });
-  }
+  };
 
   const takeBook = (title: string, bookId: number) => {
     if (id === 'гость') {
@@ -95,14 +106,14 @@ export function SearchForm({ id }: any & { id: string; }) {
         addTakenBook(String(bookId));
       }
     }
-  }
+  };
 
   const unavailableBook = () => {
     alert('Эта книга недоступна');
-  }
+  };
 
   const notAvailableClass = (numberCopies: number) => cn(styles.book, {
-    [styles.bookNotAvailable]: numberCopies === 0,
+    [styles.bookNotAvailable]: numberCopies === 0
   });
 
   return (
@@ -165,9 +176,9 @@ export function SearchForm({ id }: any & { id: string; }) {
               onChange={(e) => inputOnChange(e.target.name, e.target.value)}
               className={styles.input}
             >
-              <option hidden selected disabled />
+              <option hidden selected disabled/>
               {lists.houses
-               && lists.houses.map(({ title, id }) => {
+               && lists.houses.map(({title, id}) => {
                 return (
                   <option key={id}>
                     {title}
@@ -195,12 +206,12 @@ export function SearchForm({ id }: any & { id: string; }) {
             >
               <option hidden selected disabled/>
               {lists.genres
-               && lists.genres.map(({ title, id }) => {
-                  return (
-                    <option key={id}>
-                      {title}
-                    </option>
-                  );
+               && lists.genres.map(({title, id}) => {
+                return (
+                  <option key={id}>
+                    {title}
+                  </option>
+                );
               })}
             </select>
           </td>
@@ -269,42 +280,42 @@ export function SearchForm({ id }: any & { id: string; }) {
           prevPage,
           page,
           setPage,
-          totalPages,
+          totalPages
         }}
       />
-      {/*page={page} totalPages={totalPages} setPage={setPage} prevPage={prevPage} nextPage={nextPage}*/}
 
       <div className={styles.booksContainer}>
         {!(lists.books.length === 0 && searchClick) ? (
           lists.books &&
-          lists.books.slice(firstContentIndex, lastContentIndex).map(({
-            id,
-            author,
-            genreTitle,
-            houseTitle,
-            numberCopies,
-            title,
-            year
-          }, index) => {
-            return (
-              <div
-                className={notAvailableClass(numberCopies)}
-                key={index}
-                onClick={numberCopies > 0 ? () => takeBook(title, id) : unavailableBook}
-              >
-                <div className={styles.bookTitle}>&quot;{title}&quot;</div>
-                <div><b>Автор:</b> {author || 'Не указан'}</div>
-                <div><b>Издательство:</b> {houseTitle}</div>
-                <div><b>Жанр:</b> {genreTitle}</div>
-                <div><b>Год издания:</b> {year || 'Не указан'}</div>
-              </div>
-            );
-          })
+          lists.books.slice(firstContentIndex, lastContentIndex)
+            .map(({
+                    id,
+                    author,
+                    genreTitle,
+                    houseTitle,
+                    numberCopies,
+                    title,
+                    year
+                  }, index) => {
+              return (
+                <div
+                  className={notAvailableClass(numberCopies)}
+                  key={index}
+                  onClick={numberCopies > 0 ? () => takeBook(title, id) : unavailableBook}
+                >
+                  <div className={styles.bookTitle}>&quot;{title}&quot;</div>
+                  <div><b>Автор:</b> {author || 'Не указан'}</div>
+                  <div><b>Издательство:</b> {houseTitle}</div>
+                  <div><b>Жанр:</b> {genreTitle}</div>
+                  <div><b>Год издания:</b> {year || 'Не указан'}</div>
+                </div>
+              );
+            })
         ) : (
-          <div className={styles.nothingSearched}>
-            Ничего не найдено
-          </div>
-        )}
+           <div className={styles.nothingSearched}>
+             Ничего не найдено
+           </div>
+         )}
       </div>
     </div>
   );

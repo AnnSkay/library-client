@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import api from '../../services/api';
 import { HeadBlock } from '../../components/ui/head-block';
@@ -9,40 +9,64 @@ import { MainPageWrapper } from '../../components/ui/main-page-wrapper';
 import styles from './styles.module.css';
 
 export default function MyBooksPage(): JSX.Element {
-  const router = useRouter();
-  const { id } = router.query;
+  interface UserDataType {
+    id: number;
+    name: string;
+    lastname: string;
+    login: string;
+    password: string;
+    role: string;
+    phone: string;
+  }
 
-  const [userData, setUserData]: any = useState({});
+  const router = useRouter();
+  const {id} = router.query;
+
+  const [userData, setUserData] = useState<UserDataType>({
+    id: 0,
+    name: '',
+    lastname: '',
+    login: '',
+    password: '',
+    role: '',
+    phone: ''
+  });
+
   const [borrowedBooks, setBorrowedBooks] = useState([]);
 
   const getUserData = async () => {
     await api
-      .post('/user', {
+      .post('/users/user-data', {
         id
-      }).then((response) => {
+      })
+      .then((response) => {
         setUserData(response.data);
       });
-  }
+  };
 
   const getBorrowedUserBooks = async () => {
     await api
-      .post('/borrowedBooksByUser', {
-        id
-      }).then((response) => {
+      .get(`/books/borrowed-by-user`, {
+        params: {
+          id: id
+        }
+      })
+      .then((response) => {
         setBorrowedBooks(response.data);
       });
-  }
+  };
 
   const deleteReturnedBook = async (bookId: string) => {
     await api
-      .post('/returnBook', {
+      .post('/books/return-book', {
         bookId,
         id
-      }).then(() => {
+      })
+      .then(() => {
         alert('Книга возвращена');
         getBorrowedUserBooks();
       });
-  }
+  };
 
   useEffect(() => {
     if (!id) {
@@ -56,33 +80,33 @@ export default function MyBooksPage(): JSX.Element {
     if (confirm(`Вы уверены, что хотите вернуть книгу "${title}"?`)) {
       deleteReturnedBook(String(bookId));
     }
-  }
+  };
 
   return (
     <div>
-      <HeadBlock title="My books" />
+      <HeadBlock title="My books"/>
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo link={`/main-users/${id}`} />
+          <MainLogo link={`/main-users/${id}`}/>
           <h1 className={styles.headerTitle}>
             Мои книги
           </h1>
-          <MainMenuUsers user={userData} page="myBooks" />
+          <MainMenuUsers user={userData} page="myBooks"/>
         </MainHeaderWrapper>
 
         <div className={styles.booksContainer}>
           {!(borrowedBooks.length === 0) ? (
             borrowedBooks &&
             borrowedBooks.map(({
-              id,
-              author,
-              genreTitle,
-              houseTitle,
-              title,
-              year,
-              dateIssue
-            }, index) => {
+                                 id,
+                                 author,
+                                 genreTitle,
+                                 houseTitle,
+                                 title,
+                                 year,
+                                 dateIssue
+                               }, index) => {
               return (
                 <div
                   className={styles.book}
@@ -99,10 +123,10 @@ export default function MyBooksPage(): JSX.Element {
               );
             })
           ) : (
-            <div className={styles.nothingSearched}>
-              У вас нет выданных книг
-            </div>
-          )}
+             <div className={styles.nothingSearched}>
+               У вас нет выданных книг
+             </div>
+           )}
         </div>
       </MainPageWrapper>
     </div>

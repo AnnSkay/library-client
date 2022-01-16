@@ -1,61 +1,63 @@
 .registration {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    width: 60%;
-    height: 70%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 60%;
+  height: 70%;
 }
 
 .blockInput {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.input, .button {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid rgba(152, 118, 84, 0.7);
-    border-radius: 5px;
-    margin-top: 10px;
+.input,
+.button {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid rgba(152, 118, 84, 0.7);
+  border-radius: 5px;
+  margin-top: 10px;
 }
 
 .input:focus {
-    outline: none;
+  outline: none;
 }
 
-.inputPartOne, .inputPartTwo {
-    width: 48%;
+.inputPartOne,
+.inputPartTwo {
+  width: 48%;
 }
 
 .errorInput {
-    margin-bottom: 10px;
-    color: red;
+  margin-bottom: 10px;
+  color: red;
 }
 
 .redBorder {
-    border: 2px solid red;
+  border: 2px solid red;
 }
 
 .greenBorder {
-    border: 2px solid green;
+  border: 2px solid green;
 }
 
 .button {
-    background-color: rgba(152, 118, 84, 0.8);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
+  background-color: rgba(152, 118, 84, 0.8);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .button:hover {
-    background-color: rgba(152, 118, 84, 0.6);
-    border: 2px solid black;
+  background-color: rgba(152, 118, 84, 0.6);
+  border: 2px solid black;
 }
 
 .linkToAuth {
-    margin-top: 5px;
+  margin-top: 5px;
 }

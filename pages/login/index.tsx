@@ -1,6 +1,6 @@
 import api from '../../services/api';
 import Link from 'next/link';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 import Router from 'next/router';
 import styles from './styles.module.css';
@@ -12,24 +12,30 @@ import { AuthLeftWrapper } from '../../components/ui/auth-left-wrapper';
 import { HeadBlock } from '../../components/ui/head-block';
 
 export default function LogInPage(): JSX.Element {
-  const [serverAnswer, setServerAnswer] = useState('');
+  const [serverAnswer, setServerAnswer] = useState(false);
+
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [showRecoveryForm, isShowRecoveryFrom] = useState(false);
 
+  const [handleLoginClick, isHandleLoginClick] = useState(false);
+
   const showRecoveryClass = () => cn(styles.recoveryBlock, {
-    [styles.recoveryOpened]: showRecoveryForm,
+    [styles.recoveryOpened]: showRecoveryForm
   });
 
   async function handleLogin() {
+    isHandleLoginClick(true);
     await api
-      .post('/login', {
+      .post('/users/login', {
         login,
-        password,
-      }).then((response) => {
-        setServerAnswer(response.data);
-        if (response.data !== 'failed') {
-          Router.push(`/main-users/${response.data}`);
+        password
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.data.isSuccess) {
+          setServerAnswer(response.data.isSuccess);
+          Router.push(`/main-users/${response.data.id}`);
         }
       });
   }
@@ -39,14 +45,14 @@ export default function LogInPage(): JSX.Element {
 
   return (
     <div className={styles.container}>
-      <HeadBlock title="Log in" />
+      <HeadBlock title="Log in"/>
 
       <AuthMainWrapper>
         <AuthLeftWrapper>
-          <AuthLogo />
+          <AuthLogo/>
 
           <div className={styles.registration}>
-            <AuthTitle title="Вход" />
+            <AuthTitle title="Вход"/>
 
             <input
               type="text"
@@ -64,9 +70,10 @@ export default function LogInPage(): JSX.Element {
               placeholder="Пароль"
             />
 
-            {(serverAnswer === 'failed') ? (
-              <div className={styles.errorLogin}>Неверный логин/пароль</div>
-            ) : null
+            {
+              (!serverAnswer && handleLoginClick) ? (
+                <div className={styles.errorLogin}>Неверный логин/пароль</div>
+              ) : null
             }
 
             <div className={styles.forgotPass} onClick={showRecovery}>
@@ -91,12 +98,12 @@ export default function LogInPage(): JSX.Element {
           </div>
         </AuthLeftWrapper>
 
-        <AuthDescription />
+        <AuthDescription/>
       </AuthMainWrapper>
 
       <div className={showRecoveryClass()}>
         <div className={styles.recoveryForm}>
-          <div className={styles.recoveryClose} onClick={hideRecovery} />
+          <div className={styles.recoveryClose} onClick={hideRecovery}/>
           <h2>Восстановление пароля</h2>
 
           <div className={styles.recoveryDesc}>
@@ -104,14 +111,14 @@ export default function LogInPage(): JSX.Element {
             указанный при регистрации
           </div>
 
-          <input type="text" className={styles.input} placeholder="E-mail" />
+          <input type="text" className={styles.input} placeholder="E-mail"/>
 
           <button type="submit" className={styles.button}>
             Выслать
           </button>
         </div>
 
-        <div className={styles.blackout} onClick={hideRecovery} />
+        <div className={styles.blackout} onClick={hideRecovery}/>
       </div>
     </div>
   );

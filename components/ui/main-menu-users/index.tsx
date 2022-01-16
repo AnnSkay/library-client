@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import cn from 'classnames';
 import Link from 'next/link';
@@ -8,26 +8,29 @@ import CloseIcon from './icon-close.png';
 import { ListMenuLibrarians } from '../list-menu-librarians';
 import { ListMenuAdmins } from '../list-menu-admins';
 
-export function MainMenuUsers({ user, page }: { user: { id: number; role: string }, page: string }): JSX.Element {
+export function MainMenuUsers({
+                                user,
+                                page
+                              }: { user: { id: number; role: string }, page: string }): JSX.Element {
   const [showMenu, setShowMenu] = useState(false);
 
   const showListMenu = () => {
-    !showMenu ? setShowMenu(true) : setShowMenu(false)
-  }
+    !showMenu ? setShowMenu(true) : setShowMenu(false);
+  };
 
   const menuListClass = () => cn(styles.menuList, styles.brown, {
     [styles.hideMenu]: !showMenu,
-    [styles.white]: !showMenu,
+    [styles.white]: !showMenu
   });
 
   const selectMenuList = () => {
     switch (user.role) {
       case 'LIBR':
-        return <ListMenuLibrarians page="page" user={user} />
+        return <ListMenuLibrarians page="page" user={user}/>;
       case 'ADMIN':
-        return <ListMenuAdmins />
+        return <ListMenuAdmins/>;
     }
-  }
+  };
 
   const linkClass = (linkName: string) => cn(styles.link, {
     [styles.linkActive]: page === 'persAcc' && linkName === 'persAcc' ||

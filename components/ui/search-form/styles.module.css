@@ -1,105 +1,108 @@
 .searchForm {
-    width: 60%;
-    margin: 0 auto;
-    background-color: rgba(152, 118, 84, 0.3);
-    border-radius: 5px;
+  width: 60%;
+  margin: 0 auto;
+  background-color: rgba(152, 118, 84, 0.3);
+  border-radius: 5px;
 }
 
 .searchTitle {
-    font-size: 25px;
-    font-weight: bold;
-    margin: 10px;
+  font-size: 25px;
+  font-weight: bold;
+  margin: 10px;
 }
 
 .inputTitle {
-    width: 20%;
-    text-align: right;
-    padding-right: 10px;
+  width: 20%;
+  text-align: right;
+  padding-right: 10px;
 }
 
 .input {
-    width: 80%;
-    padding: 5px;
-    border: 2px solid rgba(152, 118, 84, 0.7);
-    border-radius: 5px;
+  width: 80%;
+  padding: 5px;
+  border: 2px solid rgba(152, 118, 84, 0.7);
+  border-radius: 5px;
 }
 
 .input:hover {
-    border: 2px solid rgb(152, 118, 84);
+  border: 2px solid rgb(152, 118, 84);
 }
 
 .input:focus {
-    outline: none;
-    border: 2px solid rgb(152, 118, 84);
+  outline: none;
+  border: 2px solid rgb(152, 118, 84);
 }
 
 .inputYear {
-    width: 15%;
+  width: 15%;
 }
 
-.checkbox{
-    display: none;
+.checkbox {
+  display: none;
 }
-.checkbox + .label{
-    display: block;
-    width: 25px;
-    height: 25px;
-    border: 2px solid rgba(152, 118, 84, 0.7);
-    background-color: white;
-    border-radius: 5px;
-    text-align: center;
+
+.checkbox + .label {
+  display: block;
+  width: 25px;
+  height: 25px;
+  border: 2px solid rgba(152, 118, 84, 0.7);
+  background-color: white;
+  border-radius: 5px;
+  text-align: center;
 }
-.checkbox + .label:before{
-    font-size: 15px;
+
+.checkbox + .label:before {
+  font-size: 15px;
 }
-.checkbox:checked + .label:before{
-    content: '✔';
-    color: rgb(152, 118, 84);
+
+.checkbox:checked + .label:before {
+  content: '✔';
+  color: rgb(152, 118, 84);
 }
 
 .buttonGroup {
-    text-align: center;
+  text-align: center;
 }
 
 .button {
-    width: 20%;
-    padding: 5px;
-    border: 2px solid rgb(152, 118, 84);
-    border-radius: 5px;
-    background-color: inherit;
-    margin-right: 10px;
+  width: 20%;
+  padding: 5px;
+  border: 2px solid rgb(152, 118, 84);
+  border-radius: 5px;
+  background-color: inherit;
+  margin-right: 10px;
 }
 
 .booksContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    margin: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  margin: 20px;
 }
 
 .book {
-    width: 300px;
-    padding: 10px;
-    border: 2px solid rgb(152, 118, 84);
-    border-radius: 5px;
-    background-color: rgba(152, 118, 84, 0.3);
-    cursor: pointer;
-    margin-bottom: 20px;
+  width: 300px;
+  padding: 10px;
+  border: 2px solid rgb(152, 118, 84);
+  border-radius: 5px;
+  background-color: rgba(152, 118, 84, 0.3);
+  cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .bookNotAvailable {
-    background-color: rgba(128, 128, 128, 0.3);
-    cursor: not-allowed;
-    color: gray;
+  background-color: rgba(128, 128, 128, 0.3);
+  cursor: not-allowed;
+  color: gray;
 }
 
 .bookTitle {
-    font-size: 25px;
-    text-align: center;
+  font-size: 25px;
+  text-align: center;
 }
 
 .nothingSearched {
-    font-size: 20px;
+  font-size: 20px;
 }

@@ -1,8 +1,10 @@
-import { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, RefObject } from 'react';
 import { useRouter } from 'next/router';
 import api from '../../services/api';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import ValidatorWrapper, { ValidatorField } from '@coxy/react-validator';
+import myRules from '../../validation/rules';
 import cn from 'classnames';
 import { HeadBlock } from '../../components/ui/head-block';
 import { MainHeaderWrapper } from '../../components/ui/main-header-wrapper';
@@ -11,50 +13,37 @@ import { MainMenuUsers } from '../../components/ui/main-menu-users';
 import { MainPageWrapper } from '../../components/ui/main-page-wrapper';
 import styles from './styles.module.css';
 
-const myRules = {
-  email: [{
-    rule: (value: string) => value !== '' && value.length > 0,
-    message: 'Email обязателен',
-  }, {
-    rule: (value: string) => (/^[\w-.]+@[\w-]+\.[a-z]{2,4}$/i).test(value),
-    message: 'Формат email некорректный',
-  }],
-
-  newPassword: [{
-    rule: (value: string) => value !== '' && value.length > 0,
-    message: 'Пароль обязателен',
-  }, {
-    rule: (value: string) => value.length > 5,
-    message: 'Пароль должен быть не меньше 6 символов',
-  }],
-
-  phone: [{
-    rule: (value: string) => value !== '' && value.length > 0,
-    message: 'Телефон обязателен',
-  }, {
-    rule: (value: string) => (/^((\+7|7|8)+([0-9]){10})$/).test(value),
-    message: 'Формат телефона некорректный',
-  }],
-};
-
 export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
-  const validator = useRef<any>();
-
-  const router = useRouter();
-  const { id } = router.query;
-
-  interface Validation {
+  interface ValidationType {
     isValid: boolean;
     message: string;
     errors: string;
   }
 
-  const [userData, setUserData]: any = useState({});
-  const [changeDataClick, setChangeDataClick] = useState(true);
-  const [changePasswordClick, setChangePasswordClick] = useState(false);
+  interface UserDataType {
+    id: number;
+    name: string;
+    lastname: string;
+    login: string;
+    password: string;
+    role: string;
+    phone: string;
+  }
 
-  const [handleDataSubmitClick, isHandleDataSubmitClick] = useState(false);
-  const [handlePasswordSubmitClick, isHandlePasswordSubmitClick] = useState(false);
+  const router = useRouter();
+  const {id} = router.query;
+
+  const validator = useRef() as RefObject<HTMLFormElement> | undefined;
+
+  const [userData, setUserData] = useState<UserDataType>({
+    id: 0,
+    name: '',
+    lastname: '',
+    login: '',
+    password: '',
+    role: '',
+    phone: ''
+  });
 
   const [userValue, setUserValue] = useState({
     userId: '',
@@ -67,9 +56,18 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
     repeatNewPassword: ''
   });
 
-  const inputOnChange = ({ target }: any) => {
-    setUserValue({ ...userValue, [target.name]: target.value });
-  }
+  const [changeDataClick, setChangeDataClick] = useState(true);
+  const [changePasswordClick, setChangePasswordClick] = useState(false);
+
+  const [handleDataSubmitClick, isHandleDataSubmitClick] = useState(false);
+  const [handlePasswordSubmitClick, isHandlePasswordSubmitClick] = useState(false);
+
+  const inputOnChange = (event: { target: HTMLInputElement; }) => {
+    setUserValue({
+      ...userValue,
+      [event.target.name]: event.target.value
+    });
+  };
 
   useEffect(() => {
     if (!id) {
@@ -80,9 +78,10 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
 
   const getUserData = async () => {
     await api
-      .post('/user', {
+      .post('/user/user-data', {
         id
-      }).then((response) => {
+      })
+      .then((response) => {
         setUserData(response.data);
         setUserValue({
           ...userValue,
@@ -93,13 +92,14 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
           phone: response.data.phone
         });
       });
-  }
+  };
 
   const sendDataChange = async () => {
     await api
-      .post('/changeUserData', {
+      .post('/users/change-user-data', {
         ...userValue
-      }).then((response) => {
+      })
+      .then((response) => {
         setUserData(response.data);
         setUserValue({
           ...userValue,
@@ -109,13 +109,14 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
           phone: response.data.phone
         });
       });
-  }
+  };
 
   const sendPasswordChange = async () => {
     await api
-      .post('/changeUserPassword', {
+      .post('/users/change-user-password', {
         ...userValue
-      }).then((response) => {
+      })
+      .then((response) => {
         setUserData(response.data);
       });
   };
@@ -123,13 +124,13 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
   const itemClick = (changeData: boolean, changePassword: boolean) => {
     setChangeDataClick(changeData);
     setChangePasswordClick(changePassword);
-  }
+  };
 
   const validationMessageBlock = (validationMessage: string) =>
-    <div className={styles.errorInput}>{validationMessage}</div>
+    <div className={styles.errorInput}>{validationMessage}</div>;
 
   const handleDataSubmit = () => {
-    const { isValid, message }: Validation = validator.current.validate(bytes);
+    const {isValid, message}: ValidationType = validator?.current?.validate(bytes);
 
     isHandleDataSubmitClick(true);
 
@@ -156,7 +157,7 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
 
   const inputClass = (isValid: boolean, inputValue: string) => cn(styles.input, {
     [styles.redBorder]: !isValid && inputValue.length !== 0,
-    [styles.greenBorder]: isValid,
+    [styles.greenBorder]: isValid
   });
 
   const repeatNewPasswordClass = () => cn(styles.input, {
@@ -164,36 +165,36 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
                         && userValue.newPassword
                         && userValue.repeatNewPassword,
     [styles.greenBorder]: userValue.newPassword === userValue.repeatNewPassword
-                          && userValue.repeatNewPassword,
+                          && userValue.repeatNewPassword
   });
 
   const changeDataTableClass = () => cn(styles.personalAccBlock, {
-    [styles.noDisplay]: !changeDataClick,
+    [styles.noDisplay]: !changeDataClick
   });
 
   const changePasswordTableClass = () => cn(styles.personalAccBlock, {
-    [styles.noDisplay]: !changePasswordClick,
+    [styles.noDisplay]: !changePasswordClick
   });
 
   const activeDataItemClass = () => cn(styles.menuChangeItem, {
-    [styles.activeItem]: changeDataClick,
+    [styles.activeItem]: changeDataClick
   });
 
   const activePasswordItemClass = () => cn(styles.menuChangeItem, {
-    [styles.activeItem]: changePasswordClick,
+    [styles.activeItem]: changePasswordClick
   });
 
   return (
     <div>
-      <HeadBlock title="Personal account" />
+      <HeadBlock title="Personal account"/>
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo link={`/main-users/${userData.id}`} />
+          <MainLogo link={`/main-users/${userData.id}`}/>
           <h1 className={styles.headerTitle}>
             Личный кабинет
           </h1>
-          <MainMenuUsers user={userData} page="persAcc" />
+          <MainMenuUsers user={userData} page="persAcc"/>
         </MainHeaderWrapper>
 
         <div className={styles.flexBox}>
@@ -252,7 +253,7 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
 
                 <td>
                   <ValidatorField value={userValue.email} rules={myRules.email}>
-                    {({ isValid, message }: Validation) => (
+                    {({isValid, message}: ValidationType) => (
                       <>
                         <input
                           type="text"
@@ -283,7 +284,7 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
 
                 <td>
                   <ValidatorField value={userValue.phone} rules={myRules.phone}>
-                    {({ isValid, message }: Validation) => (
+                    {({isValid, message}: ValidationType) => (
                       <>
                         <input
                           type="text"
@@ -352,8 +353,8 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
                 </td>
 
                 <td>
-                  <ValidatorField value={userValue.newPassword} rules={myRules.newPassword}>
-                    {({ isValid, message }: Validation) => (
+                  <ValidatorField value={userValue.newPassword} rules={myRules.password}>
+                    {({isValid, message}: ValidationType) => (
                       <>
                         <input
                           type="password"
@@ -422,7 +423,8 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
               onClick={() => itemClick(true, false)}
             >
               Личные данные
-            </div>`
+            </div>
+            `
 
             <div
               className={activePasswordItemClass()}

@@ -10,18 +10,18 @@ import { MainPageWrapper } from '../components/ui/main-page-wrapper';
 export default function MainPage(): JSX.Element {
   return (
     <div>
-      <HeadBlock title="Main Page" />
+      <HeadBlock title="Main Page"/>
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo link="/" />
+          <MainLogo link="/"/>
 
-          <MainGreeting name="Гость" />
+          <MainGreeting name="Гость"/>
 
-          <LoginToAccountLink />
+          <LoginToAccountLink/>
         </MainHeaderWrapper>
 
-        <SearchForm id={'гость'} />
+        <SearchForm id={'гость'}/>
       </MainPageWrapper>
     </div>
   );

@@ -1,8 +1,10 @@
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import React, { useRef, RefObject, useState } from 'react';
 import api from '../../services/api';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import ValidatorWrapper, { ValidatorField } from '@coxy/react-validator';
+import myRules from '../../validation/rules';
 import cn from 'classnames';
 import styles from './styles.module.css';
 import { AuthMainWrapper } from '../../components/ui/auth-main-wrapper';
@@ -12,40 +14,14 @@ import { AuthDescription } from '../../components/ui/auth-description';
 import { AuthLeftWrapper } from '../../components/ui/auth-left-wrapper';
 import { HeadBlock } from '../../components/ui/head-block';
 
-const myRules = {
-  email: [{
-    rule: (value: string) => value !== '' && value.length > 0,
-    message: 'Email обязателен',
-  }, {
-    rule: (value: string) => (/^[\w-.]+@[\w-]+\.[a-z]{2,4}$/i).test(value),
-    message: 'Формат email некорректный',
-  }],
-
-  password: [{
-    rule: (value: string) => value !== '' && value.length > 0,
-    message: 'Пароль обязателен',
-  }, {
-    rule: (value: string) => value.length > 5,
-    message: 'Пароль должен быть не меньше 6 символов',
-  }],
-
-  phone: [{
-    rule: (value: string) => value !== '' && value.length > 0,
-    message: 'Телефон обязателен',
-  }, {
-    rule: (value: string) => (/^((\+7|7|8)+([0-9]){10})$/).test(value),
-    message: 'Формат телефона некорректный',
-  }],
-};
-
 export default function SignInPage(bytes: BufferSource): JSX.Element {
-  const validator = useRef<any>();
-
-  interface Validation {
+  interface ValidationType {
     isValid: boolean;
     message: string;
     errors: string;
   }
+
+  const validator = useRef() as RefObject<HTMLFormElement> | undefined;
 
   const [handleSubmitClick, isHandleSubmitClick] = useState(false);
 
@@ -55,28 +31,31 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
     email: '',
     phone: '',
     password: '',
-    repeatPass: '',
+    repeatPass: ''
   });
 
-  const inputOnChange = ({ target }: any) => {
-    setUserValue({ ...userValue, [target.name]: target.value });
+  const inputOnChange = (event: { target: HTMLInputElement; }) => {
+    setUserValue({
+      ...userValue,
+      [event.target.name]: event.target.value
+    });
   };
 
   const addUser = async () => {
     await api
-      .post('addUser', {
-        ...userValue,
-      }).then((response) => {
+      .post('/users/add-user', {
+        ...userValue
+      })
+      .then((response) => {
         alert(response.data);
       });
   };
 
   const validationMessageBlock = (validationMessage: string) =>
-    <div className={styles.errorInput}>{validationMessage}</div>
-
+    <div className={styles.errorInput}>{validationMessage}</div>;
 
   const handleSubmit = () => {
-    const { isValid }: Validation = validator.current.validate(bytes);
+    const {isValid}: ValidationType = validator?.current?.validate(bytes);
 
     isHandleSubmitClick(true);
 
@@ -87,7 +66,7 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
 
   const inputClass = (isValid: boolean, inputValue: string) => cn(styles.input, {
     [styles.redBorder]: !isValid && inputValue.length !== 0,
-    [styles.greenBorder]: isValid,
+    [styles.greenBorder]: isValid
   });
 
   const repeatPassClass = () => cn(styles.input, {
@@ -95,20 +74,19 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
                         && userValue.password
                         && userValue.repeatPass,
     [styles.greenBorder]: userValue.password === userValue.repeatPass
-                          && userValue.repeatPass,
+                          && userValue.repeatPass
   });
 
   return (
     <div className={styles.container}>
-
-      <HeadBlock title="Sign up" />
+      <HeadBlock title="Sign up"/>
 
       <AuthMainWrapper>
         <AuthLeftWrapper>
-          <AuthLogo />
+          <AuthLogo/>
 
           <div className={styles.registration}>
-            <AuthTitle title="Регистрация" />
+            <AuthTitle title="Регистрация"/>
 
             <ValidatorWrapper ref={validator}>
 
@@ -133,7 +111,10 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
               </div>
 
               <ValidatorField value={userValue.email} rules={myRules.email}>
-                {({ isValid, message }: Validation) => (
+                {({
+                    isValid,
+                    message
+                  }: ValidationType) => (
                   <>
                     <input
                       type="text"
@@ -150,7 +131,10 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
               </ValidatorField>
 
               <ValidatorField value={userValue.phone} rules={myRules.phone}>
-                {({ isValid, message }: Validation) => (
+                {({
+                    isValid,
+                    message
+                  }: ValidationType) => (
                   <>
                     <input
                       type="text"
@@ -167,7 +151,10 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
               </ValidatorField>
 
               <ValidatorField value={userValue.password} rules={myRules.password}>
-                {({ isValid, message }: Validation) => (
+                {({
+                    isValid,
+                    message
+                  }: ValidationType) => (
                   <>
                     <input
                       type="password"
@@ -222,7 +209,7 @@ export default function SignInPage(bytes: BufferSource): JSX.Element {
           </div>
         </AuthLeftWrapper>
 
-        <AuthDescription />
+        <AuthDescription/>
       </AuthMainWrapper>
 
     </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import api from '../../services/api';
 import { HeadBlock } from '../../components/ui/head-block';
@@ -7,28 +7,36 @@ import { MainLogo } from '../../components/ui/main-logo';
 import { MainMenuUsers } from '../../components/ui/main-menu-users';
 import { MainPageWrapper } from '../../components/ui/main-page-wrapper';
 import styles from './styles.module.css';
-import cn from "classnames";
+import cn from 'classnames';
 import SearchBookIcon from './icon-search-book.png';
 import EditBookIcon from './icon-edit-book.png';
 import DeleteBookIcon from './icon-delete-book.png';
 import GoBackIcon from './icon-go-back.png';
-import Image from "next/image";
-
+import Image from 'next/image';
 
 export default function BooksManagementPage(): JSX.Element {
+  interface UserDataType {
+    id: number;
+    name: string;
+    lastname: string;
+    login: string;
+    password: string;
+    role: string;
+    phone: string;
+  }
+
   const router = useRouter();
-  const { id } = router.query;
+  const {id} = router.query;
 
-  const [userData, setUserData]: any = useState({});
-
-  const [books, setBooks] = useState([]);
-  const [searchingBookTitle, setSearchingBookTitle] = useState('');
-
-  const [addBookLinkClick, setAddBookLinkClick] = useState(true);
-  const [editBookLinkClick, setEditBookLinkClick] = useState(false);
-
-  const [searchBookClick, setSearchBookClick] = useState(false);
-  const [editBookClick, setEditBookClick] = useState(false);
+  const [userData, setUserData] = useState<UserDataType>({
+    id: 0,
+    name: '',
+    lastname: '',
+    login: '',
+    password: '',
+    role: '',
+    phone: ''
+  });
 
   const [bookValue, setBookValue] = useState({
     title: '',
@@ -46,40 +54,57 @@ export default function BooksManagementPage(): JSX.Element {
     houses: []
   });
 
-  const inputOnChange = ({target}: any) => {
-    setBookValue({ ...bookValue, [target.name]: target.value });
-  }
+  const [books, setBooks] = useState([]);
+  const [searchingBookTitle, setSearchingBookTitle] = useState('');
+
+  const [addBookLinkClick, setAddBookLinkClick] = useState(true);
+  const [editBookLinkClick, setEditBookLinkClick] = useState(false);
+
+  const [searchBookClick, setSearchBookClick] = useState(false);
+  const [editBookClick, setEditBookClick] = useState(false);
+
+  const inputOnChange = (event: { target: HTMLInputElement | HTMLSelectElement; }) => {
+    setBookValue({
+      ...bookValue,
+      [event.target.name]: event.target.value
+    });
+  };
 
   const getUserData = async () => {
     await api
-      .post('/user', {
+      .post('/users/user-data', {
         id
-      }).then((response) => {
+      })
+      .then((response) => {
         setUserData(response.data);
       });
-  }
+  };
 
   const searchGenresAndHouses = async () => {
-    const responseHouses = await api.get('/houses');
-    const responseGenres = await api.get('/genres');
-    setLists({ ...lists, houses: responseHouses.data, genres: responseGenres.data });
-  }
+    const responseHouses = await api.get('/books/houses');
+    const responseGenres = await api.get('/books/genres');
+    setLists({...lists, houses: responseHouses.data, genres: responseGenres.data});
+  };
 
   const getBooksByTitle = async () => {
     await api
-      .post('/booksByTitle', {
-        searchingBookTitle
-      }).then((response) => {
+      .get('/books/found-by-title', {
+        params: {
+          bookTitle: searchingBookTitle
+        }
+      })
+      .then((response) => {
         setBooks(response.data);
         setSearchBookClick(true);
       });
-  }
+  };
 
   const addBook = async () => {
     await api
-      .post('/addBook', {
-        ...bookValue,
-      }).then((response) => {
+      .post('books/add-book', {
+        ...bookValue
+      })
+      .then((response) => {
         alert(response.data);
         if (response.data === 'Книга добавлена') {
           setBookValue({
@@ -95,7 +120,7 @@ export default function BooksManagementPage(): JSX.Element {
           });
         }
       });
-  }
+  };
 
   const editBook = (title: string,
                     author: string,
@@ -114,30 +139,31 @@ export default function BooksManagementPage(): JSX.Element {
       publishYear: year,
       numberCopies: String(numberCopies)
     });
-  }
+  };
 
   const deleteSelectedBook = async (bookId: number) => {
     await api
-      .post('/deleteBook', {
+      .post('/books/delete-book', {
         bookId
-      }).then((response) => {
+      })
+      .then((response) => {
         alert(response.data);
         getBooksByTitle();
       });
-  }
+  };
 
   const deleteBook = (title: string, bookId: number) => {
     if (confirm(`Вы уверены, что хотите удалить книгу "${title}"?`)) {
       deleteSelectedBook(bookId);
     }
-  }
+  };
 
   useEffect(() => {
     if (!id) {
       return;
     }
     getUserData();
-    searchGenresAndHouses()
+    searchGenresAndHouses();
   }, [id]);
 
   const handleAddBookSubmit = () => {
@@ -162,30 +188,30 @@ export default function BooksManagementPage(): JSX.Element {
       publishYear: '',
       numberCopies: ''
     });
-  }
+  };
 
   const addBookBlockTableClass = () => cn(styles.booksManagementBlock, {
-    [styles.noDisplay]: !addBookLinkClick,
+    [styles.noDisplay]: !addBookLinkClick
   });
 
   const editBookBlockTableClass = () => cn(styles.booksManagementBlock, {
-    [styles.noDisplay]: !editBookLinkClick,
+    [styles.noDisplay]: !editBookLinkClick
   });
 
   const editBookTableClass = () => cn(styles.booksManagementBlock, {
-    [styles.noDisplay]: !editBookClick,
+    [styles.noDisplay]: !editBookClick
   });
 
-  const hideManagementBookMenuClass= () => cn({
-    [styles.noDisplay]: editBookClick,
+  const hideManagementBookMenuClass = () => cn({
+    [styles.noDisplay]: editBookClick
   });
 
   const activeAddBookClass = () => cn(styles.menuManagementItem, {
-    [styles.activeItem]: addBookLinkClick,
+    [styles.activeItem]: addBookLinkClick
   });
 
   const activeEditBookClass = () => cn(styles.menuManagementItem, {
-    [styles.activeItem]: editBookLinkClick,
+    [styles.activeItem]: editBookLinkClick
   });
 
   const inputFieldsForAddAndEdit = () => {
@@ -244,9 +270,9 @@ export default function BooksManagementPage(): JSX.Element {
               onChange={inputOnChange}
               className={styles.input}
             >
-              <option selected />
+              <option selected/>
               {lists.houses
-              && lists.houses.map(({ title, id }) => {
+               && lists.houses.map(({title, id}) => {
                 return (
                   <option key={id + 1}>
                     {title}
@@ -291,9 +317,9 @@ export default function BooksManagementPage(): JSX.Element {
               onChange={inputOnChange}
               className={styles.input}
             >
-              <option selected />
+              <option selected/>
               {lists.genres
-              && lists.genres.map(({ title, id }) => {
+               && lists.genres.map(({title, id}) => {
                 return (
                   <option key={id + 1}>
                     {title}
@@ -366,19 +392,19 @@ export default function BooksManagementPage(): JSX.Element {
         </tr>
       </>
     );
-  }
+  };
 
   return (
     <div>
-      <HeadBlock title="Books management" />
+      <HeadBlock title="Books management"/>
 
       <MainPageWrapper>
         <MainHeaderWrapper>
-          <MainLogo link={`/main-users/${id}`} />
+          <MainLogo link={`/main-users/${id}`}/>
           <h1 className={styles.headerTitle}>
             Управление книгами
           </h1>
-          <MainMenuUsers user={userData} page="booksManagement" />
+          <MainMenuUsers user={userData} page="booksManagement"/>
         </MainHeaderWrapper>
 
         <div className={styles.flexBox}>
@@ -486,14 +512,14 @@ export default function BooksManagementPage(): JSX.Element {
                 {!(books.length === 0 && searchBookClick) ? (
                   books &&
                   books.map(({
-                   id,
-                   author,
-                   genreTitle,
-                   houseTitle,
-                   title,
-                   year,
-                   numberCopies
-                   }, index) => {
+                               id,
+                               author,
+                               genreTitle,
+                               houseTitle,
+                               title,
+                               year,
+                               numberCopies
+                             }, index) => {
                     return (
                       <div
                         className={styles.book}
@@ -512,7 +538,8 @@ export default function BooksManagementPage(): JSX.Element {
                               setEditBookClick(true);
                               setAddBookLinkClick(false);
                               setEditBookLinkClick(false);
-                              editBook(title, author, genreTitle, houseTitle, year, numberCopies);}}
+                              editBook(title, author, genreTitle, houseTitle, year, numberCopies);
+                            }}
                             className={styles.buttonImage}
                           >
                             <Image
@@ -541,10 +568,10 @@ export default function BooksManagementPage(): JSX.Element {
                     );
                   })
                 ) : (
-                  <div className={styles.nothingSearched}>
-                    Нет таких книг
-                  </div>
-                )}
+                   <div className={styles.nothingSearched}>
+                     Нет таких книг
+                   </div>
+                 )}
               </td>
             </tr>
           </table>
