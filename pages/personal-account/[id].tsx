@@ -197,7 +197,7 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
           <h1 className={styles.headerTitle}>
             Личный кабинет
           </h1>
-          <MainMenuUsers user={userData} page="persAcc"/>
+          <MainMenuUsers user={userData} page="personalAccount"/>
         </MainHeaderWrapper>
 
         <div className={styles.flexBox}>

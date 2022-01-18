@@ -1,3 +1,20 @@
 .li {
   padding: 8px 0 5px 10px;
 }
+
+.link {
+  text-decoration: none;
+  padding: 3px;
+}
+
+.link:hover {
+  background-color: rgba(152, 118, 84, 0.7);
+  border-radius: 10px;
+  color: white;
+}
+
+.linkActive {
+  background-color: rgba(152, 118, 84, 0.7);
+  border-radius: 10px;
+  color: white;
+}

@@ -63,6 +63,8 @@ export default function BooksManagementPage(): JSX.Element {
   const [searchBookClick, setSearchBookClick] = useState(false);
   const [editBookClick, setEditBookClick] = useState(false);
 
+  const [bookId, setBookId] = useState('');
+
   const inputOnChange = (event: { target: HTMLInputElement | HTMLSelectElement; }) => {
     setBookValue({
       ...bookValue,
@@ -88,6 +90,14 @@ export default function BooksManagementPage(): JSX.Element {
     const responseGenres = await api.get('/books/genres');
     setLists({...lists, houses: responseHouses.data, genres: responseGenres.data});
   };
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+    getUserData();
+    searchGenresAndHouses();
+  }, [id]);
 
   const getBooksByTitle = async () => {
     await api
@@ -125,23 +135,19 @@ export default function BooksManagementPage(): JSX.Element {
       });
   };
 
-  const editBook = (title: string,
-                    author: string,
-                    genreTitle: string,
-                    houseTitle: string,
-                    year: string,
-                    numberCopies: number) => {
-    setBookValue({
-      ...bookValue,
-      title: title,
-      author: author,
-      publishHouse: houseTitle,
-      otherPublishHouse: '',
-      genre: genreTitle,
-      otherGenre: '',
-      publishYear: year,
-      numberCopies: String(numberCopies)
-    });
+  const editBook = async () => {
+    await api
+      .post('books/edit-book', {
+        bookId,
+        ...bookValue
+      })
+      .then((response) => {
+        alert(response.data);
+        setEditBookClick(false);
+        setAddBookLinkClick(false);
+        setEditBookLinkClick(true);
+        getBooksByTitle();
+      });
   };
 
   const deleteSelectedBook = async (bookId: number) => {
@@ -155,24 +161,44 @@ export default function BooksManagementPage(): JSX.Element {
       });
   };
 
+  const goToEditBook = (id: number,
+                        title: string,
+                        author: string,
+                        genreTitle: string,
+                        houseTitle: string,
+                        year: string,
+                        numberCopies: number) => {
+    setBookId(String(id));
+    setEditBookClick(true);
+    setAddBookLinkClick(false);
+    setEditBookLinkClick(false);
+    setBookValue({
+      ...bookValue,
+      title: title,
+      author: author,
+      publishHouse: houseTitle,
+      otherPublishHouse: '',
+      genre: genreTitle,
+      otherGenre: '',
+      publishYear: year,
+      numberCopies: String(numberCopies)
+    });
+  };
+
   const deleteBook = (title: string, bookId: number) => {
     if (confirm(`Вы уверены, что хотите удалить книгу "${title}"?`)) {
       deleteSelectedBook(bookId);
     }
   };
 
-  useEffect(() => {
-    if (!id) {
-      return;
-    }
-    getUserData();
-    searchGenresAndHouses();
-  }, [id]);
-
   const handleAddBookSubmit = () => {
     if (confirm(`Вы уверены, что хотите добавить книгу "${bookValue.title}"?`)) {
       addBook();
     }
+  };
+
+  const handleEditBookSubmit = () => {
+    editBook();
   };
 
   const goBack = () => {
@@ -301,6 +327,7 @@ export default function BooksManagementPage(): JSX.Element {
               value={bookValue.otherPublishHouse}
               onChange={inputOnChange}
               className={styles.input}
+              disabled={bookValue.publishHouse !== ''}
             />
           </td>
         </tr>
@@ -348,6 +375,7 @@ export default function BooksManagementPage(): JSX.Element {
               value={bookValue.otherGenre}
               onChange={inputOnChange}
               className={styles.input}
+              disabled={bookValue.genre !== ''}
             />
           </td>
         </tr>
@@ -462,7 +490,7 @@ export default function BooksManagementPage(): JSX.Element {
               <td colSpan={2}>
                 <button
                   type="button"
-                  // onClick={handleEditBookSubmit}
+                  onClick={handleEditBookSubmit}
                   className={styles.button}
                 >
                   Редактировать
@@ -538,10 +566,15 @@ export default function BooksManagementPage(): JSX.Element {
                           <button
                             type="button"
                             onClick={() => {
-                              setEditBookClick(true);
-                              setAddBookLinkClick(false);
-                              setEditBookLinkClick(false);
-                              editBook(title, author, genreTitle, houseTitle, year, numberCopies);
+                              goToEditBook(
+                                id,
+                                title,
+                                author,
+                                genreTitle,
+                                houseTitle,
+                                year,
+                                numberCopies
+                              );
                             }}
                             className={styles.buttonImage}
                           >

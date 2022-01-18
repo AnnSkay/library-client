@@ -26,14 +26,14 @@ export function MainMenuUsers({
   const selectMenuList = () => {
     switch (user.role) {
       case 'LIBR':
-        return <ListMenuLibrarians page="page" user={user}/>;
+        return <ListMenuLibrarians page={page} user={user}/>;
       case 'ADMIN':
-        return <ListMenuAdmins/>;
+        return <ListMenuAdmins page={page} user={user}/>;
     }
   };
 
   const linkClass = (linkName: string) => cn(styles.link, {
-    [styles.linkActive]: page === 'persAcc' && linkName === 'persAcc' ||
+    [styles.linkActive]: page === 'personalAccount' && linkName === 'personalAccount' ||
                          page === 'myBooks' && linkName === 'myBooks'
   });
 
@@ -51,7 +51,7 @@ export function MainMenuUsers({
       <ul className={menuListClass()}>
         <li className={styles.li}>
           <Link href={`/personal-account/${user.id}`}>
-            <a className={linkClass('persAcc')}>
+            <a className={linkClass('personalAccount')}>
               Личный кабинет
             </a>
           </Link>
