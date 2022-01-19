@@ -16,12 +16,12 @@ export default function LogInPage(): JSX.Element {
 
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [showRecoveryForm, isShowRecoveryFrom] = useState(false);
+  const [showPopupForm, isShowPopupFrom] = useState(false);
 
   const [handleLoginClick, isHandleLoginClick] = useState(false);
 
-  const showRecoveryClass = () => cn(styles.recoveryBlock, {
-    [styles.recoveryOpened]: showRecoveryForm
+  const showPopupClass = () => cn(styles.popupBlock, {
+    [styles.popupOpened]: showPopupForm
   });
 
   async function handleLogin() {
@@ -40,8 +40,8 @@ export default function LogInPage(): JSX.Element {
       });
   }
 
-  const showRecovery = () => isShowRecoveryFrom(true);
-  const hideRecovery = () => isShowRecoveryFrom(false);
+  const showPopup = () => isShowPopupFrom(true);
+  const hidePopup = () => isShowPopupFrom(false);
 
   return (
     <div className={styles.container}>
@@ -76,7 +76,7 @@ export default function LogInPage(): JSX.Element {
               ) : null
             }
 
-            <div className={styles.forgotPass} onClick={showRecovery}>
+            <div className={styles.forgotPass} onClick={showPopup}>
               <u>Забыли пароль?</u>
             </div>
 
@@ -101,9 +101,9 @@ export default function LogInPage(): JSX.Element {
         <AuthDescription/>
       </AuthMainWrapper>
 
-      <div className={showRecoveryClass()}>
-        <div className={styles.recoveryForm}>
-          <div className={styles.recoveryClose} onClick={hideRecovery}/>
+      <div className={showPopupClass()}>
+        <div className={styles.popupForm}>
+          <div className={styles.popupClose} onClick={hidePopup}/>
           <h2>Восстановление пароля</h2>
 
           <div className={styles.recoveryDesc}>
@@ -118,7 +118,7 @@ export default function LogInPage(): JSX.Element {
           </button>
         </div>
 
-        <div className={styles.blackout} onClick={hideRecovery}/>
+        <div className={styles.popupBlackout} onClick={hidePopup}/>
       </div>
     </div>
   );

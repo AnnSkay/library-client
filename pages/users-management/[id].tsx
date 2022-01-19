@@ -38,8 +38,11 @@ export default function UsersManagementPage(): JSX.Element {
   });
 
   const [users, setUsers] = useState([]);
+  const [userRole, setUserRole] = useState<string | undefined>('');
 
   const [searchingUserLastname, setSearchingUserLastname] = useState('');
+
+  const [showPopupForm, isShowPopupFrom] = useState(false);
 
   const getUserData = async () => {
     await api
@@ -70,16 +73,27 @@ export default function UsersManagementPage(): JSX.Element {
     getUsers();
   }, [id]);
 
-  const getRoleFormat = (role: string) => {
+  const getRoleFormat = (role: string | undefined) => {
     switch (role) {
       case 'USER':
         return 'Обычный пользователь';
       case 'LIBR':
         return 'Библиотекарь';
       case 'ADMIN':
-        return 'Админ';
+        return 'Администратор';
     }
   };
+
+  const showPopup = (role: string | undefined) => {
+    isShowPopupFrom(true);
+    setUserRole(getRoleFormat(role));
+  };
+
+  const hidePopup = () => isShowPopupFrom(false);
+
+  const showPopupClass = () => cn(styles.popupBlock, {
+    [styles.popupOpened]: showPopupForm
+  });
 
   return (
     <div>
@@ -149,7 +163,7 @@ export default function UsersManagementPage(): JSX.Element {
                       <button
                         type="button"
                         title="Изменить роль"
-                        // onClick={}
+                        onClick={() => showPopup(role)}
                         className={styles.buttonImage}
                       >
                         <Image
@@ -170,7 +184,7 @@ export default function UsersManagementPage(): JSX.Element {
                           src={DeleteUserIcon}
                           width={30}
                           height={30}
-                          alt="Удалить книгу"
+                          alt="Удалить пользователя"
                         />
                       </button>
                     </div>
@@ -185,8 +199,42 @@ export default function UsersManagementPage(): JSX.Element {
              )}
           </div>
         </div>
-
       </MainPageWrapper>
+
+      <div className={showPopupClass()}>
+        <div className={styles.popupForm}>
+          <div className={styles.popupClose} onClick={hidePopup}/>
+          <h2>Изменение роли пользователя</h2>
+
+          <select
+            id="bookPublishHouse"
+            name="publishHouse"
+            value={userRole}
+            onChange={(e) => setUserRole(e.target.value)}
+            className={styles.inputRoleForm}
+          >
+            <option>
+              Обычный пользователь
+            </option>
+            <option>
+              Библиотекарь
+            </option>
+            <option>
+              Администратор
+            </option>
+          </select>
+
+          <button
+            type="submit"
+            className={styles.buttonRoleForm}
+            // onClick={changeRole}
+          >
+            Изменить роль
+          </button>
+        </div>
+
+        <div className={styles.popupBlackout} onClick={hidePopup}/>
+      </div>
     </div>
   );
 }
