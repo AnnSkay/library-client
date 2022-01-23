@@ -38,9 +38,11 @@ export default function UsersManagementPage(): JSX.Element {
   });
 
   const [users, setUsers] = useState([]);
+  const [userId, setUserId] = useState('');
   const [userRole, setUserRole] = useState<string | undefined>('');
 
   const [searchingUserLastname, setSearchingUserLastname] = useState('');
+  const [messageChange, setMessageChange] = useState('');
 
   const [showPopupForm, isShowPopupFrom] = useState(false);
 
@@ -65,6 +67,31 @@ export default function UsersManagementPage(): JSX.Element {
       });
   };
 
+  const changeRole = async () => {
+    await api
+      .post('/users/change-role', {
+        userId,
+        userRole
+      })
+      .then((response) => {
+        setMessageChange(response.data);
+        getUsers();
+      });
+  };
+
+  const deleteUser = async (id: number, login: string) => {
+    if (confirm(`Вы уверены, что хотите удалить пользователя "${login}"?`)) {
+      await api
+        .post('/users/delete-user', {
+          id
+        })
+        .then((response) => {
+          alert(response.data);
+          getUsers();
+        });
+    }
+  };
+
   useEffect(() => {
     if (!id) {
       return;
@@ -84,9 +111,10 @@ export default function UsersManagementPage(): JSX.Element {
     }
   };
 
-  const showPopup = (role: string | undefined) => {
+  const showPopup = (id: number, role: string | undefined) => {
     isShowPopupFrom(true);
     setUserRole(getRoleFormat(role));
+    setUserId(String(id));
   };
 
   const hidePopup = () => isShowPopupFrom(false);
@@ -141,6 +169,7 @@ export default function UsersManagementPage(): JSX.Element {
             {!(users.length === 0) ? (
               users &&
               users.map(({
+                           id,
                            name,
                            lastname,
                            login,
@@ -163,7 +192,7 @@ export default function UsersManagementPage(): JSX.Element {
                       <button
                         type="button"
                         title="Изменить роль"
-                        onClick={() => showPopup(role)}
+                        onClick={() => showPopup(id, role)}
                         className={styles.buttonImage}
                       >
                         <Image
@@ -177,7 +206,7 @@ export default function UsersManagementPage(): JSX.Element {
                       <button
                         type="button"
                         title="Удалить пользователя"
-                        // onClick={}
+                        onClick={() => deleteUser(id, login)}
                         className={cn(styles.buttonImage, styles.buttonDeleteUser)}
                       >
                         <Image
@@ -227,10 +256,11 @@ export default function UsersManagementPage(): JSX.Element {
           <button
             type="submit"
             className={styles.buttonRoleForm}
-            // onClick={changeRole}
+            onClick={changeRole}
           >
             Изменить роль
           </button>
+          <div>{messageChange}</div>
         </div>
 
         <div className={styles.popupBlackout} onClick={hidePopup}/>

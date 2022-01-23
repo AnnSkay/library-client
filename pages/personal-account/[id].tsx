@@ -427,7 +427,6 @@ export default function PersonalAccountPage(bytes: BufferSource): JSX.Element {
             >
               Личные данные
             </div>
-            `
 
             <div
               className={activePasswordItemClass()}
